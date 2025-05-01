@@ -14,4 +14,8 @@ jobs:
           secret="youwillbecomerich"
           echo "::add-mask::$secret"
           echo "$secret"
+
+      - name: step3
+        run: |
+          echo "$secret"
     
