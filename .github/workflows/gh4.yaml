@@ -4,7 +4,7 @@ on: push
 
 defaults:
   run:
-    workind-drectory: /test
+    workind-directory: /test
 
 jobs:
   j1:
