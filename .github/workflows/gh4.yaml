@@ -4,7 +4,7 @@ on: push
 
 defaults:
   run:
-    working-directory: /test
+    working-directory: /home/runner
 
 jobs:
   j1:
