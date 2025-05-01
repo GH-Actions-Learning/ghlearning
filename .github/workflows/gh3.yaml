@@ -1,14 +1,26 @@
 name: testing 3
 
 on: push
+defaults:
+  run:
+    shell: bash
+
 jobs:
   j1:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
     steps:
-      - name: test
+      - name: test bash
         run: |
           pwd
           ls -a
           echo "$GITHUB_SHA"
           echo "$GITHUB_REPOSITORY"
           echo "$GITHUB_WORKSPACE"
+
+      - name: test python
+        shell: python
+        run: |
+          print("sum of a and b is:", 5 + 5)
