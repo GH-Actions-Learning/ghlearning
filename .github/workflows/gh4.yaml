@@ -10,5 +10,7 @@ jobs:
   j1:
     runs-on: ubuntu-latest
     steps:
-      - name: pwd
-        run: pwd
+      - name: testing
+        run: |
+          ls -a
+          pwd
