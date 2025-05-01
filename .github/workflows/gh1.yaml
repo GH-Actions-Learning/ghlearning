@@ -27,3 +27,6 @@ jobs:
       - name: tesing3
         run: |
           systeminfo
+          python --version
+          dotnet --version
+          java -version
