@@ -8,4 +8,10 @@ jobs:
     steps:
       - name: step1
         run: echo "::error::Missing semicolon"
+      
+      - name: step2
+        run: |
+          secret="youwillbecomerich"
+          echo "::add-mask::$secret"
+          echo "$secret"
     
