@@ -1,0 +1,14 @@
+name: testing 4
+
+on: push
+
+default:
+  run:
+    workind-drectory: /test
+
+jobs:
+  j1:
+    runs-on: ubuntu-latest
+    steps:
+      - name: pwd
+        run: pwd
