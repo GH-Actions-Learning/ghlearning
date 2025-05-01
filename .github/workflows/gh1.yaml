@@ -13,3 +13,17 @@ jobs:
           java -version
           python --version
           dotnet --version
+
+  j2:
+    runs-on: macos-latest
+    steps:
+      - name: testing2
+        run: |
+          sw_v
+
+  j3:
+    runs-on: windows-latest
+    steps:
+      - name: tesing3
+        run: |
+          systeminfo
