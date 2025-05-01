@@ -7,8 +7,17 @@ defaults:
     working-directory: /home/runner
 
 jobs:
+  j0:
+    runs-on: ubuntu-latest
+    steps:
+      - name: testing0
+        run: |
+          pwd
   j1:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        workding-directory: /home
     steps:
       - name: testing1
         run: |
@@ -16,4 +25,5 @@ jobs:
           pwd
 
       - name: testing2
+        working-directory: /home/work
         run: pwd
