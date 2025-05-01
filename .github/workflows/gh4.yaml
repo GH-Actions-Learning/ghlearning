@@ -25,5 +25,5 @@ jobs:
           pwd
 
       - name: testing2
-        working-directory: /home/work
+        working-directory: /home/runner
         run: pwd
