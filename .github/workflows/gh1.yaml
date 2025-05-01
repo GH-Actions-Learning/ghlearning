@@ -19,7 +19,7 @@ jobs:
     steps:
       - name: testing2
         run: |
-          sw_v
+          sw_vers
 
   j3:
     runs-on: windows-latest
