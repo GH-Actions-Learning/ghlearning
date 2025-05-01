@@ -1,0 +1,14 @@
+name: testing 3
+
+on: push
+jobs:
+  j1:
+    runs-on: ubuntu-latest
+    steps:
+      - name: test
+        run: |
+          pwd
+          ls -a
+          echo "$GITHUB_SHA"
+          echo "$GITHUB_REPOSITORY"
+          echo "$GITHUB_WORKSPACE"
