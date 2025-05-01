@@ -10,12 +10,7 @@ jobs:
         run: echo "1"
   j2:
     runs-on: ubuntu-latest
+    needs: j1
     steps:
       - name: testing2
         run: echo "2"
-
-  j3:
-    runs-on: ubuntu-latest
-    steps:
-      - name: testing3
-        run: echo "3"
