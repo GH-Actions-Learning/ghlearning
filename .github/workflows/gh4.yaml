@@ -2,7 +2,7 @@ name: testing 4
 
 on: push
 
-default:
+defaults:
   run:
     workind-drectory: /test
 
