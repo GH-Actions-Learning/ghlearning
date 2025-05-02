@@ -1,6 +1,6 @@
 name: testing5
 
-on: [push, pull-request, issues]
+on: [push, pull_request, issues]
 
 jobs:
   j1:
