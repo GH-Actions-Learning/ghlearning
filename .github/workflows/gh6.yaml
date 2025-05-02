@@ -1,0 +1,19 @@
+name: testing 6
+
+on:
+  push:
+  pull_request:
+    types: [opened, reopened, assigned, synchronized]
+  issues:
+    types: [opened]
+
+jobs:
+  j1:
+    runs-on: ubuntu-latest
+    steps:
+      - name: get id's
+        run: |
+          echo "$GITHUB_SHA"
+          echo "$GITHUB_REF"
+      - name: checkout to branch
+        uses: actions/checkout@v3
