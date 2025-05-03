@@ -1,0 +1,12 @@
+name: ghw-workflow-dispatch
+
+on:
+  workflow_displath:
+
+jobs:
+  workflow_dispath:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: test
+        run: echo "successfullt rich"
