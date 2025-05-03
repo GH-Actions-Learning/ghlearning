@@ -3,7 +3,7 @@ name: branch-filter-on-workflow-run
 on:
   workflow_run:
     workflows:
-      - event1
+      - ghevent1
     branches:
       - main
       - test1
