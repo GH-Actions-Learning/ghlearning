@@ -1,0 +1,16 @@
+name: path-filter2
+
+on:
+  push:
+    paths:
+      - "**/*.txt" # Any .txt file in any directory
+    branches:
+      - main
+      - test1
+
+jobs:
+  path-and-branch-filter:
+    runs-on: ubuntu-latest
+    steps:
+      - name: test1
+        run: echo "run any change in .txt file in main or test1 branch" 
