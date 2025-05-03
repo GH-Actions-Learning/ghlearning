@@ -17,5 +17,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: testing
-        run: echo "ok"
+        run: echo "Options: ${{github.event.inputs.testing}}"
           
