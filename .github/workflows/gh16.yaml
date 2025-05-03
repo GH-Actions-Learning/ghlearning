@@ -9,4 +9,4 @@ jobs:
 
     steps:
       - name: test
-        run: echo "successfullt rich"
+        run: echo "This will make us to execute this manually from UI"
