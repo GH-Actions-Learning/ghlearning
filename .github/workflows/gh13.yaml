@@ -2,11 +2,11 @@ name: path-filter2
 
 on:
   push:
-    paths:
-      - "**/*.txt" # Any .txt file in any directory
     branches:
       - main
       - test1
+    paths:
+      - "**/*.txt" # Any .txt file in any directory
 
 jobs:
   path-and-branch-filter:
