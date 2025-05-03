@@ -1,1 +1,1 @@
-print("you will become rich")
+print("you will become rich.")
