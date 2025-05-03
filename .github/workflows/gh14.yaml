@@ -1,7 +1,7 @@
 name: path-and-branch-filter-based-on-PR
 
 on:
-  pull-request:
+  pull-requests:
     types: [opened]
 
     branches:
