@@ -12,5 +12,5 @@ jobs:
      runs-on: ubuntu-latest
      steps:
        - name: test1
-         run: echo "only execute other than test1 or test2 branch"
+         run: echo "only execute other than test1/test2/main branch"
       

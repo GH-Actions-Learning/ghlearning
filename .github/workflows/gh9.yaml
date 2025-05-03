@@ -12,5 +12,5 @@ jobs:
   branch-filter:
     runs-on: ubuntu-latest
     steps:
-      - name: testing1
+      - name: includebranch
         run: echo "Testing branch filters"
