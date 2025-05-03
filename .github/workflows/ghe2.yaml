@@ -1,8 +1,8 @@
-name: event2
+name: ghevent2
 
 on:
   workflow_run:
-    workflows: [event1]
+    workflows: [ghevent1]
     types: [completed]
 
 jobs:
