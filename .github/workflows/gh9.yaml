@@ -6,9 +6,6 @@ on:
       - feature/*
       - bug/*
       - main
-    branches-ignore:
-      - test1
-      - test2
 
 
 jobs:
