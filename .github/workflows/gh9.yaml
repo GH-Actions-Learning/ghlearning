@@ -1,4 +1,4 @@
-name: branch-filter
+name: branch-filter1
 
 on:
   push:
@@ -12,5 +12,5 @@ jobs:
   branch-filter:
     runs-on: ubuntu-latest
     steps:
-      - name: testing1
+      - name: includebranch
         run: echo "Testing branch filters"
