@@ -2,7 +2,7 @@ name: path-filter1
 
 on:
   push:
-    path:
+    paths:
       - src/*
 
 jobs:
