@@ -1,0 +1,13 @@
+name: event2
+
+on:
+  workflow_run:
+    workflows: [event1]
+    types: [completed]
+
+jobs:
+  event2:
+    runs-on: ubuntu-latest
+    steps:
+      - name: e2
+        run: echo "become rich"

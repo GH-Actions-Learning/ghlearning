@@ -1,0 +1,10 @@
+name: ghevent1
+
+on: push
+
+jobs:
+  event1:
+    runs-on: ubuntu-latest
+    steps:
+      - name: e1
+        run: echo "first event is 30 lpa in 2025"
