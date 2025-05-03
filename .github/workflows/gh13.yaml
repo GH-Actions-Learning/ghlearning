@@ -1,7 +1,8 @@
-name: path-filter2
+name: path-filter2-based-on-push
 
 on:
   push:
+    # make sure that branch and path order is important or else filter will be ignored
     branches:
       - main
       - test1
