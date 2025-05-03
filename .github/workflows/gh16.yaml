@@ -1,7 +1,7 @@
 name: ghw-workflow-dispatch
 
 on:
-  workflow_displath:
+  workflow_dispatch:
 
 jobs:
   workflow_dispath:
