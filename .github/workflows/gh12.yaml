@@ -1,0 +1,13 @@
+name: path-filter1
+
+on:
+  push:
+    paths:
+      - src/*
+
+jobs:
+  changein-src-folder:
+    runs-on: ubuntu-latest
+    steps:
+      - name: test
+        run: echo "trigger only when files are changed in src dir on any branch"
