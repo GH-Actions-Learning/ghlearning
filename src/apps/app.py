@@ -1,0 +1,1 @@
+print("you will become rich")
