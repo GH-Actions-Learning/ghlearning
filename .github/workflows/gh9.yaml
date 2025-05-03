@@ -13,4 +13,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: testing1
-        echo: "Testing branch filters"
+        run: echo "Testing branch filters"
