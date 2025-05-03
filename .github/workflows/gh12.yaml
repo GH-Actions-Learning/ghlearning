@@ -10,4 +10,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: test
-        run: echo "trigger only when files are changed in src dir"
+        run: echo "trigger only when files are changed in src dir on any branch"
