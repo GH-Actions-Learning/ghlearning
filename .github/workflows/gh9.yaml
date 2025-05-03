@@ -1,4 +1,4 @@
-name: branch-filter1
+name: branch-filter1-based-on-push
 
 on:
   push:

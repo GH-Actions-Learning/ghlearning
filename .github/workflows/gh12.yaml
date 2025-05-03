@@ -1,4 +1,4 @@
-name: path-filter1
+name: path-filter1-based-on-push
 
 on:
   push:

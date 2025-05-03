@@ -1,0 +1,18 @@
+name: path-and-branch-filter-based-on-PR
+
+on:
+  pull-request:
+    types: [opened]
+
+    branches:
+      - main
+      - test1
+    paths:
+      - "**.txt"
+
+jobs:
+  path-branch-filter-on-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: test1
+        run: echo "triggers if pr is opened with changes in .txt file in any of included branch"
