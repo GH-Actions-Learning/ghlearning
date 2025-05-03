@@ -1,0 +1,21 @@
+name: ghw-workflow-dispatch1
+on:
+    workflow_dispatch:
+      inputs:
+        testing:
+          description: "this for testing"
+          requried: true
+          type: choice
+          default: "30lpa"
+          options: 
+            - 30lpa
+            - big-house
+            - plots
+
+jobs:
+  select-option:
+    runs-on: ubuntu
+    steps:
+      - name: testing
+        run: echo "ok"
+          
