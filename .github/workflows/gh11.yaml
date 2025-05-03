@@ -8,7 +8,7 @@ on:
       # - !main
 
 jobs:
-  include and exclude branches:
+  include-and-exclude-branches:
     runs-on: ubuntu-latest
     steps:
       - name: testing
