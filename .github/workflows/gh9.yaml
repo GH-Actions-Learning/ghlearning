@@ -1,0 +1,16 @@
+name: branch-filter1
+
+on:
+  push:
+    branches:
+      - feature/*
+      - bug/*
+      - main
+
+
+jobs:
+  branch-filter:
+    runs-on: ubuntu-latest
+    steps:
+      - name: includebranch
+        run: echo "Testing branch filters"

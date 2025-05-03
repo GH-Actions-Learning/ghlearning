@@ -1,0 +1,16 @@
+name: branch-filter3
+
+on:
+  push:
+    branches:
+      - test1/*
+      - test2/*
+      - !main
+
+jobs:
+  include and exclude branches:
+    runs-on: ubuntu-latest
+    steps:
+      - name: testing
+        run: echo "eclude main and include test1 and test2"
+        
