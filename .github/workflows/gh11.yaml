@@ -3,9 +3,9 @@ name: branch-filter3
 on:
   push:
     branches:
-      - test1
-      - test2
-      - !main
+      - "test1/*"
+      - "test2/*"
+      - "!main"
 
 jobs:
   include-and-exclude-branches:
