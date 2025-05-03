@@ -1,4 +1,4 @@
-name: ghw-workflow-dispatch1
+name: ghw-workflow-dispatch2
 on:
     workflow_dispatch:
       inputs:
