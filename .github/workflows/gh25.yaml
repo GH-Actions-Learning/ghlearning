@@ -36,5 +36,5 @@ jobs:
       runs-on: ubuntu-latest
       steps:
         - name: Pipeline status
-        run: |
-          echo "build unit and integration Tests are successfull"
+          run: |
+            echo "build unit and integration Tests are successfull"
