@@ -5,7 +5,7 @@ on:
     inputs:
       environment:
         description: "selct you env to run"
-        tyep: choice
+        type: choice
         required: true
         default: dev
         options:
