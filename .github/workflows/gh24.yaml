@@ -48,9 +48,9 @@ jobs:
     steps:
       - name: exp2
         run: |
-        echo "2nd condition is matched"
-        echo "${{ github.event.inputs.cloud-region }}"
-        echo "${{ github.event.inputs.tag}}"
+          echo "2nd condition is matched"
+          echo "${{ github.event.inputs.cloud-region }}"
+          echo "${{ github.event.inputs.tag}}"
 
   condition3:
     runs-on: ubuntu-latest
