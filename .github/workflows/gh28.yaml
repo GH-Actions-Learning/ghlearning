@@ -1,8 +1,8 @@
-name: logical-function-at-steps-level
+name: logical-function-at-job-level
 
 on: push
 jobs:
-  logic_fun:
+  logic_fun1:
     runs-on: ubuntu-latest
     steps:
       - name: step1
@@ -41,3 +41,12 @@ jobs:
         if: ${{ steps.step3.outcome == 'success' && always() }}
         run: |
           echo "step6 will run because we used always() with step3"
+
+  logical_func2:
+    if: success()
+    runs-on: ubuntu-latest
+    steps:
+      - name: step1
+        run: |
+          echo "step1 will run if job1 is success"
+      
