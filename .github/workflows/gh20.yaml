@@ -1,0 +1,34 @@
+name: ghw-workflow-dispatch5
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "selct you env to run"
+        tyep: choice
+        required: true
+        default: dev
+        options:
+          - dev
+          - test
+          - prod
+          - uta
+      debug:
+        description: "do you want to enable debug mode"
+        type: boolean
+        required: true
+        defualt: false
+      tag:
+        description: "purpose of run"
+        type: string
+        required: true
+
+jobs:
+  select_options:
+    runs-on: ubuntu-latest
+    steps:
+      - name: options
+        run: |
+          echo "Environment: ${{github.event.inputs.environment}}""
+          echo "Debug Enabled: ${{github.event.input.debug}}"
+          echo "tag: ${{github.event.input.tag}}"
