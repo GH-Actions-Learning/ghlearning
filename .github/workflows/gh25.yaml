@@ -1,4 +1,4 @@
-name: logical-function-with-expressions 
+name: expressions-at-job-level 
 
 on: push
 
@@ -38,3 +38,11 @@ jobs:
         - name: Pipeline status
           run: |
             echo "build unit and integration Tests are successfull"
+
+    notify:
+      if: ${{ always() }}
+      runs-on: ubuntu-latest
+      steps:
+        - name: Notify the result
+          run: |
+            echo "Build is sucess and Testing is failed"
