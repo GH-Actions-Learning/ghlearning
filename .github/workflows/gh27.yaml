@@ -20,6 +20,11 @@ jobs:
         run: |
           echo "step3 will run because step2 failed and we used fail()"
 
+      - name: step3.1
+        if: ${{steps.step3.outcome == 'success'}}
+        run: |
+          echo "step3.1 will run successfully"
+
       - name: step4
         if: success()
         run: |
