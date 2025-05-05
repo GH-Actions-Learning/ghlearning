@@ -6,7 +6,7 @@ on:
       tag:
         description: "Purpose of run"
         type: string
-        requried: true
+        required: true
 
 jobs:
   select:
