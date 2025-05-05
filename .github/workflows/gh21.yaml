@@ -1,0 +1,33 @@
+name: expression-context
+
+on: push
+
+jobs:
+  expressions:
+    runs-on: ubuntu-latest 
+
+    steps:
+      - name: exp  
+        run: |
+          # The following lines evaluate expressions using GitHub's expression syntax
+          echo "${{ 1 }}"                          # Outputs: 1 (integer)
+          echo "${{ 'This is String' }}"           # Outputs: This is String (string literal)
+          echo "${{ true }}"                       # Outputs: true (boolean)
+          echo "${{ null }}"                       # Outputs:  (null becomes empty string in shell)
+          echo "${{ 1 > 2 }}"                      # Outputs: false (1 is not greater than 2)
+          echo "${{ 'string' == 'String' }}"       # Outputs: false (case-sensitive comparison)
+          echo "${{ true && false }}"              # Outputs: false (logical AND)
+          echo "${{ true || (false && true) }}"    # Outputs: true (logical OR with grouping)
+
+  # Job 2: Exploring built-in GitHub Actions contexts
+  contexts:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: context  
+        run: |
+          # Print the contents of various built-in contexts as JSON strings
+          echo '${{ toJson(github) }}'     # Full GitHub context: info about repo, event, commit, etc.
+          echo '${{ toJson(job) }}'        # Job-level context: job ID, status, etc.
+          echo '${{ toJson(steps) }}'      # Info about steps in this job (e.g., their outcomes)
+          echo '${{ toJson(secrets) }}'    # List of available secret keys (values are masked)
