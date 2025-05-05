@@ -1,0 +1,26 @@
+name: logical-function
+
+on: push
+jobs:
+  logic_fun:
+    runs-on: ubuntu-latest
+    steps:
+      - name: step1
+        run: |
+          echo "step1 is success"
+
+      - name: step2
+        if: success()
+        run: |
+          echo "step2 is failed"
+          exit 1
+
+      - name: step3
+        if: failure()
+        run: |
+          echo "step3 will run because step2 failed and we used fail()"
+
+      - name: step4
+        if: success()
+        run: |
+         echo "step4 will run"
