@@ -16,6 +16,7 @@ jobs:
           exit 1
 
       - name: step3
+        id: step3  #here we need to use id which is used by step3.1 or else it will fail
         if: failure()
         run: |
           echo "step3 will run because step2 failed and we used fail()"
