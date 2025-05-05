@@ -1,0 +1,12 @@
+name: conditions1
+
+on: push
+
+jobs:
+  test1:
+    if: ${{github.actor == 'SaiSrujan-Asara' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: print
+        run: echo "you will get 30 lpa"
