@@ -40,4 +40,4 @@ jobs:
       - name: step6
         if: ${{ steps.step3.outcome == 'success' && always() }}
         run: |
-          echo "step6 will run because we used always()"
+          echo "step6 will run because we used always() with step3"
