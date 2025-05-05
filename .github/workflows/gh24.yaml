@@ -33,7 +33,7 @@ on:
 
 jobs:
   condition1:
-    if: ${{ github.event.inputs.cloud-region == 'ind' && github.event.inputs.tag == "testing"}}
+    if: ${{ github.event.inputs.cloud-region == 'ind' && github.event.inputs.tag == 'testing' }}
     runs-on: ubuntu-latest
     steps:
       - name: exp1
@@ -43,7 +43,7 @@ jobs:
           echo "${{ github.event.inputs.tag }}"
 
   condition2:
-    if: ${{ github.event.inputs.cloud-region == 'usa' && github.event.inputs.tag == "deploy"}}
+    if: ${{ github.event.inputs.cloud-region == 'usa' && github.event.inputs.tag == 'deploy'}}
     runs-on: ubuntu-latest
     steps:
       - name: exp2
@@ -56,7 +56,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: exp3
-        if: ${{ github.event.inputs.cloud-region == 'usa' && github.event.inputs.tag == "devops"}}
+        if: ${{ github.event.inputs.cloud-region == 'uk' && github.event.inputs.tag == 'devops' }}
         run: |
           echo "3rd condition is matched"
           echo "${{ github.event.inputs.cloud-region}}"
