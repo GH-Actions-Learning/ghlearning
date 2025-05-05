@@ -46,7 +46,18 @@ jobs:
     if: success()
     runs-on: ubuntu-latest
     steps:
-      - name: step1
+      - name: lf2_step1
         run: |
-          echo "step1 will run if job1 is success"
+          echo "This job and step will run eventhough job1 is failed because"
+          echo "this job is not depends on job1"
+
+  logical_func3:
+    needs: logical_func1
+    if: success()
+    runs-on: ubuntu-latest
+    steps:
+      - name: lf3_step1
+        run: |
+          echo "This job and step will not run because"
+          echo "This job is depends on job1"
       
