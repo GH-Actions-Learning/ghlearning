@@ -30,5 +30,5 @@ jobs:
       - name: options
         run: |
           echo "Environment: ${{github.event.inputs.environment}}""
-          echo "Debug Enabled: ${{github.event.input.debug}}"
-          echo "tag: ${{github.event.input.tag}}"
+          echo "Debug Enabled: ${{github.event.inputs.debug}}"
+          echo "tag: ${{github.event.inputs.tag}}"
