@@ -29,6 +29,6 @@ jobs:
     steps:
       - name: options
         run: |
-          echo "Environment: ${{github.event.inputs.environment}}""
+          echo "Environment: ${{github.event.inputs.environment}}"
           echo "Debug Enabled: ${{github.event.inputs.debug}}"
           echo "tag: ${{github.event.inputs.tag}}"
