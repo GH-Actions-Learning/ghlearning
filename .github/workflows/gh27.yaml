@@ -26,5 +26,6 @@ jobs:
          echo "step4 will not run because previous step (step3) was only conditional on failure"
 
       - name: step5
+        if: success() || failure()
         run: |
           echo "step5 will run no matter what is previous steps"
