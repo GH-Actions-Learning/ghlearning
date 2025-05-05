@@ -3,7 +3,7 @@ name: Environment and Context var
 on: push
 
 jobs:
-  context-and env:
+  context-and-env:
     runs-on: ubuntu-latest
     if: ${{ github.ref == 'refs/heads/main' }}
     
