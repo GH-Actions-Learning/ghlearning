@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       debug:
-        description: "Enable or Disable dbug mode"
+        description: "Enable debug mode"
         type: boolean
         requried: true
         default: false
@@ -16,3 +16,5 @@ jobs:
       - name: testing
         run: |
           echo ${{github.event.inputs.debug}}
+          echo "In dashboard you will get checkbox to enable or not for debug"
+          echo "if you click on checkbox it will be true or else it will be false"
