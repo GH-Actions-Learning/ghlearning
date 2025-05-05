@@ -18,4 +18,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: testing
-        run: echo "ok."
+        run: |
+          echo "ok."
+          echo ${{github.event.inputs.environment}}
