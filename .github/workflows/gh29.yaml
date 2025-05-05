@@ -1,0 +1,21 @@
+name: Environment and Context var
+
+on: push
+
+jobs:
+  context-and env:
+    runs-on: ubuntu-latest
+    if: ${{ github.ref == 'refs/heads/main' }}
+    
+    # DONT USE
+    # ENV VARS in place of CONTEXT VARS vice-varsa
+    # CONTEXT VARS expand during compile time
+    # ENV VARS expands during Rruntime
+    # dont use #GITHUB_REF in if conditions
+
+    steps:
+      - name: log ENV VAR
+        run: echo $GITHUB_REF
+
+      - name: Log Context
+        run: echo '${{ github.ref }}'
