@@ -1,21 +1,20 @@
 name: ghw-workflow-dispatch2
+
 on:
-    workflow_dispatch:
-      inputs:
-        testing:
-          description: "this for testing"
-          required: true
-          type: choice
-          default: "30lpa"
-          options: 
-            - 30lpa
-            - big-house
-            - plots
+  worflow_dispatch:
+    inputs:
+      environment:
+        description: "Select env"
+        type: choice
+        default: dev
+        option:
+          - dev
+          - test
+          - prod
 
 jobs:
-  select-option:
+  options:
     runs-on: ubuntu-latest
     steps:
       - name: testing
-        run:  echo "Options:- ${{ github.event.inputs.testing }}"
-          
+        run: echo "ok"
