@@ -22,6 +22,7 @@ on:
         description: "purpose of run"
         type: string
         required: true
+        default: "Testing"
 
 jobs:
   select_options:
