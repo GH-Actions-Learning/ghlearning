@@ -1,0 +1,37 @@
+name: expressions-at-step-level
+
+on: push
+
+jobs:
+  exp_step_level:
+    runs-on: ubuntu-latest
+    steps:
+      - name: build
+        id: build
+        run: |
+          echo "build success"
+
+      - name: test1
+        id: unit_test
+        if: ${{ steps.build.outcome == 'success' }}
+        run: |
+          echo "unit test is success"
+
+      - name: test2
+        id: inte_test
+        if: ${{ steps.build.outcome == 'success' }}
+        run: |
+          echo "integration test fialed"
+          exit 1
+
+      - name: result
+        id: result_status
+        if: ${{ steps.build.outcome == 'success' && steps.unit_test.outcome == 'success' && steps.inte_test.outcome == 'success' }}
+        run: |
+          echo "Build, unit test and integration test is Success"
+
+      - name: notify
+        id: notify
+        if: ${{ always() }}
+        run: |
+          echo "Build is success and Testing is failed"
