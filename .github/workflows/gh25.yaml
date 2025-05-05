@@ -17,7 +17,7 @@ jobs:
       steps:
         - name: unit test
           run: |
-            echo: "Unit test success"
+            echo "Unit test success"
             
     test2:
       needs: build
@@ -26,7 +26,7 @@ jobs:
       steps:
         - name: integration Test
           run: |
-            echo: "integration test Failed"
+            echo "integration test Failed"
             exit 1
 
     result:
