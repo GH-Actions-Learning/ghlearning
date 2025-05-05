@@ -1,0 +1,18 @@
+name: ghw-workflow-dispatch3
+
+on:
+  workflow_dispatch:
+    inputs:
+      debug:
+        description: "Enable or Disable dbug mode"
+        type: boolean
+        requried: true
+        default: false
+
+jobs:
+  boolean:
+    runs-on: ubuntu-latest
+    steps:
+      - name: testing
+        run: |
+          echo ${{github.event.inputs.debug}}
