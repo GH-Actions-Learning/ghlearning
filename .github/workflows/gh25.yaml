@@ -1,0 +1,40 @@
+name: logical function
+
+on: push
+
+jobs:
+    build:
+      runs-on: ubuntu-latest
+      steps:
+        - name: app building
+          run: |
+            echo "Build success"
+            
+    test1:
+      needs: build
+      if: ${{ needs.build.result == 'success' }}
+      runs-on: ubuntu-latest
+      steps:
+        - name: unit test
+          run: |
+            echo: "Unit test success"
+            
+    test2:
+      needs: build
+      if: ${{ needs.build.result == 'success' }}
+      runs-on: ubuntu-latest
+      steps:
+        - name: integration Test
+          run: |
+            echo: "integration test Failed"
+            exit 1
+
+    result:
+      needs:
+        - test1
+        - test2
+      runs-on: ubuntu-latest
+      steps:
+        - name: Pipeline status
+        run: |
+          echo "build unit and integration Tests are successfull"
