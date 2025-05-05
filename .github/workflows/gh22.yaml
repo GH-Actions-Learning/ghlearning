@@ -4,7 +4,7 @@ on: push
 
 jobs:
   test1:
-    if: ${{github.actor == 'SaiSrujan-Asara' }}
+    if: ${{ github.actor == 'SaiSrujan-Asara' }}
     runs-on: ubuntu-latest
 
     steps:

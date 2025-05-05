@@ -1,0 +1,12 @@
+name: conditions2
+
+on: push
+
+jobs:
+  test1:
+    runs-on: ubuntu-latest
+    steps:
+      - name: execute step if condition match
+        if : ${{ github.actor == 'SaiSrujan-Asara' }}
+        run: |
+          echo "you will get 30LPA"
