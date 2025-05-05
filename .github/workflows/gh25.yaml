@@ -40,6 +40,10 @@ jobs:
             echo "build unit and integration Tests are successfull"
 
     notify:
+      needs: 
+        - build
+        - test1
+        - test2
       if: ${{ always() }}
       runs-on: ubuntu-latest
       steps:
