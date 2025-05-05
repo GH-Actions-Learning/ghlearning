@@ -1,0 +1,63 @@
+name: conditions3
+
+on:
+  workflow_dispatch:
+    inputs:
+        cloud-region:
+            description: "selct your region to deploy"
+            type: choice
+            required: true
+            options:
+              - ind
+              - usa
+              - uk
+        debug:
+          description: "Do you want to enable debug mode"
+          type: boolean
+          required: true
+          default: false
+        value:
+          description: "what is the assigned value"
+          type: number
+          required: true
+          default: 30
+        environment:
+          description: "select your Env"
+          required: true
+          type: environment
+        tag:
+          description: "purpose of your run"
+          type: string
+          required: true
+          default: testing
+
+jobs:
+  condition1:
+    if: ${{ github.event.inputs.cloud-region == 'ind' && github.event.inputs.tag == "testing"}}
+    runs-on: ubuntu-latest
+    steps:
+      - name: exp1
+        run: |
+          echo "1st condition is matched"
+          echo "${{ github.event.inputs.cloud-region}}"
+          echo "${{ github.event.inputs.tag }}"
+
+  condition2:
+    if: ${{ github.event.inputs.cloud-region == 'usa' && github.event.inputs.tag == "deploy"}}
+    runs-on: ubuntu-latest
+    steps:
+      - name: exp2
+        run: |
+        echo "2nd condition is matched"
+        echo "${{ github.event.inputs.cloud-region }}"
+        echo "${{ github.event.inputs.tag}}"
+
+  condition3:
+    runs-on: ubuntu-latest
+    steps:
+      - name: exp3
+        if: ${{ github.event.inputs.cloud-region == 'usa' && github.event.inputs.tag == "devops"}}
+        run: |
+          echo "3rd condition is matched"
+          echo "${{ github.event.inputs.cloud-region}}"
+          echo "${{ github.event.inputs.tag}}"
