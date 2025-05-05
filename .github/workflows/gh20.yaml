@@ -3,16 +3,16 @@ name: ghw-workflow-dispatch5
 on:
   workflow_dispatch:
     inputs:
-      environment:
-        description: "selct you env to run"
+      cloud_region:
+        description: "select your cloud region to run"
         type: choice
         required: true
         default: dev
         options:
-          - dev
-          - test
-          - prod
-          - uta
+          - usa
+          - ind
+          - uk
+          - jp
       debug:
         description: "do you want to enable debug mode"
         type: boolean
@@ -23,6 +23,15 @@ on:
         type: string
         required: true
         default: "Testing"
+      count:
+        description: "Number of replicas"
+        type: number 
+        requried: true
+        default: 4
+      environment:
+        description: "select your environment"
+        type: environment
+        required: true
 
 jobs:
   select_options:
@@ -30,6 +39,8 @@ jobs:
     steps:
       - name: options
         run: |
-          echo "Environment: ${{github.event.inputs.environment}}"
+          echo "Environment: ${{github.event.inputs.cloud_region}}"
           echo "Debug Enabled: ${{github.event.inputs.debug}}"
           echo "tag: ${{github.event.inputs.tag}}"
+          echo "replicas: ${{github.event.inputs.count}}"
+          echo "Env: ${{github.event.inputs.environment}}"
