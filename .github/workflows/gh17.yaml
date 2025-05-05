@@ -4,10 +4,11 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: "Select env"
+        description: "select which env you nwant to deploy"
         type: choice
+        requried: true
         default: dev
-        option:
+        options:
           - dev
           - test
           - prod
