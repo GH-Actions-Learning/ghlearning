@@ -1,0 +1,18 @@
+name: ghw-workflow-dispatch4
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Purpose of run"
+        type: string
+        requried: true
+
+jobs:
+  select:
+    runs-on: ubuntu-latest
+    steps:
+      - name: testing
+        run: |
+          echo ${{github.event.inputs.tag}}
+
