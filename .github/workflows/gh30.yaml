@@ -42,7 +42,12 @@ jobs:
         run: |
           docker image ls -a
 
-    #   - name: Tag and Push to Nexus
-    #     run: |
-    #       docker image tag app:v1 
-    #       docker image push 
+      - name: loginto Nexus Repo
+        run: |
+          echo "${{ secrets.NEXUS_PASSWORD }}" | docker login https://0a1f70a3c196-10-244-5-187-5000.papa.r.killercoda.com -u "${{ secrets.NEXUS_USERNAME }}" --password-stdin
+
+      - name: Tag and Push to Nexus
+        run: |
+          docker tag app:v1 0a1f70a3c196-10-244-5-187-5000.papa.r.killercoda.com/docpy/app:v1 
+          docker push app:v1 0a1f70a3c196-10-244-5-187-5000.papa.r.killercoda.com/docpy/app:v1
+ 
