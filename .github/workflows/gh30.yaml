@@ -19,11 +19,14 @@ jobs:
           python-version: '3.9'
 
       - name: Install dependencies
-        working-directory: /home/runner/work/ghlearning/ghlearning/src/app
+        # working-directory: /home/runner/work/ghlearning/ghlearning/src/app
         run: |
           echo 'pwd'
           ls
           pwd
+          cd src/app
+          pwd
+          ls
           pip install --upgrade pip
           pip install -r requirements.txt
 
