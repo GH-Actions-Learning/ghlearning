@@ -19,9 +19,11 @@ jobs:
           python-version: '3.9'
 
       - name: Install dependencies
-        working-directory: src/app
+        # working-directory: src/app
         run: |
           echo 'pwd'
+          ls
+          pwd
           pip install --upgrade pip
           pip install -r requirements.txt
 
