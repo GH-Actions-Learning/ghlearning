@@ -21,10 +21,6 @@ jobs:
       - name: Install dependencies
         working-directory: /home/runner/work/ghlearning/ghlearning/src/apps
         run: |
-          echo 'pwd'
-          ls
-          pwd
-          ls
           pip install --upgrade pip
           pip install -r requirements.txt
 
@@ -32,3 +28,7 @@ jobs:
         working-directory: src/apps
         run: |
           pytest --cov=app --cov-report=term-missing
+
+      - name: Check Docker version
+        run: |
+          docker --version
