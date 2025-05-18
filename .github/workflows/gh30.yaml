@@ -49,5 +49,6 @@ jobs:
       - name: Tag and Push to Nexus
         run: |
           docker tag app:v1 0a1f70a3c196-10-244-5-187-5000.papa.r.killercoda.com/docpy/app:v1 
-          docker push app:v1 0a1f70a3c196-10-244-5-187-5000.papa.r.killercoda.com/docpy/app:v1
+          docker push 0a1f70a3c196-10-244-5-187-5000.papa.r.killercoda.com/docpy/app:v1
  
+          
