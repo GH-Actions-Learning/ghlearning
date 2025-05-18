@@ -37,3 +37,12 @@ jobs:
         working-directory: /home/runner/work/ghlearning/ghlearning/src/
         run: |
           docker image build -t app:v1 .
+
+      - name: Check Docker image
+        run: |
+          docker image ls -a
+
+    #   - name: Tag and Push to Nexus
+    #     run: |
+    #       docker image tag app:v1 
+    #       docker image push 
