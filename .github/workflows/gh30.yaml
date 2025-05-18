@@ -32,3 +32,8 @@ jobs:
       - name: Check Docker version
         run: |
           docker --version
+
+      - name: Build Docker Image
+        working-directory: /home/runner/work/ghlearning/ghlearning/src/
+        run: |
+          docker image build -t app:v1 .
