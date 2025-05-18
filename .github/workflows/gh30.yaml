@@ -24,7 +24,7 @@ jobs:
           echo 'pwd'
           ls
           pwd
-          cd src/app
+          cd src
           pwd
           ls
           pip install --upgrade pip
