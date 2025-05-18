@@ -21,6 +21,7 @@ jobs:
       - name: Install dependencies
         working-directory: src/app
         run: |
+          pwd
           pip install --upgrade pip
           pip install -r requirements.txt
 
