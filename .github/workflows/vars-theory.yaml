@@ -40,7 +40,7 @@ github_actions_variables:
     - scope: Secrets/Org
       visibility: Shared across workflows in an organization or repo
       example: Set in GitHub UI or CLI
-      
+
 
 | Type                     | Description                                                    | Scope            |
 | ------------------------ | -------------------------------------------------------------- | ---------------- |
@@ -70,3 +70,22 @@ github_actions_variables:
 | **Example output**      | `$NAME1` will print the actual value | `${{ env.NAME1 }}` becomes the value *before* shell sees it |
 | **Quotes required?**    | Often yes, for safety (`"$VAR"`)     | Always inside `${{ }}` syntax                               |
 
+
+
+| Context Name              | Description                                                   | Access Syntax                              | Scope                  | Example                                                                         |
+| ------------------------- | ------------------------------------------------------------- | ------------------------------------------ | ---------------------- | ------------------------------------------------------------------------------- |
+| `github`                  | Metadata about the workflow, repo, event, actor, commit, etc. | `${{ github.ref_name }}`                   | Global                 | `echo "Branch: ${{ github.ref_name }}"`                                         |
+| `env`                     | Environment variables defined in the workflow, job, or step   | `${{ env.MY_VAR }}`                        | Workflow, Job, or Step | `env: MY_VAR: "value"` then use `${{ env.MY_VAR }}`                             |
+| `secrets`                 | Encrypted secrets from repository/organization                | `${{ secrets.MY_SECRET }}`                 | Workflow, Job, Step    | `echo "${{ secrets.API_KEY }}"`                                                 |
+| `runner`                  | Information about the GitHub-hosted/self-hosted runner        | `${{ runner.os }}`                         | Job, Step              | `echo "OS: ${{ runner.os }}"`                                                   |
+| `job`                     | Information about the current job (status, container, etc.)   | `${{ job.status }}`                        | Job                    | `if: ${{ job.status == 'success' }}`                                            |
+| `steps`                   | Outputs from steps in the same job                            | `${{ steps.step_id.outputs.output_name }}` | Step                   | Define step with `id: build` → access via `${{ steps.build.outputs.artifact }}` |
+| `matrix`                  | Current matrix value (when using matrix strategy)             | `${{ matrix.node-version }}`               | Job                    | `strategy: matrix: node-version: [14, 16]`                                      |
+| `needs`                   | Outputs and status from previous jobs this job depends on     | `${{ needs.job_id.outputs.output_name }}`  | Job                    | `echo ${{ needs.test.outputs.coverage }}`                                       |
+| `inputs`                  | Parameters passed to reusable workflows via `workflow_call`   | `${{ inputs.param_name }}`                 | Workflow (Reusable)    | In caller: `with: name: John` → In called: `${{ inputs.name }}`                 |
+| `vars`                    | Repository or org-level custom configuration variables        | `${{ vars.MY_VAR }}`                       | Global                 | `echo "URL: ${{ vars.BASE_URL }}"`                                              |
+| `github.event`            | Full webhook payload from the triggering event                | `${{ github.event.head_commit.message }}`  | Global                 | Access PR body: `${{ github.event.pull_request.body }}`                         |
+| `strategy`                | Context for strategy matrix execution                         | `${{ strategy.job-index }}`                | Matrix Jobs            | `echo "Matrix job #${{ strategy.job-index }}"`                                  |
+| `cancelled()`             | Special function context for conditional logic                | `if: cancelled()`                          | Conditional logic      | `if: cancelled()` runs if workflow was canceled                                 |
+| `success()` / `failure()` | Logical status checks                                         | `if: success()`                            | Conditional logic      | `if: success()` runs only if previous steps/jobs succeeded                      |
+| `always()`                | Always executes regardless of prior failure                   | `if: always()`                             | Step / Job             | Used for cleanup steps                                                          |
