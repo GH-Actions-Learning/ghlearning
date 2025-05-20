@@ -1,0 +1,24 @@
+name: env vars
+
+on: push
+
+env:
+  NAME1: "workflow-level"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      NAME2: "job-level"
+    steps:
+      - name: Show environment variables
+        run: |
+          echo $NAME1
+          echo $NAME2
+          echo $NAME3
+          echo "--------------------"
+          echo "${{ env.NAME1 }}"
+          echo "${{ env.NAME2 }}"
+          echo "${{ env.NAME3 }}"
+        env:
+          NAME3: "step-level"

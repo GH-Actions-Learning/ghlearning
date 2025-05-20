@@ -1,0 +1,72 @@
+github_actions_variables:
+  variable_types_and_scopes:
+    - name: Environment Variables
+      description: Set in the environment, available to all steps in a job
+      scope: Job-level
+
+    - name: Context Variables
+      description: Built-in variables, dynamic values like github, env, job
+      scope: Workflow
+
+    - name: Secrets
+      description: Encrypted variables for sensitive data
+      scope: Repository / Org
+
+    - name: Workflow / Job Outputs
+      description: Variables set from one step or job to be used in another
+      scope: Workflow-level
+
+    - name: Custom Variables
+      description: Defined using env or set-output, not built-in
+      scope: Workflow or job
+
+  scope_comparisons:
+    - scope: Step
+      visibility: Visible only inside a particular step
+      example: env in a single run step
+
+    - scope: Job
+      visibility: Accessible by all steps within a job
+      example: env set at job level
+
+    - scope: Workflow
+      visibility: Accessible across all jobs
+      example: env set at workflow level
+
+    - scope: Reusable Workflow Inputs
+      visibility: Passed into reusable workflows
+      example: Via with:
+
+    - scope: Secrets/Org
+      visibility: Shared across workflows in an organization or repo
+      example: Set in GitHub UI or CLI
+      
+
+| Type                     | Description                                                    | Scope            |
+| ------------------------ | -------------------------------------------------------------- | ---------------- |
+| `Environment Variables`  | Set in the environment, available to all steps in a job        | Job-level        |
+| `Context Variables`      | Built-in variables, dynamic values like `github`, `env`, `job` | Workflow         |
+| `Secrets`                | Encrypted variables for sensitive data                         | Repository / Org |
+| `Workflow / Job Outputs` | Variables set from one step or job to be used in another       | Workflow-level   |
+| `Custom Variables`       | Defined using `env` or `set-output`, not built-in              | Workflow or job  |
+
+
+| Scope Type                   | Description                                        | Example                      |
+| ---------------------------- | -------------------------------------------------- | ---------------------------- |
+| **Step**                     | Visible only inside a particular step              | `env` in a single `run` step |
+| **Job**                      | Accessible by all steps within a job               | `env` set at job level       |
+| **Workflow**                 | Accessible across all jobs                         | `env` set at workflow level  |
+| **Reusable Workflow Inputs** | Passed into reusable workflows                     | Via `with:`                  |
+| **Secrets/Org**              | Shared across workflows in an organization or repo | Set in GitHub UI or CLI      |
+
+
+
+      | Aspect                  | `$NAME1` / `$VAR`                    | `${{ env.NAME1 }}`                                          |
+| ----------------------- | ------------------------------------ | ----------------------------------------------------------- |
+| **Used in**             | Inside shell commands (bash, sh)     | Used in YAML-level GitHub Actions expressions               |
+| **Evaluated by**        | The shell (`bash`, `sh`)             | GitHub Actions expression engine                            |
+| **When it's evaluated** | At **runtime**, during the job step  | At **workflow parsing time**, before execution              |
+| **Context**             | Only works inside `run:` blocks      | Can be used in `run:`, `env:`, `name:`, etc.                |
+| **Example output**      | `$NAME1` will print the actual value | `${{ env.NAME1 }}` becomes the value *before* shell sees it |
+| **Quotes required?**    | Often yes, for safety (`"$VAR"`)     | Always inside `${{ }}` syntax                               |
+

@@ -1,0 +1,20 @@
+name: env vars ovveride
+
+on: push
+
+env:
+  NAME1: "workflow-level"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      NAME1: "job-level"
+    steps:
+      - name: Show environment variables
+        run: |
+          echo $NAME1
+          echo "--------------------"
+          echo "${{ env.NAME1 }}"
+        env:
+          NAME1: "step-level"
