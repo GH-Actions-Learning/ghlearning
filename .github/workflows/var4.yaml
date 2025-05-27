@@ -9,9 +9,9 @@ on: push
 
 jobs:
   ex1:
-    runs-on: ubuntu:latest
+    runs-on: ubuntu-latest
     steps:
-      - name: set dynamic env value
+      - name: set dynamic env value.
         run: |
           echo "NAME=dynamic_var" >> GITHUB_ENV
 
