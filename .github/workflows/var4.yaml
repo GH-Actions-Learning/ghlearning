@@ -28,5 +28,10 @@ jobs:
 
       - name: Print GITHUB_ENV path
         run: echo "$GITHUB_ENV"
+
+      - name: Access step level env value
+        run: |
+          echo $NAME
+          echo $COMMIT_SHA
       
         
