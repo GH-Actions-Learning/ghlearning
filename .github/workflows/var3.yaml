@@ -17,10 +17,18 @@ jobs:
           echo "--------------------"
           echo "${{ env.NAME1 }}"
         env:
-          NAME1: "step-level"
+          NAME1: "step-level-1"
 
       - name: print env value in second step
         run: |
           echo $NAME1
           echo "--------------------"
-          echo "${{ env.NAME1 }}" 
+          echo "${{ env.NAME1 }}"      # It will take value of job env value
+
+      - name: print env value in second step
+        run: |
+          echo $NAME1
+          echo "--------------------"
+          echo "${{ env.NAME1 }}"      # It will take value of step-3 value
+        env:
+          NAME1: "step-level-3"
