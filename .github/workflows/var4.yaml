@@ -24,7 +24,7 @@ jobs:
         run: echo "COMMIT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
 
       - name: Use Commit SHA
-        run: echo "Short SHA: $COMMIT_SHA"
+        run: echo "Short SHA:$COMMIT_SHA"
 
       - name: Print GITHUB_ENV path
         run: echo "$GITHUB_ENV"
