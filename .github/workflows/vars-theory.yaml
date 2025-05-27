@@ -42,13 +42,15 @@ github_actions_variables:
       example: Set in GitHub UI or CLI
 
 
-| Type                     | Description                                                    | Scope            |
-| ------------------------ | -------------------------------------------------------------- | ---------------- |
-| `Environment Variables`  | Set in the environment, available to all steps in a job        | Job-level        |
-| `Context Variables`      | Built-in variables, dynamic values like `github`, `env`, `job` | Workflow         |
-| `Secrets`                | Encrypted variables for sensitive data                         | Repository / Org |
-| `Workflow / Job Outputs` | Variables set from one step or job to be used in another       | Workflow-level   |
-| `Custom Variables`       | Defined using `env` or `set-output`, not built-in              | Workflow or job  |
+| Type                              | Scope                                 | Example                                                     |
+| --------------------------------- | ------------------------------------- | ----------------------------------------------------------- |
+| **Default environment variables** | Built-in by GitHub                    | `GITHUB_REPOSITORY`, `GITHUB_WORKFLOW`                      |
+| **Context variables**             | Read-only values from the context     | `github.actor`, `github.event_name`                         |
+| **Environment variables (env)**   | Set by user in jobs or steps          | `env: NODE_ENV: production`                                 |
+| **Secrets**                       | Encrypted values (secure)             | `secrets.API_KEY`                                           |
+| **Workflow variables**            | User-defined, reusable                | `vars.PROJECT_NAME` (via repository/organization variables) |
+| **Job/Step outputs**              | Values passed between steps/jobs      | `steps.step_id.outputs.output_name`                         |
+| **Inputs**                        | Used in reusable workflows or actions | `inputs.environment`                                        |
 
 
 | Scope Type                   | Description                                        | Example                      |

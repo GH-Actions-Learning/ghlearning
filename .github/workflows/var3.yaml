@@ -1,31 +1,26 @@
-# GITHUB_ENV is a special file path provided by GitHub Actions.
-# When you write to this file, GitHub automatically adds the content
-# as environment variables for all subsequent steps in the same job.
-# it is replacement of set-output --> """echo "::set-output name=var::value" """"
-
-name: Dynamic-env
+name: env vars print in different steps
 
 on: push
 
+env:
+  NAME1: "workflow-level"
+
 jobs:
-  ex1:
-    runs-on: ubuntu:latest
+  build:
+    runs-on: ubuntu-latest
+    env:
+      NAME1: "job-level"
     steps:
-      - name: set dynamic env value
+      - name: print env value in first step
         run: |
-          echo "NAME=dynamic_var" >> GITHUB_ENV
+          echo $NAME1
+          echo "--------------------"
+          echo "${{ env.NAME1 }}"
+        env:
+          NAME1: "step-level"
 
-      - name: print dynamic env value
+      - name: print env value in second step
         run: |
-          echo $GITHUB_ENV
-
-      - name: Set Git commit hash
-        run: echo "COMMIT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
-
-      - name: Use Commit SHA
-        run: echo "Short SHA: $COMMIT_SHA"
-
-      - name: Print GITHUB_ENV path
-        run: echo "$GITHUB_ENV"
-      
-        
+          echo $NAME1
+          echo "--------------------"
+          echo "${{ env.NAME1 }}" 
