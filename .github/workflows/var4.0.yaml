@@ -16,7 +16,7 @@ jobs:
         env:
           VAR1: ultra-super-rich-j1s1
           VAR2: 100Lpa-j1s1
-        run:
+        run: |
           echo $VAR1
           echo $VAR2 
 
@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest 
     steps:
       - name: access var
-        run:
+        run: |
           echo $VAR1
           echo $VAR2
 
@@ -35,7 +35,7 @@ jobs:
       VAR2: 150lpa-j3
     steps:
       - name: access var
-        run:
+        run: |
           echo $VAR1
       
 
@@ -46,6 +46,6 @@ jobs:
         env:
           VAR1: super-rich-j4s1
           VAR2: 200lpa-j4s1
-        run:
+        run: |
           echo $VAR1 
           echo $VAR2
