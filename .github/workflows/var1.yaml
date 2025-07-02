@@ -1,0 +1,15 @@
+name: env var at workflow level
+
+on: push
+env:
+  VAR1: rich
+  VAR2: 35lpa
+
+jobs:
+  j1:
+    runs-on: ubuntu-latest
+    steps:
+      - name: print env values at workflow level 
+        run: |
+          echo "$VAR1"
+          echo "$35lpa"
