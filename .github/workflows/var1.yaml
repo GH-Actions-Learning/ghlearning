@@ -12,4 +12,4 @@ jobs:
       - name: print env values at workflow level 
         run: |
           echo "$VAR1"
-          echo "$35lpa"
+          echo "$VAR2"
