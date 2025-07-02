@@ -1,0 +1,26 @@
+name: access step level env var at different level
+
+on: push 
+
+jobs:
+  j1:
+    runs-on: ubuntu-latest 
+    steps:
+      - name: access step1 level env values
+        env:
+          VAR1: rich
+          VAR2: 35lpa 
+        run: |
+          echo $VAR1 
+          echo $VAR2 
+      - name: access step1 level env values 
+        env:
+          VAR1: ultra-rich 
+          VAR2: 70lpa 
+        run: |
+          echo $VAR1
+          echo $VAR2 
+      - name: try to access now 2nd step to 3rd step 
+        run: |
+          echo $VAR1
+          echo $VAR2
