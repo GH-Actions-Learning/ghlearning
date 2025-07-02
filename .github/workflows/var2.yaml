@@ -1,0 +1,15 @@
+name: env var at job level
+
+on: push
+
+jobs:
+  j1:
+    runs-on: ubuntu-latest
+    env:
+      VAR1: rich
+      VAR2: 35lpa
+    steps:
+      - name: print job level env values
+        run: |
+          echo $VAR1
+          echo $VAR2
