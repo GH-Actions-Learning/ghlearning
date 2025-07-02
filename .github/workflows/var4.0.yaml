@@ -1,0 +1,51 @@
+name: overwrite env vars 
+
+on: push 
+env:
+  VAR1: rich-w1
+  VAR2: 35lpa-w1 
+
+jobs:
+  j1:
+    runs-on: ubuntu-latest 
+    env:
+      VAR1: ultra-rich 
+      VAR2: 70lpa 
+    steps:
+      - name: access var 
+        env:
+          VAR1: ultra-super-rich-j1s1
+          VAR2: 100Lpa-j1s1
+        run:
+          echo $VAR1
+          echo $VAR2 
+
+  j2:
+    run-on: ubuntu-latest 
+    steps:
+      - name: access var
+        run:
+          echo $VAR1
+          echo $VAR2
+
+  j3:
+    runs-on: ubuntu-latest 
+    env:
+      VAR1: high-rich-j3
+      VAR2: 150lpa-j3
+    steps:
+      - name: access var
+        run:
+          echo $VAR1
+      
+
+  j4:
+    runs-on: ubuntu-latest 
+    steps:
+      - name: access var
+        env:
+          VAR1: super-rich-j4s1
+          VAR2: 200lpa-j4s1
+        run:
+          echo $VAR1 
+          echo $VAR2
