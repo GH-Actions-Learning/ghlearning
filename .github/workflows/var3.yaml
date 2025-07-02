@@ -1,0 +1,15 @@
+name: env var at step level 
+
+on: push
+
+jobs:
+  j1:
+    runs-on: ubuntu-latest
+    steps:
+      - name: set up env and access it
+        env:
+          VAR1: rich
+          VAR2: 35lpa
+        run: |
+          echo $VAR1
+          echo $VAR2
