@@ -19,18 +19,18 @@ jobs:
           echo $VAR1
           echo $VAR2 
 
-    j2:
-      runs-on: ubuntu-latest
-      env:
-        VAR1: ultra-rich
-        VAR2: 70lpa
-      steps:
-        - name: access job level env values at step1 
-          run: |
-            echo $VAR1
-            echo $VAR2 
+  j2:
+    runs-on: ubuntu-latest
+    env:
+      VAR1: ultra-rich
+      VAR2: 70lpa
+    steps:
+      - name: access job level env values at step1 
+        run: |
+          echo $VAR1
+          echo $VAR2 
 
-        - name: access job level env values at step2 
-          run: |
-            echo $VAR1
-            echo $VAR2
+      - name: access job level env values at step2 
+        run: |
+          echo $VAR1
+          echo $VAR2
