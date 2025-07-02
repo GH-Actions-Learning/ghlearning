@@ -1,0 +1,23 @@
+name: access workflow level env var at different level
+
+on: push 
+env:
+  VAR1: rich 
+  VAR2: 35lpa
+
+jobs:
+  j1:
+    runs-on: ubuntu-latest
+    steps:
+      - name: access workflow level env in j1
+        run: |
+          echo $VAR1 
+          echo $VAR2 
+
+  j2:
+    runs-on: ubuntu-latest
+    steps:
+      - name: access workflow level env in j2
+        run: |
+          echo $VAR1
+          echo $VAR2 
