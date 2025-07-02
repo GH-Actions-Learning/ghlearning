@@ -22,5 +22,5 @@ jobs:
           echo $VAR2 
       - name: try to access now 2nd step to 3rd step 
         run: |
-          echo $VAR1
+          echo $VAR1      ## VAR1 and VAR2 will not print values 
           echo $VAR2
