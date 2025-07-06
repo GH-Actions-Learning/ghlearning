@@ -1,0 +1,87 @@
+1️⃣ Push Event
+
+github:
+  actor: "octocat"
+  event_name: "push"
+  repository: "my-org/my-repo"
+  ref: "refs/heads/main"
+  ref_name: "main"
+  sha: "d1e8f7a4bc2a6f8c7e9a123456789abcdef123456"
+  workflow: "CI Build"
+  run_id: 123456789
+  run_number: 42
+  job: "build"
+  event:
+    ref: "refs/heads/main"
+    head_commit:
+      id: "d1e8f7a4bc2a6f8c7e9a123456789abcdef123456"
+      message: "Fix critical bug"
+      timestamp: "2025-07-06T12:00:00Z"
+      author:
+        name: "octocat"
+        email: "octocat@example.com"
+
+
+2️⃣ Pull Request Event
+
+github:
+  actor: "octocat"
+  event_name: "pull_request"
+  repository: "my-org/my-repo"
+  ref: "refs/pull/123/merge"
+  ref_name: "pull/123/merge"
+  sha: "abc123456789def123456789abcdef123456789a"
+  workflow: "PR Checks"
+  run_id: 987654321
+  run_number: 17
+  job: "test"
+  event:
+    pull_request:
+      number: 123
+      title: "Add new feature"
+      body: "This PR adds a new feature"
+      user:
+        login: "octocat"
+      head:
+        ref: "feature/new-feature"
+      base:
+        ref: "main"
+      merged: false
+      merged_by: null
+      merged_at: null
+
+
+3️⃣ workflow_dispatch Event
+
+github:
+  actor: "octocat"
+  event_name: "workflow_dispatch"
+  repository: "my-org/my-repo"
+  ref: "refs/heads/main"
+  ref_name: "main"
+  sha: "def123456789abcdef123456789abcdef1234567"
+  workflow: "Manual Deploy"
+  run_id: 1122334455
+  run_number: 5
+  job: "deploy"
+  event:
+    inputs:
+      environment: "staging"
+      version: "1.0.0"
+
+
+---------------------------------------
+How to Access These Nested Fields in GitHub Actions
+---------------------------------------
+
+
+| Field         | Access Syntax                                 |
+| ------------- | --------------------------------------------- |
+| PR number     | `${{ github.event.number }}`                  |
+| PR title      | `${{ github.event.pull_request.title }}`      |
+| PR body       | `${{ github.event.pull_request.body }}`       |
+| Source branch | `${{ github.event.pull_request.head.ref }}`   |
+| Target branch | `${{ github.event.pull_request.base.ref }}`   |
+| PR author     | `${{ github.event.pull_request.user.login }}` |
+| PR merged?    | `${{ github.event.pull_request.merged }}`     |
+
