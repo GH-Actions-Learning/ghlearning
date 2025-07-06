@@ -1,0 +1,186 @@
+| Phase # | Name                                             | Description                                                       |
+| ------- | ------------------------------------------------ | ----------------------------------------------------------------- |
+| 1️⃣     | **Workflow File Parsing (Pre-processing)**       | GitHub reads the `.yml` file and parses structure and expressions |
+| 2️⃣     | **Expression Evaluation (Workflow Compilation)** | All `${{ }}` expressions are resolved by GitHub                   |
+| 3️⃣     | **Workflow Dispatch**                            | GitHub creates and dispatches the workflow run                    |
+| 4️⃣     | **Runner Setup**                                 | A VM or container runner is provisioned                           |
+| 5️⃣     | **Environment Setup**                            | GitHub sets up environment variables, secrets, tools              |
+| 6️⃣     | **Job Execution (Shell Runtime)**                | Each job runs on its runner; shell executes commands              |
+| 7️⃣     | **Post-Job & Cleanup**                           | Runners execute `post` steps and cleanup tasks                    |
+| 8️⃣     | **Result Finalization**                          | GitHub finalizes logs, artifacts, status, and UI output           |
+
+
+
+| Phase                | Type         | Responsible    | Examples                                   |
+| -------------------- | ------------ | -------------- | ------------------------------------------ |
+| 1. Parse YAML        | Static       | GitHub         | Workflow structure validation              |
+| 2. Evaluate `${{ }}` | Static       | GitHub         | `${{ github.actor }}`, `${{ env.MY_VAR }}` |
+| 3. Dispatch          | Event-driven | GitHub         | Trigger by `push`, `pull_request`          |
+| 4. Setup Runner      | Dynamic      | GitHub         | Setup hosted VM                            |
+| 5. Setup Env         | Dynamic      | GitHub/Runner  | Inject `$MY_VAR`, `$GITHUB_*`              |
+| 6. Execute Shell     | Dynamic      | Shell/Bash     | `$MY_VAR`, `echo`, `npm install`           |
+| 7. Cleanup           | Dynamic      | Runner/Actions | Artifact uploads, cache cleanup            |
+| 8. Finalize          | Static       | GitHub         | Logs, artifacts, UI display                |
+
+
+name: Test Workflow
+
+on: [push]
+
+env:
+  COMMIT: ${{ github.sha }} # Evaluated at phase 2
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Show compile-time value
+        run: echo "GitHub SHA: ${{ github.sha }}" # Phase 2
+
+      - name: Show runtime env var
+        run: echo "COMMIT ENV: $COMMIT" # Phase 6 (shell)
+
+      - name: Set output
+        id: step1
+        run: echo "result=done" >> $GITHUB_OUTPUT # Phase 6
+
+
+| Use Case                                       | Correct Phase                                 |
+| ---------------------------------------------- | --------------------------------------------- |
+| Use context variables (`github.*`, `inputs.*`) | Phase 2 (expression evaluation)               |
+| Use shell variables (`$VAR_NAME`)              | Phase 6 (shell runtime)                       |
+| Use reusable workflow `outputs`                | Between Phase 6 and 7                         |
+| Access secrets                                 | Phase 5 onward                                |
+| Change step logic with `if:`                   | Phase 2 (some), Phase 6 (some dynamic values) |
+
+
+----------------------
+
+✅ 1. Workflow File Parsing (Pre-processing Phase)
+
+When it happens: When you push code or trigger a workflow.
+
+What happens:
+
+GitHub parses your .github/workflows/*.yml file.
+
+Validates YAML structure (jobs, steps, on, env, etc.).
+
+Collects context information (event, repository, etc.).
+
+✅ No code is run yet.
+
+✅ Secrets are not injected yet.
+
+✅ 2. Expression Evaluation (${{ }} Evaluation Phase)
+When it happens: Before sending the workflow to the runner.
+
+What happens:
+
+GitHub evaluates all ${{ }} expressions, including:
+
+${{ github.* }}, ${{ env.* }}, ${{ inputs.* }}, ${{ vars.* }}, etc.
+
+Conditional if: expressions
+
+env: interpolations
+
+name:, run:, with:, uses:, etc.
+
+Important:
+
+This happens on GitHub's servers, not on the runner.
+
+Only supports GitHub contexts and environment contexts.
+
+🧪 Example:
+
+name: Deploy to ${{ github.ref_name }}
+
+env:
+  MY_ENV: ${{ github.repository_owner }}
+
+These expressions are fully resolved before the runner starts.
+
+✅ 3. Workflow Dispatch
+
+GitHub triggers the workflow based on event (push, pull_request, workflow_dispatch, etc.)
+
+What happens:
+
+GitHub selects the correct workflow file based on event trigger.
+
+GitHub determines the workflow run ID, run number, and what jobs will run.
+
+For workflow_dispatch, GitHub also collects inputs.
+
+✅ 4. Runner Setup
+
+When it happens: Right before job starts executing.
+
+What happens:
+
+GitHub allocates a hosted runner or starts a self-hosted runner.
+
+Runner OS and image are prepared.
+
+Job configuration is sent to the runner.
+
+✅ 5. Environment Setup
+When it happens: Before each job starts.
+
+What happens:
+
+Environment variables from env: blocks are injected into the runner’s shell environment.
+
+secrets: values are injected securely.
+
+Actions used with uses: are downloaded and prepared.
+
+Caching, setup actions, and tools are installed.
+
+🧪 At this point, $MY_VAR will now work in shell.
+
+✅ 6. Job Execution (Shell Runtime)
+
+Each job executes its steps sequentially.
+
+What happens:
+
+Steps with run: are executed in the runner shell (Bash, PowerShell, etc.).
+
+$VAR_NAME environment variables are now resolved by the shell.
+
+Any shell-level logic, scripting, conditionals, etc., happens here.
+
+🔁 Steps:
+
+Run script or commands (run:)
+
+Evaluate if: expressions at runtime
+
+Generate outputs using $GITHUB_OUTPUT
+
+✅ 7. Post-Job & Cleanup Phase
+
+After the last step of a job finishes
+
+What happens:
+
+post: actions (e.g., @actions/cache cleanup, teardown) are executed.
+
+Temporary files are cleaned up.
+
+Artifacts are uploaded.
+
+✅ 8. Finalization Phase
+
+After all jobs complete
+
+What happens:
+
+GitHub collects logs, artifacts, exit codes.
+
+Displays status (✔️ success, ❌ failure, ⏭️ skipped).
+
+Notifies integrations (e.g., Slack, GitHub UI updates, PR checks).

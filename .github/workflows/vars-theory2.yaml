@@ -1,0 +1,254 @@
+What Are Context Variables in GitHub Actions?
+
+Context variables are read-only, structured data provided by GitHub at runtime to help you understand and control your workflow's behavior. These are accessed via ${{ <context>.<property> }} syntax.
+
+They are evaluated by GitHub before runner execution, and are used in:
+
+if: conditions
+
+env:, run:, with:, name: fields
+
+Expressions in matrix, strategy, outputs, and more
+
+✅ Context Variable Syntax
+
+${{ context.property }}
+Example:
+
+${{ github.actor }}
+${{ github.event.pull_request.title }}
+${{ runner.os }}
+${{ matrix.node }}
+
+📚 Categories of Context Variables
+
+Let’s explore each context type with examples and usage details.
+
+1️⃣ github — GitHub & Event Context
+
+Description:
+
+Contains metadata about the repository, event type, actor, branch, commit, etc.
+
+| Property            | Description                | Example                   |
+| ------------------- | -------------------------- | ------------------------- |
+| `github.repository` | "owner/repo"               | `"octocat/hello-world"`   |
+| `github.actor`      | Who triggered the workflow | `"octocat"`               |
+| `github.event_name` | Triggering event           | `"push"`                  |
+| `github.ref_name`   | Branch or tag name         | `"main"`                  |
+| `github.sha`        | Commit SHA                 | `"9fceb02"`               |
+| `github.event`      | Full event payload (JSON)  | `{ pull_request: {...} }` |
+
+Example:
+
+steps:
+  - run: echo "Triggered by: ${{ github.actor }} on branch ${{ github.ref_name }}"
+
+PR-specific example:
+
+if: github.event.pull_request.merged == true
+
+
+2️⃣ runner — Runner System Info
+
+| Property      | Description    | Example            |
+| ------------- | -------------- | ------------------ |
+| `runner.os`   | OS name        | `Linux`, `Windows` |
+| `runner.arch` | Architecture   | `X64`              |
+| `runner.name` | Name of runner | `Hosted Agent`     |
+
+Example:
+
+steps:
+  - run: echo "Running on ${{ runner.os }}"
+
+3️⃣ env — Environment Variables
+
+${{ env.MY_VAR }}
+
+
+4️⃣ vars — Repository or Organization Variables
+
+Description:
+
+Static configuration values set in the GitHub UI under repo/org settings → Variables.
+
+${{ vars.DEPLOY_REGION }}
+
+5️⃣ secrets — Secure Secrets
+
+Description:
+
+Securely stored secrets from repository/org settings.
+
+${{ secrets.API_KEY }}
+
+They are masked in logs and not available during expression evaluation outside GitHub (e.g., if: using secrets won’t work unless in run: block or secure use).
+
+6️⃣ matrix — Matrix Strategy Variables
+
+Used inside matrix jobs:
+
+strategy:
+  matrix:
+    node: [14, 16]
+run: echo "Using Node version ${{ matrix.node }}"
+
+7️⃣ steps — Outputs of Steps
+
+Access outputs or results from a previous step:
+
+${{ steps.build.outputs.artifact_path }}
+
+8️⃣ job & jobs — Job Status and Outputs
+
+${{ job.status }}
+${{ jobs.test.outputs.version }}
+
+9️⃣ needs — Dependency Job Outputs
+
+needs: build
+run: echo "Version: ${{ needs.build.outputs.version }}"
+
+1️⃣0️⃣ strategy — Strategy-level info
+
+${{ strategy.job-index }}
+${{ strategy.fail-fast }}
+
+1️⃣1️⃣ inputs — Inputs from workflow_dispatch or reusable workflows
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        default: 'dev'
+
+run: echo "Env: ${{ inputs.environment }}"
+
+🔍 Example: Using Multiple Contexts Together
+
+env:
+  DEPLOY_REGION: ${{ vars.REGION }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    steps:
+      - run: |
+          echo "Deploying to region: ${{ env.DEPLOY_REGION }}"
+          echo "Event: ${{ github.event_name }}"
+          echo "Branch: ${{ github.ref_name }}"
+          echo "Runner OS: ${{ runner.os }}"
+          echo "Matrix OS: ${{ matrix.os }}"
+
+
+----------------
+
+| Type        | Mutable | Example Usage                       | Supports Dynamic Assignment? |
+| ----------- | ------- | ----------------------------------- | ---------------------------- |
+| `github.*`  | ❌ No    | `${{ github.actor }}`               | ❌                            |
+| `runner.*`  | ❌ No    | `${{ runner.os }}`                  | ❌                            |
+| `env.*`     | ✅ Yes   | `${{ env.MY_VAR }}`                 | ✅                            |
+| `secrets.*` | ❌ No    | `${{ secrets.MY_SECRET }}`          | ❌                            |
+| `steps.*`   | ✅ Yes   | `${{ steps.step1.outputs.foo }}`    | ✅                            |
+| `needs.*`   | ✅ Yes   | `${{ needs.job1.outputs.version }}` | ✅                            |
+| `inputs.*`  | ❌ No    | `${{ inputs.environment }}`         | ❌                            |
+
+
+
+------------------
+
+Top Most Commonly Used GitHub Actions Contexts
+
+------------------
+
+
+1️⃣ github (🏆 Most Used)
+
+| Property            | Example                                                      |
+| ------------------- | ------------------------------------------------------------ |
+| `github.repository` | `"my-org/my-repo"`                                           |
+| `github.actor`      | `"your-username"` (who triggered the run)                    |
+| `github.ref_name`   | `"main"`, `"feature/login"` (branch/tag name)                |
+| `github.event_name` | `"push"`, `"pull_request"`                                   |
+| `github.sha`        | Git commit SHA                                               |
+| `github.event`      | Full event payload (e.g., `github.event.pull_request.title`) |
+
+
+2️⃣ env
+
+| Property         | Usage                                   |
+| ---------------- | --------------------------------------- |
+| `env.MY_ENV_VAR` | Read/write custom environment variables |
+| `$MY_ENV_VAR`    | Used in shell script                    |
+
+
+3️⃣ secrets
+
+| Property                    | Example            |
+| --------------------------- | ------------------ |
+| `secrets.AZURE_CREDENTIALS` | Azure login        |
+| `secrets.DOCKER_PASSWORD`   | Docker Hub push    |
+| `secrets.SLACK_WEBHOOK`     | Notification hooks |
+
+
+4️⃣ runner
+
+| Property      | Example                     |
+| ------------- | --------------------------- |
+| `runner.os`   | `Linux`, `Windows`, `macOS` |
+| `runner.arch` | `X64`, `ARM64`              |
+
+
+5️⃣ matrix
+
+| Property      | Example                           |
+| ------------- | --------------------------------- |
+| `matrix.node` | `14`, `16`                        |
+| `matrix.os`   | `ubuntu-latest`, `windows-latest` |
+
+
+6️⃣ steps
+
+| Property                           | Example              |
+| ---------------------------------- | -------------------- |
+| `steps.build.outputs.artifact_url` | Step output value    |
+| `steps.test.conclusion`            | `success`, `failure` |
+
+
+7️⃣ needs
+
+| Property                      | Example                 |
+| ----------------------------- | ----------------------- |
+| `needs.build.outputs.version` | Output from job `build` |
+| `needs.test.result`           | Status from another job |
+
+
+8️⃣ inputs
+
+| Property             | Example           |
+| -------------------- | ----------------- |
+| `inputs.environment` | `"dev"`, `"prod"` |
+| `inputs.version`     | `"1.0.3"`         |
+
+
+9️⃣ vars (Config Variables from GitHub UI)
+
+| Property           | Example     |
+| ------------------ | ----------- |
+| `vars.ENVIRONMENT` | `"staging"` |
+| `vars.REGION`      | `"west-us"` |
+
+
+1️⃣0️⃣ job, jobs
+
+| Property             | Example                |
+| -------------------- | ---------------------- |
+| `job.status`         | `success`, `failure`   |
+| `jobs.deploy.result` | Status of `deploy` job |
+
+

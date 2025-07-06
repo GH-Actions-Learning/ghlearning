@@ -1,0 +1,32 @@
+name: Print Context Metadata
+
+on: [push]
+
+jobs:
+  print-contexts:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Print github context
+        run: echo '${{ toJson(github) }}'
+
+      - name: Print env context
+        run: echo '${{ toJson(env) }}'
+
+      - name: Print job context
+        run: echo '${{ toJson(job) }}'
+
+      - name: Print steps context
+        run: echo '${{ toJson(steps) }}'
+
+      - name: Print runner context
+        run: echo '${{ toJson(runner) }}'
+
+      - name: Print secrets context
+        run: echo '${{ toJson(secrets) }}'
+
+      - name: Print strategy context
+        run: echo '${{ toJson(strategy) }}'
+
+      - name: Print matrix context
+        run: echo '${{ toJson(matrix) }}'
