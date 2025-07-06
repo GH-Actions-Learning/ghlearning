@@ -7,17 +7,17 @@ jobs:
     runs-on: ubunut-latest
     steps:
       - name: Who triggered this?
-        run: echo 'Actor: ${{ github.actor }}'
+        run: echo 'Actor:- ${{ github.actor }}'
 
       - name: Which event?
-        run: echo 'Event name: ${{ github.event_name }}'
+        run: echo 'Event name:- ${{ github.event_name }}'
 
       - name: On which branch?
-        run: echo 'Branch: ${{ github.ref_name }}'
+        run: echo 'Branch:- ${{ github.ref_name }}'
 
       - name: Commit info
-        run: echo 'Commit SHA: ${{ github.sha }}'
+        run: echo 'Commit SHA:- ${{ github.sha }}'
 
       - name: Show PR Title (only if PR)
         if: github.event_name == 'pull_request'
-        run: echo 'PR Title: ${{ github.event.pull_request.title }}'
+        run: echo 'PR Title:- ${{ github.event.pull_request.title }}'
