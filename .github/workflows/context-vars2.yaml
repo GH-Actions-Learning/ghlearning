@@ -4,7 +4,7 @@ on: push
 
 jobs:
   j1:
-    runs-on: ubunut-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Who triggered this?
         run: echo 'Actor:- ${{ github.actor }}'
