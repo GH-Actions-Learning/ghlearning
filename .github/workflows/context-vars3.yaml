@@ -1,0 +1,21 @@
+name: Manual Deployment
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        required: true
+        default: "staging"
+      version:
+        required: true
+        default: "latest"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy
+        run: |
+          echo "🚀 Triggered by: ${{ github.actor }}"
+          echo "🔧 Deploying version: ${{ github.event.inputs.version }}"
+          echo "🌍 Environment: ${{ github.event.inputs.environment }}"
