@@ -1,0 +1,29 @@
+name: job context variables 
+
+on: push
+
+jobs:
+  safe-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Step that might fail
+        run: exit 1
+        continue-on-error: true  # ❗ Important
+
+      - name: Handle failure
+        if: job.status == 'failure'
+        run: echo "💥 Step failed, but continuing the job..."
+
+      - name: Notify
+        run: echo "📬 Job final status: ${{ job.status }}"
+        
+  recoverable-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Critical step
+        run: exit 1
+        continue-on-error: true
+
+      - name: Decide what to do next
+        if: job.status == 'failure'
+        run: echo "⚠️ One or more steps failed. Logging error, sending alert..."
