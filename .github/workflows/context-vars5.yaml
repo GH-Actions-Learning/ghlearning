@@ -15,7 +15,7 @@ jobs:
         run: echo "💥 Step failed, but continuing the job..."
 
       - name: Notify
-        run: echo "📬 Job final status: ${{ job.status }}"
+        run: echo "📬 Job final status:- ${{ job.status }}"
         
   recoverable-job:
     runs-on: ubuntu-latest
