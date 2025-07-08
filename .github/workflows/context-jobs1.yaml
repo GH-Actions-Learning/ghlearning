@@ -18,15 +18,15 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build, test]
     steps:
-      - name: Show job outcomes
-        run: |
-          echo "Build job outcome: ${{ jobs.build.outcome }}"
-          echo "Test job outcome: ${{ jobs.test.outcome }}"
+    - name: Show job outcomes
+      run: |
+        echo "Build job outcome: ${{ jobs.build.outcome }}"
+        echo "Test job outcome: ${{ jobs.test.outcome }}"
       
-      - name: Conditional deploy
-        if: ${{ jobs.build.outcome == 'success' && jobs.test.outcome == 'success' }}
-        run: echo "Deploying application..."
+    - name: Conditional deploy
+      if: ${{ jobs.build.outcome == 'success' && jobs.test.outcome == 'success' }}
+      run: echo "Deploying application..."
 
-      - name: Skip deploy notice
-        if: ${{ !(jobs.build.outcome == 'success' && jobs.test.outcome == 'success') }}
-        run: echo "Deploy skipped due to build or test failure."
+    - name: Skip deploy notice
+      if: ${{ !(jobs.build.outcome == 'success' && jobs.test.outcome == 'success') }}
+      run: echo "Deploy skipped due to build or test failure."
