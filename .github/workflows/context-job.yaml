@@ -6,18 +6,14 @@ jobs:
   sample:
     runs-on: ubuntu-latest
     steps:
-      - name: This will succeed
-        run: echo "Running..."
+      - name: This will fail
+        run: exit 1
+        continue-on-error: true
 
       - name: Check job status
         if: ${{ job.status == 'success' }}
         run: echo "The job is succeeding!"
 
-      - name: This will fail
-        run: |
-          exit 1
-
-      - name: Check job status
-        if: ${{ job.status == 'failure' }}
-        run: |
-          echo "Job Failed"
+      - name: Or handle failure
+        if: ${{ job.status != 'success' }}
+        run: echo "Something went wrong in the job"
