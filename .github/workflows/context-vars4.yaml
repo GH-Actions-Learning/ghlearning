@@ -1,4 +1,4 @@
-name: Pull Request Handler
+name: Github context Pull Request Handler
 
 on:
   pull_request:

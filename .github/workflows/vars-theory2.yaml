@@ -169,14 +169,45 @@ Top Most Commonly Used GitHub Actions Contexts
 
 1️⃣ github (🏆 Most Used)
 
-| Property            | Example                                                      |
-| ------------------- | ------------------------------------------------------------ |
-| `github.repository` | `"my-org/my-repo"`                                           |
-| `github.actor`      | `"your-username"` (who triggered the run)                    |
-| `github.ref_name`   | `"main"`, `"feature/login"` (branch/tag name)                |
-| `github.event_name` | `"push"`, `"pull_request"`                                   |
-| `github.sha`        | Git commit SHA                                               |
-| `github.event`      | Full event payload (e.g., `github.event.pull_request.title`) |
+| Property                  | Description                    | Example                    |
+| ------------------------- | ------------------------------ | -------------------------- |
+| `github.repository`       | Full name of repo              | `"octocat/hello-world"`    |
+| `github.repository_owner` | Owner of repo                  | `"octocat"`                |
+| `github.ref`              | Full ref path                  | `"refs/heads/main"`        |
+| `github.ref_name`         | Branch or tag name             | `"main"`                   |
+| `github.sha`              | Commit SHA triggering workflow | `"a1b2c3d4..."`            |
+| `github.actor`            | Username of triggerer          | `"johnsmith"`              |
+| `github.event_name`       | Event type                     | `"push"`, `"pull_request"` |
+| `github.workflow`         | Name of the workflow           | `"CI Pipeline"`            |
+| `github.run_id`           | Unique run ID                  | `"321123"`                 |
+| `github.run_number`       | Incremental number of run      | `"25"`                     |
+| `github.event`            | Full event payload             | Complex JSON               |
+| `github.head_ref`         | Head branch (for PRs)          | `"feature-xyz"`            |
+| `github.base_ref`         | Base branch (for PRs)          | `"main"`                   |
+   
+    Complete Reference: github Context Properties
+
+| Property           | Description                                                        |
+| ------------------ | ------------------------------------------------------------------ |
+| `action`           | Name of the action currently running                               |
+| `actor`            | Username of the person or app that initiated the workflow          |
+| `base_ref`         | The base ref or branch of the pull request                         |
+| `event_name`       | The name of the event that triggered the workflow                  |
+| `event`            | The full webhook event payload                                     |
+| `head_ref`         | The branch of the pull request from where changes are coming       |
+| `job`              | The ID of the current job                                          |
+| `ref`              | The full ref that triggered the workflow (e.g., `refs/heads/main`) |
+| `ref_name`         | Short ref name (e.g., `main`, `v1.0`)                              |
+| `ref_type`         | Type of ref (branch or tag)                                        |
+| `repository`       | Full repo name (e.g., `octocat/my-repo`)                           |
+| `repository_owner` | Owner of the repository                                            |
+| `run_id`           | Unique ID of the workflow run                                      |
+| `run_number`       | Sequential run number                                              |
+| `server_url`       | URL of GitHub server                                               |
+| `sha`              | Commit SHA that triggered the workflow                             |
+| `workflow`         | Name of the workflow                                               |
+| `triggering_actor` | The user who initiated the workflow (can differ from `actor`)      |
+| `workspace`        | Path to the GitHub workspace directory                             |
 
 
 2️⃣ env
@@ -236,7 +267,7 @@ Top Most Commonly Used GitHub Actions Contexts
 | `inputs.version`     | `"1.0.3"`         |
 
 
-9️⃣ vars (Config Variables from GitHub UI)
+9️⃣ vars (Config Variables from GitHub UI - Repository-/organization-/environment-defined variables (via GitHub UI: “Variables” section))
 
 | Property           | Example     |
 | ------------------ | ----------- |
@@ -252,3 +283,33 @@ Top Most Commonly Used GitHub Actions Contexts
 | `jobs.deploy.result` | Status of `deploy` job |
 
 
+-----------------------
+
+
+| Context Name   | Description                                                                                                                       |
+| -------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| **`github`**   | Data about the workflow run, repository, event payload, commit, actor, ref, and more ([docs.github.com][1], [docs.github.com][2]) |
+| **`env`**      | Environment variables defined at workflow, job, or step scope                                                                     |
+| **`vars`**     | Repository-/organization-/environment-defined variables (via GitHub UI: “Variables” section)                                      |
+| **`job`**      | Info about the current job (e.g., `status`)                                                                                       |
+| **`jobs`**     | In reusable workflows: outputs and metadata from other jobs                                                                       |
+| **`steps`**    | Information and outputs from earlier steps in the same job                                                                        |
+| **`runner`**   | Details about the runner executing the job (OS, arch, workspace path)                                                             |
+| **`secrets`**  | Secure access to repository or environment secrets                                                                                |
+| **`strategy`** | Strategy-level data (e.g., matrix definition, fail-fast, max‑parallel)                                                            |
+| **`matrix`**   | Specific values from your matrix strategy for the current job instance                                                            |
+| **`needs`**    | Outputs and status from jobs this job depends on                                                                                  |
+| **`inputs`**   | Inputs passed via `workflow_dispatch` or reusable workflow arguments                                                              |
+
+
+-------------------------
+⚠️ 4. vars vs env vs secrets
+-----------------------
+
+| Feature                    | `vars`                                | `env`                             | `secrets`        |
+| -------------------------- | ------------------------------------- | --------------------------------- | ---------------- |
+| Purpose                    | Config values shared across workflows | Inline or scoped environment vars | Sensitive info   |
+| Defined in                 | GitHub UI/API                         | Workflow YAML or shell script     | GitHub UI        |
+| Visibility in logs         | ✅ Visible                             | ✅ Visible                         | ❌ Masked         |
+| Scope control              | ✅ (org/repo/env)                      | ✅ (step/job/workflow)             | ✅ (org/repo/env) |
+| Can be updated dynamically | ❌                                     | ✅                                 | ❌                |

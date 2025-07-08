@@ -1,4 +1,4 @@
-name: Manual Deployment
+name: Manual Deployment using github context vars
 
 on:
   workflow_dispatch:

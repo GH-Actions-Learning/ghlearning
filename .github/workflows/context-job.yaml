@@ -1,76 +1,23 @@
-What is job in GitHub Actions?
+name: Job Context Test
 
-The job context refers to the job currently being executed.
-
-You use it to check the runtime status of the job (whether it succeeded, failed, etc.)
-
-It's only available within that job.
-
-Most commonly used in:
-
-Conditional steps
-
-Error handling
-
-Notifications
-
-
-🧪 Possible Values of job.status
-
-| Value       | Meaning                             |
-| ----------- | ----------------------------------- |
-| `success`   | Job is succeeding so far            |
-| `failure`   | Job has failed                      |
-| `cancelled` | Job was cancelled (manual or auto)  |
-| `skipped`   | Job was skipped (due to conditions) |
-
-
-✅ Basic Example
+on: push
 
 jobs:
-  example:
+  sample:
     runs-on: ubuntu-latest
     steps:
-      - name: Run step
-        run: echo "Doing something..."
+      - name: This will succeed
+        run: echo "Running..."
 
-      - name: Log job status
-        run: echo "Job status: ${{ job.status }}"
+      - name: Check job status
+        if: ${{ job.status == 'success' }}
+        run: echo "The job is succeeding!"
 
+      - name: This will fail
+        run: |
+          exit 1
 
-🧪 Advanced Example: Use with continue-on-error
-
-jobs:
-  safe-check:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Step that might fail
-        run: exit 1
-        continue-on-error: true  # ❗ Important
-
-      - name: Handle failure
-        if: job.status == 'failure'
-        run: echo "💥 Step failed, but continuing the job..."
-
-      - name: Notify
-        run: echo "📬 Job final status: ${{ job.status }}"
-
-
-
-💡 When and Why to Use job.status
-
-| Use Case                                     | Why                              |
-| -------------------------------------------- | -------------------------------- |
-| Error handling without stopping the job      | Helps keep jobs recoverable      |
-| Final status notifications/logs              | Clean reporting                  |
-| Conditional steps based on cumulative result | Adds smart behavior inside a job |
-
-
-🔐 Best Practices
-
-| Practice                                            | Reason                                          |
-| --------------------------------------------------- | ----------------------------------------------- |
-| Use with `continue-on-error` to add resilience      | Don't break entire job on non-critical failures |
-| Don't assume `job.status == 'success'` early in job | It reflects **so far**, not the future          |
-| Use clear step names when reacting to status        | For easier debugging                            |
-
+      - name: Check job status
+        if: ${{ job.status == 'failure' }}
+        run: |
+          echo "Job Failed"
