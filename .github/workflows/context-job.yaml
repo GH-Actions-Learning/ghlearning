@@ -7,9 +7,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Build
-        run: |
-          exit 1
-
-      - name: Cleanup on failure
-        if: ${{ always() && job.status == 'failure' }}
         run: pwd
+
+      - name: Send failure notification
+        if: ${{ always() && job.status == 'failure' }}
+        run: echo "Job failed! Sending notification..."
+
