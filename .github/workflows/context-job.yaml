@@ -1,4 +1,4 @@
-name: Job Context Test
+name: Job Context
 
 on: push
 
