@@ -1,19 +1,11 @@
-name: Job Context example
-
-on: push
-
 jobs:
-  sample:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: This will fail
-        run: exit 1
-        continue-on-error: true
+      - name: Build
+        run: |
+          exit 1
 
-      - name: Check job status
-        if: ${{ job.status == 'success' }}
-        run: echo "The job is succeeding!"
-
-      - name: Or handle failure
-        if: ${{ job.status != 'success' }}
-        run: echo "Something went wrong in the job"
+      - name: Cleanup on failure
+        if: ${{ always() && job.status == 'failure' }}
+        run: pwd
