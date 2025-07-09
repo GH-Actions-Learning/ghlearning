@@ -2,12 +2,9 @@ name: Contxt Jobs example
 
 on: [push]
 
-
 jobs:
   build:
     runs-on: ubuntu-latest
-    outputs:
-      build_status: ${{ job.status }}
     steps:
       - name: Build step
         run: echo "Building..."
@@ -15,8 +12,6 @@ jobs:
   test:
     needs: build
     runs-on: ubuntu-latest
-    outputs:
-      test_status: ${{ job.status }}
     steps:
       - name: Test step
         run: echo "Testing..."
