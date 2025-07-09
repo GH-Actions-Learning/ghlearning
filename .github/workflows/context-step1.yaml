@@ -1,0 +1,15 @@
+name: Steps Context Demo
+
+on: [push]
+
+jobs:
+  example:
+    runs-on: ubuntu-latest
+
+    steps:
+      - id: step1
+        run: |
+          echo "myOutput=Hello from step 1" >> $GITHUB_OUTPUT
+
+      - id: step2
+        run: echo "Output from step1: ${{ steps.step1.outputs.myOutput }}"
