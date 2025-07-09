@@ -1,0 +1,35 @@
+name: Strategy Context Full Demo
+on: push
+
+jobs:
+  matrix-demo:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: true
+      max-parallel: 2
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        node: [14, 16]
+
+    steps:
+      - name: Show Strategy Context Info
+        run: |
+          echo "Fail-fast: ${{ strategy.fail-fast }}"
+          echo "Max Parallel: ${{ strategy.max-parallel }}"
+          echo "Job Index: ${{ strategy.job-index }}"
+          echo "Total Jobs: ${{ strategy.job-total }}"
+
+      - name: Show Matrix Info
+        run: |
+          echo "OS: ${{ matrix.os }}"
+          echo "Node Version: ${{ matrix.node }}"
+
+      - name: Simulate Failure on Node 14 Windows
+        if: matrix.os == 'windows-latest' && matrix.node == 14
+        run: |
+          echo "Simulating a failure..."
+          exit 1
+
+      - name: Run Only in Last Job (Summary)
+        if: strategy.job-index == strategy.job-total - 1
+        run: echo "✅ Summary:- All ${{ strategy.job-total }} matrix jobs have been scheduled!"
