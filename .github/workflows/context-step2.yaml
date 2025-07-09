@@ -16,7 +16,9 @@ jobs:
         run: exit 1
 
       - id: check_outputs
+        if: always()
         run: |
           echo "Output from step1: ${{ steps.step1.outputs.outputVar }}"
           echo "Step2 conclusion: ${{ steps.step2.conclusion }}"
           echo "Step3 status: ${{ steps.step3.status }}"
+
