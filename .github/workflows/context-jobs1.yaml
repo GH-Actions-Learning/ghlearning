@@ -12,9 +12,12 @@ jobs:
     needs: job1
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Job 1 status: ${{ jobs.job1.status }}"
-      - run: |
-          if [ "${{ jobs.job1.status }}" = "success" ]; then
+      - name: Print job1 status
+        env:
+          JOB1_STATUS: ${{ jobs.job1.status }}
+        run: |
+          echo "Job 1 status is $JOB1_STATUS"
+          if [ "$JOB1_STATUS" = "success" ]; then
             echo "Job 1 succeeded!"
           else
             echo "Job 1 failed!"
