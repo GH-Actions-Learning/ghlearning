@@ -1,0 +1,22 @@
+name: Steps Context Demo 2
+on: [push]
+
+jobs:
+  demo:
+    runs-on: ubuntu-latest
+    steps:
+      - id: step1
+        run: |
+          echo "outputVar=HelloWorld" >> $GITHUB_OUTPUT
+
+      - id: step2
+        run: exit 0
+
+      - id: step3
+        run: exit 1
+
+      - id: check_outputs
+        run: |
+          echo "Output from step1: ${{ steps.step1.outputs.outputVar }}"
+          echo "Step2 conclusion: ${{ steps.step2.conclusion }}"
+          echo "Step3 status: ${{ steps.step3.status }}"
