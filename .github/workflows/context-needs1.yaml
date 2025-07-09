@@ -1,0 +1,35 @@
+name: Needs Context Demo 1
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.set-ver.outputs.ver }}
+    steps:
+      - id: set-ver
+        run: echo "ver=1.2.3" >> $GITHUB_OUTPUT
+
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - run: echo "Testing version ${{ needs.build.outputs.version }}"
+
+  deploy:
+    needs: [build, test]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Deploying after test"
+
+  on_failure:
+    needs: [build, test, deploy]
+    if: ${{ failure() }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "Some job failed."
+          echo "Build status: ${{ needs.build.result }}"
+          echo "Test status: ${{ needs.test.result }}"
+          echo "Deploy status: ${{ needs.deploy.result }}"
+
