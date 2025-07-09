@@ -1,35 +1,21 @@
-name: Contxt Jobs example
+name: Quick Jobs Status Test
 
 on: [push]
 
 jobs:
-  build:
+  job1:
     runs-on: ubuntu-latest
     steps:
-      - name: Build step
-        run: echo "Building..."
+      - run: echo "Job 1 running"
 
-  test:
-    needs: build
+  job2:
+    needs: job1
     runs-on: ubuntu-latest
     steps:
-      - name: Test step
-        run: echo "Testing..."
-
-  deploy:
-    needs: [build, test]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check build job status
-        env:
-          BUILD_STATUS: ${{ jobs.build.status }}
-        run: echo "Build job status:- $BUILD_STATUS"
-
-      - name: Check test job status
-        env:
-          TEST_STATUS: ${{ jobs.test.status }}
-        run: echo "Test job status:- $TEST_STATUS"
-
-      - name: Conditional deploy
-        if: ${{ jobs.build.status == 'success' && jobs.test.status == 'success' }}
-        run: echo "Deploying because build and test succeeded!"
+      - run: echo "Job 1 status: ${{ jobs.job1.status }}"
+      - run: |
+          if [ "${{ jobs.job1.status }}" = "success" ]; then
+            echo "Job 1 succeeded!"
+          else
+            echo "Job 1 failed!"
+          fi
