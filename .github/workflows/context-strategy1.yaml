@@ -29,7 +29,3 @@ jobs:
         run: |
           echo "Simulating a failure..."
           exit 1
-
-      - name: Run Only in Last Job (Summary)
-        if: strategy.job-index == (strategy.job-total - 1)
-        run: echo "✅ Summary:- All ${{ strategy.job-total }} matrix jobs have been scheduled!"
