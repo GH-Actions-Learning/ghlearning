@@ -22,14 +22,22 @@ jobs:
     steps:
       - run: echo "Deploying after test"
 
+  fail:
+    runs-on: ubuntu-latest
+    steps:
+      - name: lets fail this job 
+        run: |
+          exit 1
+
   on_failure:
-    needs: [build, test, deploy]
+    needs: [build, test, deploy, fail]
     if: ${{ failure() }}
     runs-on: ubuntu-latest
     steps:
       - run: |
           echo "Some job failed."
-          echo "Build status: ${{ needs.build.result }}"
-          echo "Test status: ${{ needs.test.result }}"
-          echo "Deploy status: ${{ needs.deploy.result }}"
+          echo "Build status:- ${{ needs.build.result }}"
+          echo "Test status:- ${{ needs.test.result }}"
+          echo "Deploy status:- ${{ needs.deploy.result }}"
+          echo "Fail Status:- ${{ needs.fail.result }}"
 
