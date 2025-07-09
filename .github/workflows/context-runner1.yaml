@@ -1,0 +1,44 @@
+name: Runner Context Demo
+on: push
+
+jobs:
+  show-runner-details:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Show Runner Name
+        run: echo "Runner Name:- ${{ runner.name }}"
+
+      - name: Show OS (Only on Linux)
+        if: runner.os == 'Linux'
+        run: echo "Running on Linux OS:- ${{ runner.os }}"
+
+      - name: Show OS (Only on Windows)
+        if: runner.os == 'Windows'
+        run: echo "Running on Windows OS:- ${{ runner.os }}"
+
+      - name: Show Architecture (Only on X64)
+        if: runner.arch == 'X64'
+        run: echo "Architecture:- ${{ runner.arch }}"
+
+      - name: Use Temporary Directory
+        run: |
+          echo "Creating temp file in:- ${{ runner.temp }}"
+          echo "This is a temp file." > ${{ runner.temp }}/tempfile.txt
+          cat ${{ runner.temp }}/tempfile.txt
+
+      - name: Show Tool Cache Location (Only if defined)
+        if: runner.tool_cache != ''
+        run: echo "Tool cache is at:- ${{ runner.tool_cache }}"
+
+      - name: Debug Flag Check
+        if: runner.debug == '1'
+        run: echo "Debug logging is ENABLED"
+
+      - name: Show Environment Type (Only on GitHub-hosted)
+        if: runner.environment == 'github-hosted'
+        run: echo "Running on GitHub-hosted runner"
+
+      - name: Show Environment Type (Only on Self-hosted)
+        if: runner.environment == 'self-hosted'
+        run: echo "Running on Self-hosted runner"
