@@ -20,5 +20,5 @@ jobs:
         run: |
           echo "Output from step1: ${{ steps.step1.outputs.outputVar }}"
           echo "Step2 conclusion: ${{ steps.step2.conclusion }}"
-          echo "Step3 status: ${{ steps.step3.status }}"
+          echo "Step3 conclusion: ${{ steps.step3.conclusion }}"
 
