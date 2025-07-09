@@ -26,10 +26,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check build job status
-        run: echo "Build job status: ${{ jobs.build.status }}"
+        run: echo "Build job status:- ${{ jobs.build.status }}"
 
       - name: Check test job status
-        run: echo "Test job status: ${{ jobs.test.status }}"
+        run: echo "Test job status:- ${{ jobs.test.status }}"
 
       - name: Conditional deploy
         if: ${{ jobs.build.status == 'success' && jobs.test.status == 'success' }}
