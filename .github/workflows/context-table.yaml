@@ -1,0 +1,24 @@
+🔍 outcome vs conclusion vs status — The Final Word
+
+| Term         | Scope        | Available In                | Example Context                                     | Purpose                                           |
+| ------------ | ------------ | --------------------------- | --------------------------------------------------- | ------------------------------------------------- |
+| `status`     | Execution    | **Job only (API mostly)**   | `job.status`                                        | Lifecycle stage (`queued`, etc.)                  |
+| `conclusion` | Final result | ✅ **Steps** + **Jobs**      | `steps.build.conclusion`<br>`jobs.build.conclusion` | Whether it succeeded/failed/etc.                  |
+| `outcome`    | Final result | ✅ **Jobs via `needs` only** | `needs.build.outcome`                               | Same as `conclusion`, but only in `needs` context |
+
+
+✅ Valid Parameters for steps.<step_id> Context
+
+| Parameter    | Type   | Description                                            | Example                                  |
+| ------------ | ------ | ------------------------------------------------------ | ---------------------------------------- |
+| `outputs`    | object | Key-value pairs set using `$GITHUB_OUTPUT` in the step | `${{ steps.extract.outputs.version }}`   |
+| `conclusion` | string | Final result of the step (after execution completes)   | `if: steps.test.conclusion == 'success'` |
+
+| Trigger Type        | Correct Syntax                     | Why?                                                       |
+| ------------------- | ---------------------------------- | ---------------------------------------------------------- |
+| `workflow_dispatch` | `github.event.inputs.<input_name>` | Because the input is part of the GitHub event payload      |
+| `workflow_call`     | `inputs.<input_name>`              | Because inputs are defined at the workflow interface level |
+
+
+
+

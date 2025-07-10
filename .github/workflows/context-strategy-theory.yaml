@@ -1,13 +1,24 @@
 The strategy context provides runtime metadata about the matrix execution strategy for the current job. It's only available in jobs that use a strategy block.
 
+The strategy context is used inside a job to control how matrix jobs are generated and run. It enables you to:
+
+Run the same job with different input combinations (OS, language versions, etc.)
+
+Limit concurrency
+
+Fail fast on any failure
+
+Dynamically configure job behavior
+
 ✅ Available Properties
 
-| Property                | Type      | Description                                      |
-| ----------------------- | --------- | ------------------------------------------------ |
-| `strategy.fail-fast`    | `boolean` | Whether failing one matrix job cancels the rest. |
-| `strategy.job-index`    | `number`  | Zero-based index of the current matrix job.      |
-| `strategy.job-total`    | `number`  | Total number of matrix jobs (non-zero-based).    |
-| `strategy.max-parallel` | `number`  | Max parallel jobs allowed.                       |
+| Property                | Type    | Description                                                                 |
+| ----------------------- | ------- | --------------------------------------------------------------------------- |
+| `strategy.fail-fast`    | boolean | Whether one job failure will cancel remaining matrix jobs                   |
+| `strategy.matrix`       | object  | Defines variables and their values used to generate the matrix combinations |
+| `strategy.job-index`    | number  | Zero-based index of the current matrix job                                  |
+| `strategy.job-total`    | number  | Total number of jobs in the matrix (non-zero-based)                         |
+| `strategy.max-parallel` | number  | Maximum number of matrix jobs allowed to run in parallel                    |
 
 
 🔹 echo "Fail-fast: ${{ strategy.fail-fast }}"
@@ -135,3 +146,23 @@ Max parallel: 2
 | Limited self-hosted runner pool    | Avoid overwhelming runners |
 | Expensive tests or builds          | Reduce resource spikes     |
 | Rate-limited external dependencies | Prevent API overloading    |
+
+-----------------
+
+🔍 What strategy.matrix Contains
+
+This object includes all dimensions used to generate jobs, for example:
+
+If your workflow has:
+
+strategy:
+  matrix:
+    os: [ubuntu-latest, windows-latest]
+    node: [14, 16]
+
+Then:
+
+strategy.matrix.os == 'ubuntu-latest' (or 'windows-latest')
+
+strategy.matrix.node == 14 (or 16)
+

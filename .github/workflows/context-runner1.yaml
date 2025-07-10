@@ -1,3 +1,13 @@
+# | Property            | Type   | Description                                          | Example                                                                          |
+# | ------------------- | ------ | ---------------------------------------------------- | -------------------------------------------------------------------------------- |
+# | `runner.os`         | string | Operating system (e.g., `Linux`, `Windows`, `macOS`) | `Linux` <br>Usage: `if: runner.os == 'Linux'`                                    |
+# | `runner.arch`       | string | CPU architecture (e.g., `X64`, `ARM64`)              | `X64` <br>Usage: `echo "Arch: ${{ runner.arch }}"`                               |
+# | `runner.name`       | string | Name of the runner machine                           | `GitHub Actions Runner (hosted)` <br>Usage: `echo "Runner: ${{ runner.name }}"`  |
+# | `runner.temp`       | string | Path to the temp directory on runner                 | `/home/runner/temp` <br>Usage: `run: ls ${{ runner.temp }}`                      |
+# | `runner.tool_cache` | string | Path to tool cache directory                         | `/opt/hostedtoolcache` <br>Usage: `run: ls ${{ runner.tool_cache }}`             |
+# | `runner.workspace`  | string | Path to the workspace directory (repo root)          | `/home/runner/work/my-repo/my-repo` <br>Usage: `run: cd ${{ runner.workspace }}` |
+
+
 name: Runner Context Demo
 on: push
 

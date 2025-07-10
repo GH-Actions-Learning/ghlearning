@@ -27,13 +27,10 @@ ${{ steps.<step_id>.outputs.<output_name> }}
 
 ---------
 
-| Property                                | Description                                    | Example Usage                            |
-| --------------------------------------- | ---------------------------------------------- | ---------------------------------------- |
-| `steps.<step_id>.outputs.<output_name>` | Access output set by the step                  | `${{ steps.build.outputs.result }}`      |
-| `steps.<step_id>.conclusion`            | Final conclusion of the step (`success`, etc.) | `if: steps.test.conclusion == 'failure'` |
-| `steps.<step_id>.status`                | Current status of the step                     | `if: steps.deploy.status == 'success'`   |
-
-
+# | Property                      | Type    | Description                                                          | Example                                           |
+# |-------------------------------|---------|-----------------------------------------------------------------------|---------------------------------------------------|
+# | `steps.<step_id>.outputs`     | object  | Outputs set by a previous step (only for steps with id and outputs)  | `${{ steps.my_step.outputs.my_output }}`          |
+# | `steps.<step_id>.conclusion`  | string  | Final result of the step (success, failure, skipped, cancelled, etc.)| `if: steps.test.conclusion == 'success'`          |
 steps.<id>.conclusion
 
 What it is:

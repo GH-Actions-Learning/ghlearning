@@ -1,8 +1,7 @@
-# | Feature                      | Description                                                      |
-# | ---------------------------- | ---------------------------------------------------------------- |
-# | `needs: <job>`               | Enforces job dependency, ensures order                           |
-# | `needs.<job>.outputs.<name>` | Access data exported from other jobs                             |
-# | `needs.<job>.result`         | Job execution result (`success`/`failure`/`skipped`/`cancelled`) |
+# | Property                 | Type   | Description                                                           | Example                                       |
+# | ------------------------ | ------ | --------------------------------------------------------------------- | --------------------------------------------- |
+# | `needs.<job_id>.result`  | string | The result status of the job (`success`, `failure`, `cancelled`)      | `if: needs.build.result == 'success'`         |
+# | `needs.<job_id>.outputs` | object | Outputs set by the dependent job                                      | `${{ needs.build.outputs.version }}`          |
 
 name: Needs Context Demo 1
 on: push
