@@ -1,0 +1,159 @@
+🧪 $GITHUB_OUTPUT – The Complete Deep Dive
+
+📘 What is $GITHUB_OUTPUT?
+
+$GITHUB_OUTPUT is a special GitHub Actions internal file used to define outputs from a step, which can be accessed in later steps or jobs.
+
+It's a replacement for the deprecated set-output command (deprecated in 2022).
+
+The output is tied to the step with an id, and accessed using:
+
+${{ steps.<step_id>.outputs.<key> }}
+
+--------------
+✅ Basic Syntax
+
+echo "key=value" >> $GITHUB_OUTPUT
+
+--------------------
+
+🔹 Minimal Working Example
+
+name: GITHUB_OUTPUT Demo
+
+on: [push]
+
+jobs:
+  example:
+    runs-on: ubuntu-latest
+    steps:
+      - id: set_version
+        run: echo "version=1.0.0" >> $GITHUB_OUTPUT
+
+      - name: Use Output
+        run: echo "Version is ${{ steps.set_version.outputs.version }}"
+
+---------
+
+🎯 Where is $GITHUB_OUTPUT used?
+
+To pass values from one step to another step in the same job.
+
+To set job outputs for use in other jobs via outputs: and needs.
+
+Often used in matrix jobs, workflow_call, or composite actions.
+
+---------
+
+🔍 How Does It Work Internally?
+
+$GITHUB_OUTPUT is a temporary file created by GitHub Actions.
+
+When you append lines like name=value, GitHub scans it and stores that output value.
+
+It maps it to the step with an id so later steps can use:
+
+${{ steps.<step_id>.outputs.<name> }}
+
+---------
+
+💡 Step-to-Step Output Passing Example
+
+steps:
+  - id: step1
+    run: echo "message=Hello from Step 1" >> $GITHUB_OUTPUT
+
+  - name: Read from step1
+    run: echo "${{ steps.step1.outputs.message }}"
+
+--------
+📤 Job-to-Job Output Passing
+
+To pass output between jobs:
+
+Job A: Define job outputs
+jobs:
+  producer:
+    runs-on: ubuntu-latest
+    outputs:
+      greeting: ${{ steps.greet.outputs.message }}
+    steps:
+      - id: greet
+        run: echo "message=Hello World" >> $GITHUB_OUTPUT
+Job B: Use output via needs
+  consumer:
+    needs: producer
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "${{ needs.producer.outputs.greeting }}"
+
+---------
+
+🧪 Example: Use with matrix strategy
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        version: [1.0, 2.0]
+    runs-on: ubuntu-latest
+    steps:
+      - id: setvar
+        run: echo "value=build-for-${{ matrix.version }}" >> $GITHUB_OUTPUT
+      - run: echo "Got value: ${{ steps.setvar.outputs.value }}"
+
+--------
+🔐 Can I use secrets with $GITHUB_OUTPUT?
+
+Yes, but never echo secrets to the terminal.
+Instead:
+
+- run: echo "token=${{ secrets.MY_SECRET }}" >> $GITHUB_OUTPUT
+That’s safe, because output values are not printed unless you do so explicitly.
+
+-------
+
+🧪 Advanced: Multiline Output
+
+- id: multiline
+  run: |
+    echo "data<<EOF" >> $GITHUB_OUTPUT
+    echo "line 1" >> $GITHUB_OUTPUT
+    echo "line 2" >> $GITHUB_OUTPUT
+    echo "EOF" >> $GITHUB_OUTPUT
+Then access it:
+
+run: echo "${{ steps.multiline.outputs.data }}"
+
+-------------------
+Diff b/w $GITHUB_ENV AND $GITHUB_OUTPUT
+
+
+| Use Case                             | Use `$GITHUB_ENV`?  | Use `$GITHUB_OUTPUT`? | Access Syntax                            |
+| ------------------------------------ | ------------------- | --------------------- | ---------------------------------------- |
+| Set an env var for later steps       | ✅ Yes               | ❌ Not intended        | `$MY_VAR` or `${{ env.MY_VAR }}`         |
+| Pass output from one step to another | ❌ Not for this      | ✅ Yes                 | `${{ steps.step_id.outputs.key }}`       |
+| Use value in same step               | ❌ (not immediately) | ❌ (not immediately)   | Use shell variables instead              |
+| Need expressions / logic on value    | ✅ Yes               | ✅ Yes                 | Use `env.` or `steps.<id>.outputs.<key>` |
+| Need to pass between jobs            | ❌ Use job outputs   | ✅ Use job outputs     | `${{ needs.job_id.outputs.key }}`        |
+
+---------------------
+Diff b/w $GITHUB_ENV AND env block
+
+| Feature                | `env:` (YAML-based)                             | `$GITHUB_ENV` (Runtime file-based)                     |
+| ---------------------- | ----------------------------------------------- | ------------------------------------------------------ |
+| When it’s defined      | **Statically** in YAML (workflow, job, or step) | **Dynamically at runtime** during a `run:` step        |
+| How it's set           | `env:` block                                    | `echo "KEY=VALUE" >> $GITHUB_ENV`                      |
+| When it becomes active | Immediately (before step runs)                  | In **future steps only**, not the current one          |
+| Use case               | Known/configured variables                      | Variables generated/calculated during the run          |
+| Can use expressions?   | ✅ Yes                                           | ✅ Yes (in writing the value)                           |
+| Scope                  | Workflow-wide / job-wide / step-wide            | Only **within the same job**, from point of set onward |
+
+✅ When to Use What?
+
+| Scenario                                            | Use This           |
+| --------------------------------------------------- | ------------------ |
+| You know the env var ahead of time (config)         | `env:` block       |
+| You need to use the env var across jobs             | `env:` at workflow |
+| You compute the value dynamically during workflow   | `$GITHUB_ENV`      |
+| You want to reuse envs in multiple steps (same job) | `$GITHUB_ENV`      |
