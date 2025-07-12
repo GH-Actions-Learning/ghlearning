@@ -1,0 +1,32 @@
+name: contains function demo 1
+
+on:
+  push:
+    branches:
+      - main
+      - 'release/*'
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment (dev, staging, production)'
+        required: true
+        type: 'choice'
+        default: 'staging'
+        options:
+          - prod
+          - dev 
+          - staging
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    # Run if: triggered from a release branch or manually with "prod" in environment input
+    if: ${{ contains(github.ref, 'release/') || contains(github.event.inputs.environment, 'prod') }}
+
+    steps:
+      - name: Show selected environment
+        run: echo "Deploying to environment: ${{ github.event.inputs.environment }}"
+
+      - name: Deploy app
+        run: echo "✅ Deploying application to ${{ github.event.inputs.environment }}"

@@ -1,0 +1,16 @@
+List of Functions can be used in expressions
+
+| Function       | Purpose                              |
+| -------------- | ------------------------------------ |
+| `contains()`   | Substring or array membership test   |
+| `startsWith()` | Prefix string test                   |
+| `endsWith()`   | Suffix string test                   |
+| `format()`     | String templating                    |
+| `join()`       | Join array elements                  |
+| `toJSON()`     | Convert to JSON string               |
+| `fromJSON()`   | Parse JSON string into workflow data |
+| `hashFiles()`  | Generate SHA-256 hash for file globs |
+| `success()`    | Job/step success check               |
+| `failure()`    | Job/step failure check               |
+| `cancelled()`  | Job/step cancellation check          |
+| `always()`     | Always‑true condition                |

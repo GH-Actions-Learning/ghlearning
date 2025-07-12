@@ -1,0 +1,84 @@
+🔹 1. What is contains() in GitHub Actions?
+The contains() function checks whether a string or an array contains a given value. It’s used in GitHub Actions to control logic in conditionals (if:), filter workflow behavior, and validate content.
+
+🧠 2. Syntax
+
+${{ contains(search, item) }}
+
+search: a string or array/list
+
+item: a value to check for inside the search
+
+Returns: true or false
+
+📘 3. Basic Examples
+
+🔹 Check if a string contains a substring
+
+if: ${{ contains(github.ref, 'feature') }}
+
+✅ This condition is true if the branch name (e.g., refs/heads/feature/login) contains the word feature.
+
+🔹 Check if an array contains an item
+
+if: ${{ contains(['dev', 'stage', 'prod'], 'prod') }}
+
+✅ This returns true.
+
+🔍 4. Different Use Cases (with Examples)
+
+✅ a. Run a job only for bot users
+
+if: ${{ contains(github.actor, 'bot') }}
+
+✅ b. Validate if an environment is production
+
+if: ${{ contains(env.ENVIRONMENT, 'prod') }}
+
+✅ c. Check if the triggered event is a pull request
+
+if: ${{ contains(github.event_name, 'pull_request') }}
+
+✅ d. Conditionally run steps for specific environments
+
+if: ${{ contains(['qa', 'staging', 'production'], env.ENVIRONMENT) }}
+
+⚙️ 5. Parameters Explained
+
+| Parameter | Description                               | Required? | Type            | Example                                           |
+| --------- | ----------------------------------------- | --------- | --------------- | ------------------------------------------------- |
+| `search`  | The string or array you want to search in | ✅ Yes     | string or array | `"refs/heads/feature/login"` or `['dev', 'prod']` |
+| `item`    | The value you want to search for          | ✅ Yes     | string          | `'feature'`                                       |
+
+🔸 From Matrix
+
+if: ${{ contains(matrix.os, 'ubuntu') }}
+
+Checks if ubuntu is in the matrix.os array.
+
+🔸 From Contexts (e.g., environment variables)
+
+if: ${{ contains(env.DEPLOY_TARGET, 'staging') }}
+
+🔸 Inside expressions
+
+- name: Run only if feature branch
+
+  if: ${{ contains(github.ref, 'feature/') && success() }}
+
+✅ Option 1: Use || (OR)
+
+if: ${{ contains(['dev', 'stage', 'prod'], 'prod') || contains(['dev', 'stage', 'prod'], 'uat') }}
+
+This checks each item separately.
+
+✅ Option 2: Use a custom step with fromJson() and join() (advanced)
+
+If you're dealing with long lists dynamically, you might want to loop or use a custom action instead. But for simple checks, Option 1 is best.
+
+| Usage                         | Valid? | Explanation                                  |
+| ----------------------------- | ------ | -------------------------------------------- |
+| `contains(['a', 'b'], 'a')`   | ✅      | Checks if `'a'` is in the list               |
+| `contains(['a', 'b'], ['a'])` | ❌      | Second argument must be a string             |
+| `contains('abc', 'b')`        | ✅      | Checks if `'b'` is a substring               |
+| `contains('abc', ['b'])`      | ❌      | Second argument must be a string, not a list |
