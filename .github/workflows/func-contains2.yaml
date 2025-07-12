@@ -26,7 +26,7 @@ jobs:
 
     steps:
       - name: Show selected environment
-        run: echo "Deploying to environment: ${{ github.event.inputs.environment }}"
+        run: echo "Deploying to environment:- ${{ github.event.inputs.environment }}"
 
       - name: Deploy app
         run: echo "✅ Deploying application to ${{ github.event.inputs.environment }}"
