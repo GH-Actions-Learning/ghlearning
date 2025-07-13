@@ -1,0 +1,26 @@
+name: ToJSON Example
+
+on:
+  workflow_dispatch:
+    inputs:
+      app:
+        description: "App name"
+        default: "frontend"
+      env:
+        description: "Environment"
+        default: "staging"
+
+jobs:
+  show-json:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Show input as JSON
+        run: echo "${{ toJSON(inputs) }}"
+
+      - name: Show object as JSON
+        run: |
+          echo "${{ toJSON({'app': inputs.app, 'env': inputs.env, 'status': 'deployed'}) }}"
+
+      - name: Show array as JSON
+        run: |
+          echo "${{ toJSON(['frontend', 'api', 'worker']) }}"
