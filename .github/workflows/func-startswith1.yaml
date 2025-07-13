@@ -1,0 +1,25 @@
+name: CI/CD Workflow
+
+on:
+  push:
+    branches:
+      - main
+      - 'release/*'
+      - 'feature/*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Build for release
+        if: ${{ startsWith(github.ref, 'refs/heads/release/') }}
+        run: echo "Building release branch: ${{ github.ref }}"
+
+      - name: Build for feature UI branches
+        if: ${{ startsWith(github.ref, 'refs/heads/feature/') && contains(github.ref, '-ui') }}
+        run: echo "Building UI feature branch: ${{ github.ref }}"
+
+      - name: Build for main
+        if: ${{ github.ref == 'refs/heads/main' }}
+        run: echo "Building main branch"
