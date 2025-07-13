@@ -1,0 +1,56 @@
+name: Format Function Demo
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Environment (e.g., dev, staging, prod)"
+        required: true
+        default: "dev"
+      app:
+        description: "Application Name"
+        required: true
+        default: "inventory"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      # 1. Docker Tag using format()
+      DOCKER_TAG: ${{ format('{0}:{1}', inputs.app, github.sha) }}
+
+      # 2. Artifact File Name using format()
+      ARTIFACT_NAME: ${{ format('{0}-{1}-{2}.zip', inputs.app, inputs.environment, github.run_number) }}
+
+      # 3. Slack-style log message
+      STATUS_MESSAGE: ${{ format('Deploying {0} to {1} (run {2})', inputs.app, inputs.environment, github.run_number) }}
+
+      # 4. Path formatting
+      DEPLOY_PATH: ${{ format('/var/www/{0}/{1}', inputs.environment, inputs.app) }}
+
+    steps:
+      - name: Show Docker Tag
+        run: echo "Docker Tag:- $DOCKER_TAG"
+
+      - name: Show Artifact Name
+        run: echo "Artifact:- $ARTIFACT_NAME"
+
+      - name: Show Deployment Status
+        run: echo "Status:- $STATUS_MESSAGE"
+
+      - name: Show Deployment Path
+        run: echo "App will be deployed to:- $DEPLOY_PATH"
+
+      - name: Simulate Docker Build
+        run: |
+          echo "Building docker image $DOCKER_TAG..."
+          # docker build -t $DOCKER_TAG .
+
+      - name: Simulate Artifact Packaging
+        run: |
+          echo "Packaging artifact as $ARTIFACT_NAME"
+          # zip $ARTIFACT_NAME dist/*
+
+      - name: Simulate Deployment
+        run: echo "Deploying to $DEPLOY_PATH"

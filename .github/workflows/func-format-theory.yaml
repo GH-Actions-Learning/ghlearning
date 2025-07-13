@@ -1,0 +1,94 @@
+✅ 1. What is format()?
+
+format() lets you insert values into a string dynamically, using placeholders like {0}, {1}, etc.
+
+✅ 2. Syntax
+
+format(string, value1, value2, ...)
+
+string: A template string with numbered placeholders like {0}, {1}
+
+valueN: Values to insert into those placeholders
+
+✅ 3. Simple Example
+
+format('Hello, {0}!', 'world')
+
+🔁 Output:
+
+Hello, world!
+
+✅ 4. Multiple Parameters Example
+
+format('Deploying {0} to {1}', 'app-service', 'production')
+
+🔁 Output:
+
+Deploying app-service to production
+
+✅ 5. Real GitHub Actions Use Case
+
+env:
+  IMAGE_TAG: ${{ format('{0}:{1}', 'my-app', github.sha) }}
+
+🔁 Output:
+
+my-app:fc3a29fbb7e...
+
+✅ Useful for:
+
+Docker image tags
+
+Deployment labels
+
+Artifact naming
+
+✅ 6. Full Workflow Example Using format()
+
+name: Format Example
+
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      BRANCH_NAME: ${{ github.ref_name }}
+      IMAGE_NAME: ${{ format('myapp-{0}:{1}', github.ref_name, github.run_number) }}
+
+    steps:
+      - name: Show image name
+        run: echo "Building image: $IMAGE_NAME"
+
+🔧 Example Output:
+
+Building image: myapp-main:42
+
+✅ 7. Use Case Scenarios
+
+| Use Case          | Example                           |
+| ----------------- | --------------------------------- |
+| Docker tagging    | `myapp:{sha}`                     |
+| Artifact naming   | `build-{run_number}.zip`          |
+| Slack messages    | `Deployed {0} to {1}`             |
+| File paths        | `artifacts/{0}/{1}.zip`           |
+| Test report names | `test-{branch}-{run_number}.html` |
+
+✅ 8. Best Practices
+
+Use format() when you need dynamic strings based on:
+
+github.ref
+
+github.actor
+
+github.run_number
+
+Inputs, outputs, env vars
+
+Always quote string literals inside format() if they're static
+
+Use with env: to define global tags or messages

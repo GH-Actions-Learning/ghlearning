@@ -1,4 +1,4 @@
-name: Full EndsWith Usage Demo
+name: EndsWith function demo 1
 
 on:
   push:
