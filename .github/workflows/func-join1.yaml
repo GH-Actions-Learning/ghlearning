@@ -20,16 +20,16 @@ jobs:
   enhanced:
     runs-on: ubuntu-latest
     env:
-      APP_NAME: ${{ inputs.app }}
-      ENV: ${{ inputs.environment }}
-      TEAM: ${{ inputs.team }}
+      APP_NAME: ${{ github.event.inputs.app }}
+      ENV: ${{ github.event.inputs.environment }}
+      TEAM: ${{ github.event.inputs.team }}
       SHORT_SHA: ${{ github.sha }}
 
       # 🧩 join() examples
       SERVICES: ${{ join(fromJSON('["api", "worker", "scheduler"]'), ', ') }}
       IMAGE_LABEL: ${{ join(fromJSON('["inventory", "dev", "v1.2.3"]'), '-') }}
-      ARTIFACT_PATH: ${{ join(fromJSON(['artifacts', inputs.app, inputs.environment]), '/') }}
-      DEPLOY_TAG: ${{ join(fromJSON([inputs.app, inputs.environment, github.run_number]), '_') }}
+      ARTIFACT_PATH: ${{ join(fromJSON('['artifacts', github.event.inputs.app, github.event.inputs.environment]'), '/') }}
+      DEPLOY_TAG: ${{ join(fromJSON('[github.event.inputs.app, github.event.inputs.environment, github.run_number]'), '_') }}
 
     steps:
       - name: Checkout repository
