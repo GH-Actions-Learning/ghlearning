@@ -73,4 +73,4 @@ jobs:
 
       - name: Upload only if report is PDF
         if: ${{ endsWith(steps.generate.outputs.report_file, '.pdf') }}
-        run: echo "Uploading PDF report: ${{ steps.generate.outputs.report_file }}"
+        run: echo "Uploading PDF report:- ${{ steps.generate.outputs.report_file }}"
