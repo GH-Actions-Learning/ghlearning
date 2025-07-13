@@ -1,0 +1,76 @@
+✅ 1. What is join()?
+
+The join() function concatenates elements of an array using a specified delimiter (like -, ,, or /).
+
+✅ 2. Syntax
+
+join(array, delimiter)
+
+array: A list of strings or values.
+
+delimiter: The separator to place between array elements in the final string.
+
+✅ 3. Simple Example
+
+${{ join(['alpha', 'beta', 'gamma'], '-') }}
+
+🔁 Output:
+
+alpha-beta-gamma
+
+✅ 4. Use Case in GitHub Actions
+
+Say you're generating a tag or file name from matrix strategy values:
+
+strategy:
+  matrix:
+    os: [ubuntu, windows]
+    node: [14, 16]
+env:
+  TAG: ${{ join([matrix.os, matrix.node], '-') }}
+
+🔁 For matrix combo ubuntu, 14
+
+➡️ Output: ubuntu-14
+
+✅ 5. Real Workflow Example
+
+name: Join Example
+on: [push]
+jobs:
+  join-demo:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        service: [auth, billing, orders]
+
+    env:
+      SERVICES: ${{ join(matrix.service, '-') }}
+
+    steps:
+      - name: Print joined service name
+        run: echo "Joined service tag: $SERVICES"
+
+But above will fail because matrix.service is a string, not an array.
+
+Here’s a better real-world usage example with a static array:
+
+jobs:
+  join-example:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create comma-separated list
+        run: |
+          echo "${{ join(fromJSON('["frontend", "backend", "auth"]'), ', ') }}"
+
+🧠 fromJSON() is used to simulate an array in a workflow expression.
+
+✅ 6. When to Use join()
+
+| Scenario            | Example                                                      |
+| ------------------- | ------------------------------------------------------------ |
+| Docker tags         | `join(['backend', 'api', 'prod'], '-')` → `backend-api-prod` |
+| Filenames           | `join(['test', '2025', '07'], '_')` → `test_2025_07`         |
+| Labels/tags         | `join(['env', 'prod', 'app'], ':')` → `env:prod:app`         |
+| Slack message parts | `join(['Deployed', 'frontend', 'to', 'staging'], ' ')`       |

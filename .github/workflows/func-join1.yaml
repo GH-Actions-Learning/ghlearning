@@ -1,0 +1,53 @@
+name: Full Format & Join Demo
+
+on:
+  workflow_dispatch:
+    inputs:
+      app:
+        description: "Application name"
+        required: true
+        default: "inventory"
+      environment:
+        description: "Target environment (dev, staging, prod)"
+        required: true
+        default: "dev"
+      team:
+        description: "Owning team"
+        required: false
+        default: "platform"
+
+jobs:
+  enhanced:
+    runs-on: ubuntu-latest
+    env:
+      APP_NAME: ${{ inputs.app }}
+      ENV: ${{ inputs.environment }}
+      TEAM: ${{ inputs.team }}
+      SHORT_SHA: ${{ github.sha }}
+
+      # 🧩 join() examples
+      SERVICES: ${{ join(fromJSON('["api", "worker", "scheduler"]'), ', ') }}
+      IMAGE_LABEL: ${{ join(fromJSON('["inventory", "dev", "v1.2.3"]'), '-') }}
+      ARTIFACT_PATH: ${{ join(fromJSON(['artifacts', inputs.app, inputs.environment]), '/') }}
+      DEPLOY_TAG: ${{ join(fromJSON([inputs.app, inputs.environment, github.run_number]), '_') }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🔍 Show all format and join values
+        run: |
+
+          echo "🔗 join() VALUES:"
+          echo "SERVICES: $SERVICES"
+          echo "IMAGE_LABEL: $IMAGE_LABEL"
+          echo "ARTIFACT_PATH: $ARTIFACT_PATH"
+          echo "DEPLOY_TAG: $DEPLOY_TAG"
+
+      - name: Simulate Deployment Steps
+        run: |
+          echo "Packaging artifact $ARTIFACT_NAME"
+          echo "Slack Message: $STATUS_MSG"
+          echo "Joined services: $SERVICES"
+          echo "Image label: $IMAGE_LABEL"
+          echo "Artifact stored at: $ARTIFACT_PATH"
