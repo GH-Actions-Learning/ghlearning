@@ -19,7 +19,7 @@ jobs:
 
       - name: Show object as JSON
         run: |
-          echo "${{ toJSON({'app': inputs.app, 'env': inputs.env, 'status': 'deployed'}) }}"
+          echo "${{ toJSON({'app': github.event.inputs.app, 'env': github.event.inputs.env, 'status': 'deployed'}) }}"
 
       - name: Show array as JSON
         run: |
