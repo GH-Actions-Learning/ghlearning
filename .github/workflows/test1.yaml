@@ -12,7 +12,7 @@ jobs:
 
     steps:
       - name: Show github.ref in single-line run (no pipe)
-        run: echo "Single-line run: Branch is ${{ github.ref_name }}"
+        run: echo "Single-line run:- Branch is ${{ github.ref_name }}"
 
       - name: Show github.ref in multi-line run (with pipe) — incorrect usage
         run: |
