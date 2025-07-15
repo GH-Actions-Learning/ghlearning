@@ -19,10 +19,10 @@ jobs:
           echo "BRANCH_WITH: $BRANCH_WITH"
           echo "BRANCH_WITHOUT: $BRANCH_WITHOUT"
 
-      - name: Use context in run command with ${{ }} (will expand)
+      - name: Use context in run command with ${{ }}
         run: echo "Direct context with \${{ }}:- ${{ github.ref_name }}"
 
-      - name: Use context in run command without ${{ }} (literal)
+      - name: Use context in run command without ${{ }}
         run: echo "Direct context without \${{ }}:- github.ref_name"
 
       - name: Use context in if condition (with ${{ }}) — will run only on main branch
