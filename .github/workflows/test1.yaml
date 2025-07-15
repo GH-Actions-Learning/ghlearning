@@ -22,7 +22,7 @@ jobs:
 
       - name: Use context in run command with branckets
         if: always()
-        run: echo 'Direct context with branckets:- ${{ github.ref_name }}''
+        run: echo 'Direct context with branckets:- ${{ github.ref_name }}'
 
       - name: Use context in run command without without branckets
         if: always()
