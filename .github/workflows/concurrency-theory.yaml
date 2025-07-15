@@ -1,0 +1,249 @@
+What is Concurrency in GitHub Actions?
+
+* Concurrency controls the number of workflow runs or jobs that can run simultaneously for a given concurrency group.
+
+* It prevents race conditions, conflicts, or redundant runs when multiple triggers happen close together.
+
+* Using concurrency, you can cancel in-progress runs of the same workflow or queue new runs until the previous ones complete.
+
+Why Use Concurrency?
+
+* Avoid deploying multiple versions simultaneously to the same environment.
+
+* Prevent overlapping builds that might cause inconsistent states or resource conflicts.
+
+* Save compute resources by cancelling unnecessary runs.
+
+* Manage workflow runs for the same branch, PR, or deployment target.
+
+Explanation of Parameters
+
+| Parameter            | Description                                                                                                                |
+| -------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `group`              | Required. Identifies the concurrency group. Runs with the same group are mutually exclusive.                               |
+| `cancel-in-progress` | Optional (default: false). If true, cancels any currently running workflows in the same group when a new run is triggered. |
+
+
+Use Cases of Concurrency
+
+| Use Case                               | Description                                          |
+| -------------------------------------- | ---------------------------------------------------- |
+| Cancel redundant builds on same branch | Saves resources by cancelling obsolete workflow runs |
+| Ensure serial deployment to production | Prevent overlapping deploys to production            |
+| Queue up workflow runs for PRs         | Avoid concurrent test runs on same PR branch         |
+
+
+1) Problem Statements Without Concurrency
+
+When you don’t use concurrency, GitHub Actions workflows triggered by the same event (e.g., multiple pushes to the same branch) can run simultaneously or overlap. This can cause several issues:
+
+Problem 1:- Overlapping Workflow Runs Leading to Race Conditions
+
+Example:-
+
+You push code changes to the main branch three times within a minute. Without concurrency:
+
+GitHub triggers 3 separate workflow runs for each push.
+
+All 3 runs start and build your Flask app concurrently.
+
+If your workflow deploys the app at the end, all 3 deploys run, possibly deploying conflicting versions.
+
+The last run to finish may not be the last push, leading to an inconsistent or outdated deployment.
+
+Output:-
+
+Multiple deployment jobs start and finish.
+
+You end up with an unpredictable final state of your app.
+
+Waste of compute resources on builds/deploys for intermediate commits.
+
+--------------
+
+Problem 2:- Resource Contention and Inefficiency
+
+Example:-
+
+Your workflow runs resource-heavy jobs like building Docker images or integration tests.
+
+Without concurrency control, multiple runs on the same branch compete for limited runners.
+
+Parallel runs consume more CI minutes and slow down pipelines.
+
+Unnecessary builds for intermediate commits slow down feedback to developers.
+
+Output:-
+
+Increased CI cost.
+
+Slower overall pipeline due to runner queueing.
+
+Developers waiting longer for test/deploy feedback.
+
+-----------------
+
+Problem 3:- Conflicts in Deployment or Shared State
+
+Example:-
+
+Your deployment step updates a Kubernetes cluster or a shared server.
+
+Concurrent deploys can overwrite each other.
+
+Partially applied deployments might cause downtime or inconsistency.
+
+No clear guarantee that the last commit is the one actually deployed.
+
+Output:-
+
+Possible downtime or app errors.
+
+Deployment logs show overlapping deploys.
+
+Troubleshooting becomes complex.
+
+--------------
+Summary of Problems Without Concurrency
+
+| Problem              | Cause                     | Effect                         |
+| -------------------- | ------------------------- | ------------------------------ |
+| Race conditions      | Multiple overlapping runs | Unpredictable app state        |
+| Resource waste       | Redundant builds/deploys  | Higher costs, slower pipelines |
+| Deployment conflicts | Concurrent deploys        | Downtime, broken app           |
+
+-------------
+
+2) How Does Concurrency Solve These Problems?
+
+Concurrency groups define sets of workflow runs that cannot run simultaneously.
+
+When a new run starts in the same concurrency group:
+
+It cancels any in-progress runs (if cancel-in-progress: true).
+
+Or queues the new run until the previous run completes.
+
+This serializes workflow runs per group, ensuring no overlap.
+
+The group name can be dynamic (branch, PR number, environment) to scope concurrency appropriately.
+
+------
+
+3) Detailed Examples Showing How Concurrency Works
+
+Example 1: Cancel Previous Runs on Same Branch (Most Common Use Case)
+
+concurrency:
+  group: ${{ github.ref }}   
+  cancel-in-progress: true  
+
+Scenario:
+
+You push 3 commits quickly to main.
+
+Workflow Run 1 starts immediately.
+
+Workflow Run 2 triggered by second push starts → cancels Run 1.
+
+Workflow Run 3 triggered by third push starts → cancels Run 2.
+
+Finally, only Run 3 finishes.
+
+Output:
+
+Only one final build and deploy for the latest commit.
+
+Saves resources and prevents race conditions.
+
+Your deployed app is always from the latest commit.
+
+-----------------
+
+Example 2: Queue Runs Instead of Cancel (Set cancel-in-progress: false)
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: false
+
+Scenario:
+
+Push 3 commits rapidly to main.
+
+Run 1 starts immediately.
+
+Run 2 is queued and waits for Run 1 to finish.
+
+Run 3 is queued behind Run 2.
+
+Runs happen sequentially, not concurrently.
+
+Output:
+
+No cancellation; all runs complete in order.
+
+More resource use but no race conditions.
+
+Good if you want to preserve all runs (e.g., audit or logs).
+
+-------------
+
+Example 3: Concurrency per Pull Request (Use PR Number)
+
+concurrency:
+  group: pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+Scenario:
+
+Multiple pushes on the same PR trigger runs.
+
+Only one workflow run for that PR runs at a time.
+
+New pushes cancel the previous run on the same PR.
+
+Output:
+
+Prevents overlapping test runs on the same PR.
+
+Saves resources and reduces confusing test results.
+
+---------------------
+
+Example 4: Concurrency per Deployment Environment
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+Scenario:
+
+Deploy jobs for the same branch use this concurrency group.
+
+Ensures only one deployment at a time to the environment.
+
+Prevents conflicting deploys from overlapping.
+
+------
+
+4) What Happens if You Don’t Use Concurrency?
+
+Multiple workflow runs execute concurrently for same branch or PR.
+
+Overlapping deployments or builds may cause issues.
+
+Resource wastage, inconsistent results, race conditions.
+
+Hard to know which run’s output is the final state.
+
+--------
+5) Summary: How Concurrency Fixes These
+
+| Feature              | How it Fixes the Problem                                   |
+| -------------------- | ---------------------------------------------------------- |
+| `group`              | Defines scope of mutually exclusive runs (branch, PR, env) |
+| `cancel-in-progress` | Stops outdated runs to save resources                      |
+| Queuing runs         | Ensures sequential run order without overlap               |
+| Dynamic groups       | Customize concurrency for different use cases (PRs, envs)  |
+
+
