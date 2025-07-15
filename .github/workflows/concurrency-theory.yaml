@@ -247,3 +247,86 @@ Hard to know which run’s output is the final state.
 | Dynamic groups       | Customize concurrency for different use cases (PRs, envs)  |
 
 
+-----------------------------
+
+🔄 What Is a Concurrency Group in GitHub Actions?
+
+A concurrency group is not something you create in the UI — it's just a label (string) that you define inside your workflow YAML under the concurrency key.
+
+GitHub uses that string to identify and control how workflow runs are allowed to overlap (or not).
+
+✅ Where to Define It?
+
+You define the concurrency group inside your workflow file like this:
+
+concurrency:
+  group: your-custom-group-name
+  cancel-in-progress: true
+
+You can define it:
+
+At the workflow level (applies to the whole workflow)
+
+Or per job (to control concurrency for specific jobs like deploy)
+
+--------
+
+🎯 How to Create/Use a Concurrency Group
+
+-------
+
+🧩 Option 1: Static Group Name (not common)
+
+concurrency:
+  group: "only-one-run"
+  cancel-in-progress: true
+
+📌 This means: only one workflow run with group "only-one-run" can be active at a time, across all branches and PRs.
+
+------
+
+🧩 Option 2: Dynamic Group per Branch (common and useful)
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+📌 ${{ github.ref }} is like refs/heads/main or refs/pull/42/merge.
+
+Use case: Only one run per branch at a time. If multiple pushes happen to main, only the latest one finishes.
+
+------
+
+🧩 Option 3: Scoped Group for Pull Requests
+
+concurrency:
+  group: pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+📌 Ensures only one workflow run per PR number. Great for CI pipelines with lots of updates.
+
+------
+
+🧩 Option 4: Environment-Specific Deployment Groups
+
+jobs:
+  deploy-to-prod:
+    concurrency:
+      group: deploy-prod
+      cancel-in-progress: true
+
+📌 Ensures only one production deployment job runs at a time. Prevents race conditions during critical deploys.
+
+-----
+
+📝 Recap: You "create" concurrency groups by defining them in YAML
+
+You don’t configure anything in the GitHub UI.
+
+✅ Define concurrency like this in your workflow:
+
+concurrency:
+  group: my-deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+GitHub interprets that as: "Only one workflow run in this group should be active."
