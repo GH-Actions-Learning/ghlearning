@@ -1,0 +1,24 @@
+name: Test Expression Expansion
+
+on: [push]
+
+jobs:
+  test-run:
+    runs-on: ubuntu-latest
+
+    env:
+      # Define an environment variable at YAML level
+      BRANCH_ENV: ${{ github.ref_name }}
+
+    steps:
+      - name: Show github.ref in single-line run (no pipe)
+        run: echo "Single-line run: Branch is ${{ github.ref_name }}"
+
+      - name: Show github.ref in multi-line run (with pipe) — incorrect usage
+        run: |
+          echo "Multi-line run (incorrect): Branch is ${{ github.ref_name }}"
+          echo "This will print literally without expansion"
+
+      - name: Show env variable in multi-line run (correct usage)
+        run: |
+          echo "Multi-line run (correct): Branch is $BRANCH_ENV"
