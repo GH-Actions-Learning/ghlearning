@@ -20,7 +20,7 @@ jobs:
         run: echo 'Direct context with ${{}}:-' ${{ github.ref_name }}
 
       - name: Use context in run command without ${{ }} (literal)
-        run: echo "Direct context without \${{ }}: github.ref_name"
+        run: echo "Direct context without \${{ }}:- github.ref_name"
 
       - name: Use context in if condition (with ${{ }}) — will run only on main branch
         if: ${{ github.ref_name == 'main' }}
