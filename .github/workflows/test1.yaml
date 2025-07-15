@@ -1,3 +1,25 @@
+# Summary of your results:
+#
+# | How you write it                                       | Where it is defined or used            | Does GitHub expand it?                                            | Explanation                                                                                                                 |
+# | ------------------------------------------------------ | -------------------------------------- | ----------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+# | env: VAR: ${{ github.ref_name }}                       | In `env:` block with `${{ }}`          | ✅ Yes, **GitHub expands it BEFORE runtime**                       | The expression inside `${{ }}` is evaluated by GitHub, so the env var VAR gets the **actual branch name** (e.g., `main`).   |
+# | env: VAR: github.ref_name (without `${{ }}`)           | In `env:` block without `${{ }}`       | ❌ No, GitHub does NOT expand it                                   | The literal string `github.ref_name` is assigned to VAR. Shell sees this literal string at runtime, no replacement happens. |
+# | run: echo "branch is ${{ github.ref_name }}"           | Inside `run:` command with `${{ }}`    | ✅ Yes, GitHub expands it **BEFORE** passing the command to runner | The command becomes `echo "branch is main"` (or whatever branch).                                                           |
+# | run: echo "branch is github.ref_name" (no `${{ }}`)    | Inside `run:` command without `${{ }}` | ❌ No expansion, just literal string                               | The command prints `branch is github.ref_name`.                                                                             |
+# | run: echo "branch is $VAR"` where VAR is env variable  | Shell uses `$VAR` at runtime           | ✅ Shell expands it during runtime                                 | Shell expands the env var VAR passed to it at runtime.                                                                      |
+#
+# Important notes:
+# - ${{ }} expressions always get expanded by GitHub Actions engine before the runner gets the script.
+# - Even inside multi-line run: blocks or strings, ${{ }} are replaced first.
+# - Without ${{ }}, it's just a normal string passed to your shell.
+#
+# Why does this matter?
+# - Use ${{ }} when you want GitHub expressions or context values evaluated at workflow compile time.
+# - Use plain strings when you want the literal text or to access shell environment variables (e.g., $BRANCH_WITH inside bash).
+
+
+
+
 name: Test Context Expansion
 
 on: [push]
