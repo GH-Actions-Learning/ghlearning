@@ -17,10 +17,10 @@ jobs:
           echo "BRANCH_WITHOUT: $BRANCH_WITHOUT"
 
       - name: Use context in run command with branckets
-        run: echo 'Direct context with ${{}}:-' ${{ github.ref_name }}
+        run: echo 'Direct context with branckets:- ${{ github.ref_name }}''
 
       - name: Use context in run command without without branckets
-        run: echo "Direct context without \${{ }}:- github.ref_name"
+        run: echo "Direct context without branckets:- github.ref_name"
 
       - name: Use context in if condition
         if: ${{ github.ref_name == 'main' }}
