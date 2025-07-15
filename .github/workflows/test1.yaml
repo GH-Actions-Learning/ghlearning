@@ -1,24 +1,30 @@
-name: Test Expression Expansion
+name: Test Context Expansion
 
 on: [push]
 
 jobs:
-  test-run:
+  test-expansion:
     runs-on: ubuntu-latest
 
     env:
-      # Define an environment variable at YAML level
-      BRANCH_ENV: ${{ github.ref_name }}
+      # With ${{ }} — GitHub expands this before running
+      BRANCH_WITH: ${{ github.ref_name }}
+
+      # Without ${{ }} — this will be literal string "github.ref_name"
+      BRANCH_WITHOUT: github.ref_name
 
     steps:
-      - name: Show github.ref in single-line run (no pipe)
-        run: echo "Single-line run:- Branch is ${{ github.ref_name }}"
-
-      - name: Show github.ref in multi-line run (with pipe) — incorrect usage
+      - name: Print env variables in single-line run
         run: |
-          echo "Multi-line run (incorrect): Branch is ${{ github.ref_name }}"
-          echo "This will print literally without expansion"
+          echo "BRANCH_WITH: $BRANCH_WITH"
+          echo "BRANCH_WITHOUT: $BRANCH_WITHOUT"
 
-      - name: Show env variable in multi-line run (correct usage)
-        run: |
-          echo "Multi-line run (correct): Branch is $BRANCH_ENV"
+      - name: Use context in run command with ${{ }} (will expand)
+        run: echo "Direct context with \${{ }}:- ${{ github.ref_name }}"
+
+      - name: Use context in run command without ${{ }} (literal)
+        run: echo "Direct context without \${{ }}:- github.ref_name"
+
+      - name: Use context in if condition (with ${{ }}) — will run only on main branch
+        if: ${{ github.ref_name == 'main' }}
+        run: echo "This runs only on the 'main' branch"
