@@ -37,6 +37,8 @@ jobs:
         run: |
           echo "BRANCH_WITH: $BRANCH_WITH"
           echo "BRANCH_WITHOUT: $BRANCH_WITHOUT"
+          echo ${{ env.BRANCH_WITH }}
+          echo ${{ env.BRANCH_WITHOUT }}
       
       - name: Use context in if condition
         if: ${{ github.ref_name == 'main' }}

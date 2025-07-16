@@ -427,3 +427,4 @@ exclude does not affect manually added combos in include.
 | Pair with `include` to build **perfect sets** of jobs         | Lets you define custom combos (`include`) and remove unwanted auto-generated ones (`exclude`) |
 | Don't use it alone if you’re defining **only include combos** | If you only use `include`, the base matrix isn’t used—so `exclude` won’t do anything          |
 | Be careful — `exclude` works on **exact matches** only        | Partial matches won’t work — all key-value pairs must match to be excluded successfully       |
+
