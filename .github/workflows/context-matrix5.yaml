@@ -1,0 +1,71 @@
+name: Matrix Include Demo
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  combined-matrix:
+    runs-on: ${{ matrix.os || 'ubuntu-latest' }}
+
+    strategy:
+      matrix:
+        include:
+          # 🟠 Problem 1: Custom combo (only add windows+node 20)
+          - os: windows-latest
+            node: 20
+            tag: win-node20
+
+          # 🟢 Problem 2: Add environment only to specific node
+          - os: ubuntu-latest
+            node: 18
+            environment: prod
+            tag: ubuntu-node18-prod
+
+          # 🔵 Problem 3: Asymmetric combos (custom os+node pairs)
+          - os: ubuntu-latest
+            node: 14
+            tag: ubuntu-node14
+          - os: windows-latest
+            node: 16
+            tag: windows-node16
+
+          # 🟣 Problem 4: Add labels
+          - os: ubuntu-latest
+            python: 3.8
+            label: legacy
+            tag: legacy-python
+          - os: ubuntu-latest
+            python: 3.11
+            label: modern
+            tag: modern-python
+
+    steps:
+      - name: Show all matrix values
+        run: |
+          echo "OS: ${{ matrix.os }}"
+          echo "Node: ${{ matrix.node || 'N/A' }}"
+          echo "Python: ${{ matrix.python || 'N/A' }}"
+          echo "Environment: ${{ matrix.environment || 'N/A' }}"
+          echo "Label: ${{ matrix.label || 'N/A' }}"
+          echo "Tag: ${{ matrix.tag }}"
+
+      - name: Conditionally run for prod environment
+        if: ${{ matrix.environment == 'prod' }}
+        run: echo "🚀 Deploying to PRODUCTION for Node ${{ matrix.node }}"
+
+      - name: Conditionally run legacy tests
+        if: ${{ matrix.label == 'legacy' }}
+        run: echo "🧪 Running legacy Python tests"
+
+      - name: Conditionally run modern tests
+        if: ${{ matrix.label == 'modern' }}
+        run: echo "🧪 Running modern Python tests"
+
+      - name: Conditionally run Node.js specific job
+        if: ${{ matrix.node && matrix.node >= 18 }}
+        run: echo "⚙️ Running Node.js ${{ matrix.node }} build"
+
+      - name: Conditionally run Python-specific logic
+        if: ${{ matrix.python }}
+        run: echo "🐍 Python version is ${{ matrix.python }}"

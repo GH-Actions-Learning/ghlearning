@@ -1,0 +1,16 @@
+name: Matrix demo 2
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [16, 18]
+        include:
+          - node: 18
+            environment: prod
+    steps:
+      - name: Echo environment
+        run: echo "Node:- ${{ matrix.node }} | Environment:- ${{ matrix.environment || 'none' }}"

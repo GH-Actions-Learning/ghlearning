@@ -1,0 +1,16 @@
+name: Matrix Demo 4
+
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - python: 3.8
+            label: legacy
+          - python: 3.11
+            label: modern
+    steps:
+      - run: echo "Python ${{ matrix.python }}, Label:- ${{ matrix.label }}"

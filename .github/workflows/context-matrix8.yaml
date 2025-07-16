@@ -1,0 +1,28 @@
+name: Matrix Context Demo 1
+
+on: [push]
+
+jobs:
+  test:
+    name: Test on ${{ matrix.os }} / Node ${{ matrix.node }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      max-parallel: 2
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        node: [14, 16]
+        include:
+          - os: windows-latest
+            node: 18
+            deploy: true
+        exclude:
+          - os: windows-latest
+            node: 14
+    steps:
+      - run: |
+          echo "OS: ${{ matrix.os }}"
+          echo "Node Version: ${{ matrix.node }}"
+          echo "Deploy? ${{ matrix.deploy || 'false' }}"
+      - if: matrix.deploy == true
+        run: echo "Running deployment tasks..."

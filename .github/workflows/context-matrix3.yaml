@@ -1,0 +1,16 @@
+name: Matrix demo 3
+
+on: [push]
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            node: 14
+          - os: windows-latest
+            node: 16
+    steps:
+      - run: echo "OS:- ${{ matrix.os }}, Node:- ${{ matrix.node }}"
