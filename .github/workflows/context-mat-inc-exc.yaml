@@ -1,0 +1,31 @@
+name: Matrix Exclude & Include Combined
+
+on: [push]
+
+jobs:
+  test-matrix:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        node: [14, 16, 18]
+        exclude:
+          - os: windows-latest
+            node: 14
+          - os: windows-latest
+            node: 16
+          - os: ubuntu-latest
+            node: 18
+        include:
+          - os: macos-latest
+            node: 20
+            environment: prod
+    steps:
+      - run: |
+          echo "OS: ${{ matrix.os }}"
+          echo "Node: ${{ matrix.node }}"
+          echo "Env: ${{ matrix.environment || 'none' }}"
+
+      - name: Run only in prod
+        if: ${{ matrix.environment == 'prod' }}
+        run: echo "🚀 Running production steps"

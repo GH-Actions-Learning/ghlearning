@@ -1,0 +1,20 @@
+name: Matrix Exclude demo 2
+
+on: [push]
+
+jobs:
+  node-test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        node: [14, 16, 18]
+        exclude:
+          - os: windows-latest
+            node: 14
+          - os: windows-latest
+            node: 16
+          - os: ubuntu-latest
+            node: 18
+    steps:
+      - run: echo "Node ${{ matrix.node }} on ${{ matrix.os }}"

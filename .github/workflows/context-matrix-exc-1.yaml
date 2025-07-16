@@ -1,0 +1,16 @@
+name: Matrix Exclude Demo 1
+
+on: [push]
+
+jobs:
+  compatibility-check:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        lang: [python, powershell]
+        exclude:
+          - os: ubuntu-latest
+            lang: powershell
+    steps:
+      - run: echo "Running ${{ matrix.lang }} on ${{ matrix.os }}"

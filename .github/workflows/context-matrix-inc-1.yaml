@@ -1,4 +1,3 @@
-# .github/workflows/problem1-with-include.yml
 name: Matrix 1 demo
 
 on: [push]
