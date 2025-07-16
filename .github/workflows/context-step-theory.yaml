@@ -27,59 +27,92 @@ ${{ steps.<step_id>.outputs.<output_name> }}
 
 ---------
 
-# | Property                      | Type    | Description                                                          | Example                                           |
-# |-------------------------------|---------|-----------------------------------------------------------------------|---------------------------------------------------|
-# | `steps.<step_id>.outputs`     | object  | Outputs set by a previous step (only for steps with id and outputs)  | `${{ steps.my_step.outputs.my_output }}`          |
-# | `steps.<step_id>.conclusion`  | string  | Final result of the step (success, failure, skipped, cancelled, etc.)| `if: steps.test.conclusion == 'success'`          |
-steps.<id>.conclusion
+✅ What Are conclusion and outcome in steps ?
 
-What it is:
+Both are part of GitHub’s execution context — values available in expressions like ${{ steps.<step_id>.conclusion }} or ${{ steps.<step_id>.outcome }}.
 
-The final outcome of a step after it finishes running.
+| Term         | Meaning                                                                             | Value Examples                                                                          |
+| ------------ | ----------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `outcome`    | Shows the **raw execution result** of a step                                        | `success`, `failure`, `cancelled`, `skipped`                                            |
+| `conclusion` | Shows the **final logical result**, considering `continue-on-error` and other logic | `success`, `failure`, `skipped`, `cancelled`, `neutral`, `timed_out`, `action_required` |
 
-Possible values:
+-------
+⚙️ 1. outcome → Raw Execution Status
 
-success, failure, skipped, cancelled, etc.
+This always shows what actually happened when the step ran.
 
-When to use:
+It does not change even if continue-on-error: true.
 
-Use this to check if a step passed or failed, especially in if: conditions for subsequent steps.
+🔸 Used when you care about whether the step physically failed or succeeded, regardless of error handling.
 
-Example:
+--------
+⚙️ 2. conclusion → Final Logical Result
 
-if: steps.build.conclusion == 'success'
+This may show success even if the step failed, if continue-on-error: true was set.
 
-Reliability:
+It reflects what the system considers as the outcome, after handling.
 
-Always set after the step completes. Preferred for decision-making.
+🔸 Used when you want to evaluate whether the step was treated as failed or not in the context of the workflow.
 
-steps.<id>.status
+🧪 Real Example Comparing Both
 
-What it is:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Step that fails but is allowed
+        id: fail
+        run: exit 1
+        continue-on-error: true
 
-The current state of the step at the time the workflow is evaluated.
+      - name: Print outcome and conclusion
+        run: |
+          echo "Outcome: ${{ steps.fail.outcome }}"
+          echo "Conclusion: ${{ steps.fail.conclusion }}"
 
-Possible values:
+🟡 Output:
+Outcome: failure
+Conclusion: success
 
-queued, in_progress, completed (sometimes can be empty)
+🔹 outcome is failure: because the step command (exit 1) failed.
 
-When to use:
+🔹 conclusion is success: because we told GitHub Actions to continue anyway.
 
-Rarely needed for most workflows. Not recommended for conditional logic since it may not always be set or reliable.
+---------
 
-Example:
+✅ When to Use conclusion vs outcome
+| Use Case                                            | Use                             |
+| --------------------------------------------------- | ------------------------------- |
+| Custom decision-making based on **real failure**    | `outcome`                       |
+| Flow logic that respects `continue-on-error`        | `conclusion`                    |
+| Skipping or branching steps based on a soft failure | `conclusion`                    |
+| Logging and diagnostics                             | `outcome` (to show real result) |
 
-if: steps.build.status == 'completed'
 
-Reliability:
+✅ Example: Retry on Failure But Continue on Logical Success
 
-Can be empty or misleading, especially after the step finishes. Not recommended for critical logic.
+jobs:
+  retry-example:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Maybe fails
+        id: flaky
+        run: |
+          echo "Running a flaky test"
+          exit $((RANDOM % 2))
+        continue-on-error: true
 
-Summary Table
+      - name: Retry if outcome is failure
+        if: ${{ steps.flaky.outcome == 'failure' }}
+        run: echo "⚠️ Flaky test failed. Retrying..."
 
-| Use Case                   | Use conclusion? | Use status? |
-| -------------------------- | --------------- | ----------- |
-| Check if a step succeeded  | ✅               | ❌           |
-| Check if a step failed     | ✅               | ❌           |
-| Check if a step is running | ❌               | ✅           |
-| Reliable conditional logic | ✅               | ❌           |
+      - name: Skip if final conclusion is success
+        if: ${{ steps.flaky.conclusion == 'success' }}
+        run: echo "✅ No retry needed!"
+
+🧾 Conclusion
+
+| Attribute    | What it tells you                                 | When to use it                         |
+| ------------ | ------------------------------------------------- | -------------------------------------- |
+| `outcome`    | Whether the step’s command failed or succeeded    | For raw status checks, debug, retries  |
+| `conclusion` | Whether GitHub **considered** it failed/succeeded | For logical flow control, continuation |

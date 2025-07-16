@@ -1,12 +1,3 @@
-🔍 outcome vs conclusion vs status — The Final Word
-
-| Term         | Scope        | Available In                | Example Context                                     | Purpose                                           |
-| ------------ | ------------ | --------------------------- | --------------------------------------------------- | ------------------------------------------------- |
-| `status`     | Execution    | **Job only (API mostly)**   | `job.status`                                        | Lifecycle stage (`queued`, etc.)                  |
-| `conclusion` | Final result | ✅ **Steps** + **Jobs**      | `steps.build.conclusion`<br>`jobs.build.conclusion` | Whether it succeeded/failed/etc.                  |
-| `outcome`    | Final result | ✅ **Jobs via `needs` only** | `needs.build.outcome`                               | Same as `conclusion`, but only in `needs` context |
-
-
 ✅ Valid Parameters for steps.<step_id> Context
 
 | Parameter    | Type   | Description                                            | Example                                  |
