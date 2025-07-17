@@ -8,12 +8,17 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
-        node: [14, 16]
+        node: [14, 16, 18]
         include:
           # 1. Add new node version with existing OS
           - os: ubuntu-latest
             node: 18
             special: true
+
+          # 1. Add new node version with existing OS
+          - os: ubuntu-latest
+            node: 19
+            special: false
 
           # 2. Add new OS with existing node version
           - os: macos-latest
