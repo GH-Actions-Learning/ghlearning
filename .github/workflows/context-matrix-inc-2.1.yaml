@@ -1,6 +1,6 @@
-name: Matrix demo 2
+name: Matrix Demo with Include Behavior
 
-on: [push] 
+on: [push]
 
 jobs:
   test:
@@ -10,25 +10,35 @@ jobs:
         os: [ubuntu-latest, windows-latest]
         node: [14, 16]
         include:
+          # 1. Add new node version with existing OS
           - os: ubuntu-latest
             node: 18
             special: true
+
+          # 2. Add new OS with existing node version
           - os: macos-latest
             node: 16
             special: false
+
+          # 3. Add new OS with missing node (partial include)
           - os: macos-latest
             experiment: true
+
+          # 4. Add new node with missing OS (partial include)
           - node: 18
             testing: true
 
-          
+          - environments: dev
 
+          - country: india
 
     steps:
-      - name: Print Info
+      - name: Print Matrix Values
         run: |
           echo "OS: ${{ matrix.os }}"
           echo "Node: ${{ matrix.node }}"
           echo "Special: ${{ matrix.special }}"
-          echo "experiment: ${{matrix.experiment}}"
-          echo "testing: ${{matrix.testing}}"
+          echo "Experiment: ${{ matrix.experiment }}"
+          echo "Testing: ${{ matrix.testing }}"
+          echo "Environment: {{ matrix.environment }}"
+          echo "Country: {{ matrix.country }}"
