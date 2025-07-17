@@ -1,0 +1,62 @@
+📌 1. What is output in GitHub Actions?
+
+output is a way to pass a value from one step or job to another.
+
+You can use it to send values like a version number, status, result from a script, etc.
+
+🔄 Types of Outputs
+
+| Type            | Description                                                              |
+| --------------- | ------------------------------------------------------------------------ |
+| **Step Output** | Output from a single step, available to later steps in the **same job**. |
+| **Job Output**  | Output from a job, available to other **dependent jobs**.                |
+
+
+----------------
+🔹 Step Outputs Example (Within Same Job)
+
+jobs:
+  example:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set a value
+        id: step_one
+        run: echo "value=hello world" >> $GITHUB_OUTPUT
+
+      - name: Use that value
+        run: echo "Output was: ${{ steps.step_one.outputs.value }}"
+
+💡 Explanation:
+
+step_one defines an output value=hello world.
+
+It uses >> $GITHUB_OUTPUT (for modern syntax).
+
+The second step uses ${{ steps.step_one.outputs.value }} to access it.
+
+---------------
+
+🔹 Job Outputs Example (Pass values between jobs)
+
+jobs:
+  job1:
+    runs-on: ubuntu-latest
+    outputs:
+      greeting: ${{ steps.set_greeting.outputs.greeting }}
+    steps:
+      - name: Set greeting
+        id: set_greeting
+        run: echo "greeting=Hello from job1" >> $GITHUB_OUTPUT
+
+  job2:
+    needs: job1
+    runs-on: ubuntu-latest
+    steps:
+      - name: Use output from job1
+        run: echo "Job1 said: ${{ needs.job1.outputs.greeting }}"
+
+💡 Explanation:
+
+job1 defines an output named greeting.
+
+job2 uses needs: job1 to access its outputs via ${{ needs.job1.outputs.greeting }}.
