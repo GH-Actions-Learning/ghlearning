@@ -35,7 +35,7 @@ jobs:
     steps:
       - name: Print env variables in single-line run
         run: |
-          echo "BRANCH_WITH: $BRANCH_WITH"
+          echo "BRANCH_WITH: $BRANCH_WITH"           
           echo "BRANCH_WITHOUT: $BRANCH_WITHOUT"
           echo ${{ env.BRANCH_WITH }}
           echo ${{ env.BRANCH_WITHOUT }}

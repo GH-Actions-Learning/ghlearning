@@ -1,0 +1,24 @@
+name: Matrix demo 2
+
+on: [push] 
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        node: [14, 16]
+        include:
+          - os: ubuntu-latest
+            node: 18
+            special: true
+          - os: macos-latest
+            node: 16
+            special: false
+    steps:
+      - name: Print Info
+        run: |
+          echo "OS: ${{ matrix.os }}"
+          echo "Node: ${{ matrix.node }}"
+          echo "Special: ${{ matrix.special }}"
