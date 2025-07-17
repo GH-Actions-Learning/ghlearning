@@ -16,7 +16,14 @@ jobs:
           - os: macos-latest
             node: 16
             special: false
-          - experiment: true
+          - os: ubuntu-latest
+            experiment: true
+          - node: 18
+            testing: true
+
+          
+
+
     steps:
       - name: Print Info
         run: |
@@ -24,3 +31,4 @@ jobs:
           echo "Node: ${{ matrix.node }}"
           echo "Special: ${{ matrix.special }}"
           echo "experiment: ${{matrix.experiment}}"
+          echo "testing: ${{matrix.testing}}"
