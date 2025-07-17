@@ -10,26 +10,24 @@ jobs:
         os: [ubuntu-latest, windows-latest]
         node: [14, 16, 18]
         include:
-          # 1. Add new node version with existing OS
           - os: ubuntu-latest
             node: 18
             special: true
 
-          # 1. Add new node version with existing OS
           - os: ubuntu-latest
             node: 19
             special: false
 
-          # 2. Add new OS with existing node version
+          - os: ubuntu-latest
+            testing: true
+
           - os: macos-latest
             node: 16
             special: false
 
-          # 3. Add new OS with missing node (partial include)
           - os: macos-latest
             experiment: true
 
-          # 4. Add new node with missing OS (partial include)
           - node: 18
             testing: true
 
