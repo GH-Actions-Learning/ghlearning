@@ -16,7 +16,7 @@ jobs:
           - os: macos-latest
             node: 16
             special: false
-          - os: ubuntu-latest
+          - os: macos-latest
             experiment: true
           - node: 18
             testing: true
