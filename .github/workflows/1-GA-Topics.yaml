@@ -1,0 +1,58 @@
+| #  | Topic                                  | Criticality     | Description                                                     |
+| -- | -------------------------------------- | ------------    | --------------------------------------------------------------- |
+| 1  | What is GitHub Actions?                | ⭐ High         | CI/CD tool built into GitHub for automation                     |
+| 2  | YAML Syntax                            | ⭐⭐ Very High | GitHub Actions uses `.yml` configuration files                  |
+| 3  | Understanding Workflows                | ⭐⭐ Very High | `.github/workflows/*.yml` defines automation                    |
+| 4  | Events / Triggers                      | ⭐⭐ Very High | What triggers a workflow? (push, pull\_request, schedule, etc.) |
+| 5  | Jobs                                   | ⭐⭐ Very High | A workflow is made of jobs; jobs run in VMs or containers       |
+| 6  | Steps                                  | ⭐⭐ Very High | Each job contains steps which run commands or actions           |
+| 7  | Actions (Marketplace & Custom)         | ⭐⭐ Very High | Reusable units of automation                                    |
+| 8  | Runners                                | ⭐⭐ Very High | Where workflows run: GitHub-hosted or self-hosted               |
+| 9  | Basic Environment Variables            | ⭐ High         | Define and use `env` variables in workflows                     |
+| 10 | Reusable Workflows (Calling Workflows) | ⭐⭐ Very High | DRY approach to standardize CI/CD logic                         |
+
+
+| #  | Topic                                       | Criticality     | Description                                            |
+| -- | ------------------------------------------- | ------------    | ------------------------------------------------------ |
+| 1  | Matrix Builds                               | ⭐⭐ Very High | Run jobs in parallel with multiple configurations      |
+| 2  | Secrets and Encrypted Variables             | ⭐⭐ Very High | Secure API keys, tokens, and passwords                 |
+| 3  | Job Dependencies & Needs                    | ⭐ High         | Control job order and parallelism                      |
+| 4  | Caching Dependencies                        | ⭐ High         | Use `actions/cache` to speed up builds                 |
+| 5  | Artifacts: Upload & Download                | ⭐⭐ Very High | Store build/test outputs between jobs                  |
+| 6  | Manual Triggers (`workflow_dispatch`)       | ⭐ High         | Manually trigger workflows via button or API           |
+| 7  | Scheduled Workflows (`schedule`)            | ⭐ Medium       | Cron-style triggers for regular automation             |
+| 8  | Using `if` Conditions in Jobs/Steps         | ⭐⭐ Very High  | Conditional execution based on context                 |
+| 9  | Working with GitHub Context & Expressions   | ⭐⭐ Very High  | Use `${{ github }}`, `${{ env }}`, `${{ steps }}`      |
+| 10 | Using Docker in Workflows                   | ⭐⭐ Very High  | Build, push, or run Docker containers                  |
+| 11 | Notifications (Slack, Teams, Email)         | ⭐ Medium       | Notify teams of CI/CD status                           |
+| 12 | GitHub Packages (npm, docker)               | ⭐ Medium       | Publish to GitHub's own registry                       |
+| 13 | Working with Branches & Tags                | ⭐ High         | Branch-based deployment, release tagging               |
+| 14 | Creating and Publishing Custom Actions      | ⭐⭐ Very High | Reuse your own custom automation logic                 |
+| 15 | Using Composite Actions                     | ⭐ High         | Bundle multiple steps into one logical unit            |
+| 16 | Debugging Workflows                         | ⭐⭐ Very High | Enable debugging, print logs, use `ACTIONS_STEP_DEBUG` |
+| 17 | Managing Workflow Runs                      | ⭐ High         | Rerun, cancel, view logs, re-trigger workflows         |
+| 18 | Reusing Scripts (Bash, PowerShell, Node.js) | ⭐ High         | Externalize common logic into scripts                  |
+
+
+
+| #  | Topic                                     | Criticality     | Description                                                  |
+| -- | ----------------------------------------- | ------------    | ------------------------------------------------------------ |
+| 1  | Self-hosted Runners (Linux/Windows/macOS) | ⭐⭐ Very High | For better performance, control, and security                |
+| 2  | Scaling Runners with Autoscaling          | ⭐⭐ Very High | Dynamically manage runners for large-scale builds            |
+| 3  | Multi-Repo Workflows                      | ⭐⭐ Very High | Workflows across multiple GitHub repositories                |
+| 4  | Monorepo CI/CD with GitHub Actions        | ⭐⭐ Very High | CI/CD strategies for single-repo multiple services           |
+| 5  | Integration with Azure DevOps             | ⭐⭐ Very High | Hybrid pipelines between Azure Pipelines and GitHub Actions  |
+| 6  | Deploying to Azure                        | ⭐⭐ Very High | AKS, App Service, Functions, Static Web Apps                 |
+| 7  | Deployment Environments                   | ⭐⭐ Very High | Use `environments` + `protection rules` (approvals, secrets) |
+| 8  | Enabling Manual Approvals                 | ⭐⭐ Very High | Approval gates for production deployments                    |
+| 9  | Secrets Scanning and Policy Enforcement   | ⭐⭐ Very High | Prevent secrets leaks and enforce security policies          |
+| 10 | Role-Based Access Control (RBAC)          | ⭐⭐ Very High | Limit workflow capabilities by permission                    |
+| 11 | Secure Dependencies with Dependabot       | ⭐ High         | Auto PRs for outdated/insecure dependencies                  |
+| 12 | GitHub OIDC + Azure Federated Identity    | ⭐⭐ Very High | Passwordless identity federation for Azure deployments       |
+| 13 | Performance Optimization                  | ⭐⭐ Very High | Speed up builds using caching, concurrency, etc.             |
+| 14 | Observability, Telemetry & Logging        | ⭐⭐ Very High | Export logs, integrate with Azure Monitor, App Insights      |
+| 15 | Compliance, Audit & Reporting             | ⭐⭐ Very High | Logging workflow events for auditing (ISO, SOC2)             |
+| 16 | DR Strategy and Fallback Plans            | ⭐⭐ Very High | Plan for runner failure, workflow rollback                   |
+
+
+
