@@ -43,6 +43,6 @@ jobs:
           echo "Special: ${{ matrix.special }}"
           echo "Experiment: ${{ matrix.experiment }}"
           echo "Testing: ${{ matrix.testing }}"
-          echo "Environment: {{ matrix.environment }}"
+          echo "Environment: {{ matrix.environments }}"
           echo "Country: {{ matrix.country }}"
           echo "become: {{ matrix.become }}"
