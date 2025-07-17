@@ -10,6 +10,9 @@ jobs:
         os: [ubuntu-latest, windows-latest]
         node: [14, 16, 18]
         include:
+          - node: 18
+            become: rich
+            
           - os: ubuntu-latest
             node: 18
             special: true
@@ -27,9 +30,6 @@ jobs:
 
           - os: macos-latest
             experiment: true
-
-          - node: 18
-            become: rich
 
           - environments: dev
 
