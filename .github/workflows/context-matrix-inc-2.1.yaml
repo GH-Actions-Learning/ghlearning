@@ -38,7 +38,7 @@ jobs:
     steps:
       - name: Print Matrix Values
         run: |
-          echo "OS: ${{ matrix.os }}"
+          echo "OS:- ${{ matrix.os }}"
           echo "Node: ${{ matrix.node }}"
           echo "Special: ${{ matrix.special }}"
           echo "Experiment: ${{ matrix.experiment }}"
