@@ -1,4 +1,8 @@
-## if all keys & values of matrix matches keys & values in include. Then Include job will not run it will override
+## if all exact keys of matrix matches with keys of include. And if values of include is different then new job will create
+## if no keys of matirx matches with keys of include no job will be created. But values are available to all jobs
+## if all keys & values of matrix matches with all keys & values in include. Then job will be skip 
+## if all keys & values of matrix matches all keys & values in include and it had extra key and value. Then extra key & value will be overide to base job
+## if any one of the key from matrix matches any one of the key in include then it will not craete extra job but value is override to base job.
 
 name: Matrix Demo with Include Behavior
 
@@ -13,10 +17,10 @@ jobs:
         node: [14, 16, 18]
         include:
 
-          - os: ubuntu-latest
+          - os: ubuntu-latest          x
             node: 14
 
-          - os: ubuntu-latest            
+          - os: ubuntu-latest          x 
             node: 18
             special: true
 
@@ -24,22 +28,22 @@ jobs:
             node: 19
             special: false
 
-          - os: ubuntu-latest             
+          - os: ubuntu-latest          x  
             testing: true
 
           - os: macos-latest
             node: 16
             special: false
 
-          - os: macos-latest
+          - os: macos-latest        
             experiment: true
 
-          - node: 18                      
+          - node: 18                  x        
             become: rich
 
-          - environments: dev
+          - environments: dev         x
 
-          - country: india
+          - country: india            x
 
     steps:
       - name: Print Matrix Values

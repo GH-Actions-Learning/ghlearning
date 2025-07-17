@@ -1,0 +1,63 @@
+✅ Understanding How include Works in a GitHub Actions Matrix (Beginner Friendly)
+
+-------------------------
+If all matrix keys (like os and node) in the include match an existing matrix job, but the values are different:
+
+👉 A new job will be created using the new values from include.
+
+Example:
+
+Matrix has: os: ubuntu-latest, node: 18
+Include has: os: ubuntu-latest, node: 19
+
+→ A new job for node 19 will be added.
+
+------------------------
+
+If the include doesn’t match any matrix keys at all (like os or node):
+
+👉 No job will be created, but the values in the include are still available to all jobs.
+
+Example:
+
+Include has: country: india (no os, no node)
+
+→ No new job, but matrix.country is available inside every job.
+
+-----------------------
+
+If both the keys and values in the include exactly match an existing matrix job:
+
+👉 The job is already part of the matrix, so nothing happens — it’s skipped.
+
+Example:
+
+Matrix has: os: ubuntu-latest, node: 14
+Include has the same: os: ubuntu-latest, node: 14
+
+→ Already exists → skipped.
+
+----------------------
+
+If the include matches an existing matrix job, but adds extra values (new properties):
+
+👉 Those extra values are added (injected) into that job. The job is not duplicated, just enhanced.
+
+Example:
+
+Matrix has: os: ubuntu-latest, node: 18
+Include adds: special: true
+
+→ That job will run with special: true available inside.
+
+--------------------
+
+If only one matrix key matches in the include (like just os or just node):
+
+👉 GitHub will not create a new job, but any extra values in the include will be added to the matching base job.
+
+Example:
+
+Include: os: ubuntu-latest, testing: true
+
+→ No new job is created, but testing: true will be added to all ubuntu-latest jobs.
