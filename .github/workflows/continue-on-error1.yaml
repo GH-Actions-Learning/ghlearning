@@ -1,0 +1,36 @@
+name: continue on error demo 1
+
+on: push 
+
+jobs:
+  test1:
+    continue-on-error: true 
+    runs-on: ubuntu-latest
+    steps:
+      - name: Risky step
+        run: exit 1
+        continue-on-error: true 
+
+      - name: Continue next step
+        run: echo "✅ We reached here"
+
+  test2:
+    continue-on-error: true 
+    runs-on: ubuntu-latest
+    steps:
+      - name: Risky step
+        run: exit 1
+        continue-on-error: false 
+
+      - name: Continue next step
+        run: echo "✅ We reached here"
+
+  test3:
+    continue-on-error: false 
+    runs-on: ubuntu-latest
+    steps:
+      - name: Risky step
+        run: exit 1
+        continue-on-error: true  
+      - name: Continue next step
+        run: echo "✅ We reached here"
