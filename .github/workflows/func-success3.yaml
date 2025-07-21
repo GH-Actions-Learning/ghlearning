@@ -1,0 +1,26 @@
+name: success demo3
+
+on: push
+
+jobs:
+  build-and-notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Step 1:- Run build
+        run: |
+          docker --version
+
+      # Make this step fail, but mark it as continue-on-error
+      - name: Step 1.1:- Fail this step
+        id: step1_1
+        continue-on-error: true
+        run: |
+          exit 1
+
+      - name: Step 2:- Send Notification (based on outcome)
+        if: ${{ steps.step1_1.outcome == 'success' }}
+        run: echo "✅ Build succeeded! Sending notification..."
+
+      - name: Step 3:- Send Notification (based on conclusion)
+        if: ${{ steps.step1_1.conclusion == 'success' }}
+        run: echo "✅ Build succeeded! Sending notification..."

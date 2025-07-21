@@ -10,6 +10,8 @@ jobs:
         run: |
           docker --version
 
+      # This makes step 1.1 success even thoug exit 1
+
       - name: Step1.1:- Fail this step
         continue-on-error: true
         run: |
