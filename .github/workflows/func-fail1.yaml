@@ -12,4 +12,12 @@ jobs:
 
       - name: Step 2:- Send Notification
         if: failure()
-        run: echo "✅ Build succeeded! Sending notification..."
+        run: echo "✅ This step will not execute..."
+
+      - name: Step3:- fail this step 
+        run: |
+          exit 1
+
+      - name: Step 4:- check status
+        if: failure()
+        run: echo "✅ This step will execute..."
