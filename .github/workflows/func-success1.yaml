@@ -7,7 +7,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Step 1:- Run build
-        run: npm run build
+        run: |
+          docker --version
 
       - name: Step 2:- Send Notification
         if: success()
