@@ -1,4 +1,4 @@
-name: failure demo2
+name: failure demo3
 
 on: push
 
@@ -17,6 +17,10 @@ jobs:
       - name: Step3:- fail this step 
         run: |
           exit 1
+
+      - name: Step3.1:- success this step 
+        run: |
+          echo "make success this step"
 
       - name: Step 4:- check status
         if: failure()
