@@ -37,8 +37,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Step A
-        run: exit 1 
         continue_on_error: true
+        run: exit 1 
 
       - name: Step B (Skipped)
         if: false
