@@ -1,0 +1,32 @@
+name: failure demo2
+
+on: push
+
+jobs:
+  build-and-notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Step 1:- Run build
+        run: |
+          docker --version
+
+      - name: Step 2:- Send Notification
+        if: failure()
+        run: echo "✅ This step will not execute..."
+
+      - name: Step3:- fail this step 
+        run: |
+          exit 1
+
+      - name: Step 4:- check status
+        if: failure()
+        run: echo "✅ This step will execute..."
+
+      - name: Step4.1
+        run: |
+          echo "Make this step success"
+
+      - name: Step 5:- check status
+        if: failure()
+        run: echo "✅ This step will execute..."
+

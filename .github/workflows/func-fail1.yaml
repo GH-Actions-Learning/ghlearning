@@ -25,3 +25,19 @@ jobs:
       - name: Step 5:- check status
         if: failure()
         run: echo "✅ This step will execute..."
+
+
+# ✅ Short Answer How Step5 will execute:
+
+# failure() doesn’t just look at the immediately preceding step.
+# It checks the entire job history up to that point for any failure (not skipped or allowed).
+#
+# So even if Step 4 succeeded, the job is still in a failed state because Step 3 failed,
+# and that failure is still "active."
+#
+# 🧠 How failure() works:
+# failure() returns true if any previous step in the job (not skipped or marked with continue-on-error) has failed.
+#
+# It is not reset by later successful steps.
+#
+# Once a step fails, failure() remains true for the rest of the job — unless you split things
