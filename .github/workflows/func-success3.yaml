@@ -17,10 +17,24 @@ jobs:
         run: |
           exit 1
 
-      - name: Step 2:- Send Notification (based on outcome)
+      - name: Step 2:- based on outcome
         if: ${{ steps.step1_1.outcome == 'success' }}
-        run: echo "✅ Build succeeded! Sending notification..."
+        run: |
+          echo "This step will not execute"
+          echo "Outcome will capture actual result of steps even though we used continue_on_error"
 
-      - name: Step 3:- Send Notification (based on conclusion)
+      - name: Step2.1:- check success
+        if: success()
+        run: |
+          echo "step 2.1 is success if step2 success"
+
+      - name: Step 3:- based on conclusion
         if: ${{ steps.step1_1.conclusion == 'success' }}
-        run: echo "✅ Build succeeded! Sending notification..."
+        run: |
+          echo "This step will execute"
+          echo "Conclusion will not capture actual result it treat as success, because it uses continue_on_error"
+
+      - name: Step3.1:- check success
+        if: success()
+        run: |
+          echo "step 3.1 is success if step3 success"
