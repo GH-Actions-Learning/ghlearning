@@ -1,4 +1,4 @@
-name: failure demo2
+name: failure demo4
 
 on: push
 
@@ -7,6 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Step 1:- Run build
+        id: step1
         run: |
           docker --version
 
@@ -17,12 +18,18 @@ jobs:
       - name: Step3:- fail this step 
         run: |
           exit 1
+      
+      # This step will skip because after fail step it will not consider success step
+      - name: Step3.1:- success this step 
+        run: |
+          echo "make success this step"   
 
       - name: Step 4:- check status
         if: failure()
         run: echo "✅ This step will execute..."
-      
+
       # This step will skip because after fail step it will not consider success step
+
       - name: Step4.1
         run: |
           echo "This Step4.1 will skips. so no execution"
@@ -31,3 +38,6 @@ jobs:
         if: failure()
         run: echo "✅ This step will execute..."
 
+      - name: step6:- execute if step1 is success
+        if: steps.step1.outcome == 'success'
+        run: echo "This step 6 executed success"

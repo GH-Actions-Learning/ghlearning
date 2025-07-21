@@ -17,14 +17,17 @@ jobs:
       - name: Step3:- fail this step 
         run: |
           exit 1
-
+      
+      # This step will skip because after fail step it will not consider success step
       - name: Step3.1:- success this step 
         run: |
-          echo "make success this step"
+          echo "make success this step"   
 
       - name: Step 4:- check status
         if: failure()
         run: echo "✅ This step will execute..."
+
+      # This step will skip because after fail step it will not consider success step
 
       - name: Step4.1
         run: |
@@ -34,3 +37,14 @@ jobs:
         if: failure()
         run: echo "✅ This step will execute..."
 
+# 🧠 Key Rules to Keep in Mind:
+#
+# ✅ GitHub Actions aborts a job after a step fails — unless the next step has:
+#    if: condition (e.g. failure() or always())
+#    or the failed step used continue-on-error: true
+#
+# ✅ Once a step fails, the job enters a "failure state"
+#
+# ✅ failure() stays true for all following steps
+#
+# ❌ Steps without if: after a failure will be skipped by default

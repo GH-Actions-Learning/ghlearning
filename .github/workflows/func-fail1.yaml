@@ -22,6 +22,8 @@ jobs:
         if: failure()
         run: echo "✅ This step will execute..."
 
+
+      # This Second failure also will execute
       - name: Step 5:- check status
         if: failure()
         run: echo "✅ This step will execute..."
