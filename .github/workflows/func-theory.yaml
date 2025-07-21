@@ -14,3 +14,30 @@ List of Functions can be used in expressions
 | `failure()`    | Job/step failure check               |
 | `cancelled()`  | Job/step cancellation check          |
 | `always()`     | Always‑true condition                |
+
+
+🛠️ Full List of Built-in Expression Functions
+
+| Function                  | Description                             | Example                                |
+| ------------------------- | --------------------------------------- | -------------------------------------- |
+| `contains()`              | Checks if a string contains a substring | `contains(github.ref, 'main')`         |
+| `startsWith()`            | Checks string prefix                    | `startsWith(github.ref, 'refs/tags/')` |
+| `endsWith()`              | Checks string suffix                    | `endsWith(github.ref, '/release')`     |
+| `format()`                | String formatter                        | `format('Hello {0}', github.actor)`    |
+| `join()`                  | Join array to string                    | `join(matrix.versions, ', ')`          |
+| `toJSON()`                | Serialize value to JSON                 | `toJSON(github)`                       |
+| `fromJSON()`              | Deserialize JSON to object              | `fromJSON('{"env":"prod"}')`           |
+| `hashFiles()`             | Hash files for caching                  | `hashFiles('**/package-lock.json')`    |
+| `always()`                | Always run step                         | `if: always()`                         |
+| `success()` / `failure()` | Conditional logic based on job status   | `if: success()`                        |
+| `cancelled()`             | Detect canceled jobs                    | `if: cancelled()`                      |
+
+
+🔄 Difference: Composite Actions vs Expression Functions
+
+| Feature     | Expression Function                         | Composite Action                     |
+| ----------- | ------------------------------------------- | ------------------------------------ |
+| Scope       | Inside `${{ }}`                             | Defined in `.yml` action             |
+| Purpose     | Evaluate logic, control flow                | Reuse multiple steps                 |
+| Reusability | Not reusable across workflows               | Reusable across repos                |
+| Inputs      | Use built-in context (e.g., `github.actor`) | Use `inputs` defined in `action.yml` |
