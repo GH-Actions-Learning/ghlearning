@@ -1,9 +1,9 @@
-name: success demo3
+name: success demo4
 
 on: push
 
 jobs:
-  test-success1:
+  test_success1:
     runs-on: ubuntu-latest
     steps:
       - name: Step A
@@ -17,7 +17,7 @@ jobs:
         if: success()
         run: echo "C will run" # <-- Now this fails!
   
-  test-success 2:
+  test_success 2:
     runs-on: ubuntu-latest
     steps:
       - name: Step A
