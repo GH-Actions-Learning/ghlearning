@@ -1,0 +1,20 @@
+name: success demo2
+
+on: push
+
+jobs:
+  build-and-notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Step 1:- Run build
+        run: |
+          docker --version
+
+      - name: Step1.1:- Fail this step
+        continue-on-error: true
+        run: |
+          exit 1
+
+      - name: Step 2:- Send Notification
+        if: success()
+        run: echo "✅ Build succeeded! Sending notification..."
