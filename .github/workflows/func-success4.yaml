@@ -1,0 +1,34 @@
+name: success demo3
+
+on: push
+
+jobs:
+  test-success1:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Step A
+        run: exit 1  # <-- Now this fails!
+
+      - name: Step B (Skipped)
+        if: false
+        run: echo "Should not run"
+
+      - name: Step C (Runs if all previous steps succeeded)
+        if: success()
+        run: echo "C will run" # <-- Now this fails!
+  
+  test-success 2:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Step A
+        run: echo "A passed"
+
+      - name: Step B (Skipped)
+        if: false
+        run: echo "Should not run"
+
+      - name: Step C (Runs if all previous steps succeeded)
+        if: success()
+        run: echo "C will run"  
+      # <-- Now this success because it skips if previous step is skipped and it consider before that step (step1)!
+
