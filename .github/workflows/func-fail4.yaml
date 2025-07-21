@@ -38,6 +38,8 @@ jobs:
         if: failure()
         run: echo "✅ This step will execute..."
 
+    # This step6 also skip because after fail step it will not consider any success step so it will not execute
+
       - name: step6:- execute if step1 is success
         if: steps.step1.outcome == 'success'
         run: echo "This step 6 executed success"
