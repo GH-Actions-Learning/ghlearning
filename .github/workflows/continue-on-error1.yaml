@@ -86,3 +86,12 @@ jobs:
     # - Step 1 fails, not ignored.
     # - Step 2 skipped.
     # - Job status: ❌ FAILURE
+
+
+# 🔎 TL;DR — GitHub Actions UI Summary
+#
+# Situation                                  Step Status UI       Job Status UI
+# --------------------------------------------------------------------------------
+# Step fails, job-level continue-on-error: true     ❌ Red (failed)       ✅ Green (success)
+# Step fails, step-level continue-on-error: true    ⚠️ Neutral / Green    ✅ Green
+# Step fails, no continue-on-error anywhere         ❌ Red                ❌ Red
