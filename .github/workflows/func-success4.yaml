@@ -20,7 +20,11 @@ jobs:
   test_success2:
     runs-on: ubuntu-latest
     steps:
-      - name: Step A
+      
+      - name: Step A 
+        run: exit 1
+
+      - name: Step A.1
         run: echo "A passed"
 
       - name: Step B (Skipped)
