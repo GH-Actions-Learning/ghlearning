@@ -3,59 +3,86 @@ name: continue on error demo 1
 on: push 
 
 jobs:
+
+  # ✅ TEST 1
   test1:
-    continue-on-error: true 
+    continue-on-error: true    # Job won't fail even if steps fail
     runs-on: ubuntu-latest
     steps:
       - name: Risky step
         run: exit 1
-        continue-on-error: true 
-
+        continue-on-error: true   # Step fails, but continues
       - name: Continue next step
-        run: echo "✅ We reached here"
+        run: echo "✅ We reached here"  # ✅ Executes
 
+    # 🔹 Output:
+    # - Step 1 fails but is ignored.
+    # - Step 2 runs successfully.
+    # - Job status: ✅ SUCCESS (both job and step failure ignored)
+
+  # ❌ TEST 2
   test2:
-    continue-on-error: true 
+    continue-on-error: true    # Job marked success even if it fails
     runs-on: ubuntu-latest
     steps:
       - name: Risky step
         run: exit 1
-        continue-on-error: false 
-
+        continue-on-error: false   # Step fails and halts execution
       - name: Continue next step
-        run: echo "✅ We reached here"
+        run: echo "✅ We reached here"  # ❌ Skipped
 
+    # 🔹 Output:
+    # - Step 1 fails, not ignored.
+    # - Step 2 is skipped due to failure.
+    # - Job status: ✅ SUCCESS (job-level ignore, but only step 1 ran)
+
+  # ❌ TEST 3
   test3:
-    continue-on-error: true 
+    continue-on-error: true
     runs-on: ubuntu-latest
     steps:
       - name: Risky step
         run: exit 1
-        continue-on-error: false 
-
+        continue-on-error: false   # Step fails, stops execution
       - name: Risky step
         run: exit 1
-        continue-on-error: true
-
+        continue-on-error: true    # ❌ Skipped
       - name: Continue next step
-        run: echo "✅ We reached here"
+        run: echo "✅ We reached here"  # ❌ Skipped
 
+    # 🔹 Output:
+    # - Step 1 fails and halts further execution.
+    # - Step 2 & 3 are skipped.
+    # - Job status: ✅ SUCCESS (because of job-level continue-on-error)
+
+  # ✅ TEST 4
   test4:
-    continue-on-error: false 
+    continue-on-error: false   # Normal behavior: fail job on failure
     runs-on: ubuntu-latest
     steps:
       - name: Risky step
         run: exit 1
-        continue-on-error: true  
+        continue-on-error: true    # Step fails but is ignored
       - name: Continue next step
-        run: echo "✅ We reached here"
+        run: echo "✅ We reached here"  # ✅ Executes
 
+    # 🔹 Output:
+    # - Step 1 fails but ignored (step-level).
+    # - Step 2 runs successfully.
+    # - Job status: ✅ SUCCESS
+
+  # ❌ TEST 5
   test5:
-    continue-on-error: false 
+    continue-on-error: false   # Default job behavior
     runs-on: ubuntu-latest
     steps:
       - name: Risky step
         run: exit 1
-        continue-on-error: false
+        continue-on-error: false   # Step fails and halts job
       - name: Continue next step
-        run: echo "✅ We reached here"
+        run: echo "✅ We reached here"  # ❌ Skipped
+
+    # 🔹 Output:
+    # - Step 1 fails, not ignored.
+    # - Step 2 skipped.
+    # - Job status: ❌ FAILURE
