@@ -1,0 +1,13 @@
+name:
+
+on: push
+
+jobs:
+  j1:
+    uses: ./.github/workflows/reusable2.yml
+    with: 
+      message: "You will become rich j1"
+  j2:
+    uses: ./.github/workflows/reusable2.yml
+    with:
+      message: "you will get 35 LPA"

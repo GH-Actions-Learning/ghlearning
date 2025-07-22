@@ -10,4 +10,5 @@ jobs:
   print:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "${{ inputs.message }}"
+      - name: rich
+        run: echo "${{ inputs.message }}"
