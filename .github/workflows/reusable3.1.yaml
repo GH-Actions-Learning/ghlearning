@@ -1,0 +1,18 @@
+name: reusable2 3.1
+
+on: 
+  workflow_call:
+    inputs:
+      environemt:
+        description: this is your environemt
+        type: string
+        required: true
+
+jobs:
+  rich1:
+    runs-on: ubuntu-latest 
+    steps:
+      - name: r1S1
+        run: |
+          echo "this is ${{ inputs.environemt }} env"
+        

@@ -1,0 +1,17 @@
+name: reusable 3.1
+
+on:
+  workflow_call:
+    inputs:
+      stage:
+        description: "this is your stage"
+        type: string
+        requried: true 
+      
+jobs:
+  rich2:
+    runs-on: ubuntu-latest
+    steps:
+      - name: r2s1
+        run: |
+          echo "this is ${{ inputs.stage }} stage" 

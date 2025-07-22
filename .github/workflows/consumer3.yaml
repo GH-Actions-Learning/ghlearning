@@ -1,0 +1,14 @@
+name: Consumer Workflow 3
+
+on: push
+
+jobs:
+  j1:
+    uses: ./.github/workflows/reusable3.1.yaml
+    with:
+      environemt: dev
+
+  j2:
+    uses: ./.github/workflows/reusable3.2.yaml
+    with:
+      stage: docker-build
