@@ -1,0 +1,11 @@
+name: Consumer Workflow
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  call-template:
+    uses: ./.github/workflows/reusable1.yml
+    with:
+      message: "Triggered from main workflow"

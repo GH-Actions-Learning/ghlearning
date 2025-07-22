@@ -1,0 +1,10 @@
+name: Reusable CI
+
+on:
+  workflow_call: # <--- Enables it to be called from other workflows
+
+jobs:
+  print:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "${{ inputs.message }}"
