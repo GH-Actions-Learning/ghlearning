@@ -7,4 +7,5 @@ jobs:
   say-hello:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Hello from reusable workflow!"
+      - name: rich  
+        run: echo "Hello from reusable workflow!"
