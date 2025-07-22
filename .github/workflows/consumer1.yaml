@@ -6,4 +6,4 @@ on:
 
 jobs:
   call-it:
-    uses: ./.github/workflows/reusable1.yml
+    uses: ./.github/workflows/reusable1.yaml
