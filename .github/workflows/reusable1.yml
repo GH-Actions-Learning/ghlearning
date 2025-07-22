@@ -2,7 +2,10 @@ name: Reusable CI
 
 on:
   workflow_call: # <--- Enables it to be called from other workflows
-
+    inputs:
+      message:
+        required: true
+        type: string
 jobs:
   print:
     runs-on: ubuntu-latest
