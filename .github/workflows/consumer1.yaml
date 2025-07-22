@@ -1,0 +1,9 @@
+name: Consumer Workflow 1
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  call-it:
+    uses: ./.github/workflows/reusable1.yml

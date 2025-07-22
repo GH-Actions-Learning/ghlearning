@@ -1,4 +1,4 @@
-name: Reusable CI
+name: Reusable 2
 
 on:
   workflow_call: # <--- Enables it to be called from other workflows

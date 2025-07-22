@@ -1,9 +1,9 @@
-name: Consumer Workflow
+name: Consumer Workflow 2
 
 on: push
 
 jobs:
   call-template:
-    uses: ./.github/workflows/reusable1.yml
+    uses: ./.github/workflows/reusable2.yml
     with:
       message: "Triggered from main workflow"
