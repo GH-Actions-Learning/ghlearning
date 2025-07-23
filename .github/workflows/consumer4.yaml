@@ -11,4 +11,4 @@ jobs:
     needs: call-reusable
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Message:- ${{ needs.reusable_job.outputs.message }}"
+      - run: echo "Message:- ${{ needs.call-reusable.outputs.message }}"
