@@ -14,8 +14,11 @@ jobs:
       message: ${{ steps.step1.outputs.message }}
 
     steps:
-      - id: step1
+      - name: s1
+        id: step1
         run: |
           echo "message = Hello from reusable workflow!" >> $GITHUB_OUTPUT
-          cat $GITHUB_OUTPUT
+      
+      - name: Print Output from Step
+        run: echo "Step Output:- ${{ steps.step1.outputs.message }}"
 
