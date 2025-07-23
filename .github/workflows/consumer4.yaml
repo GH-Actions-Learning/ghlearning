@@ -1,0 +1,14 @@
+name: Consumer Workflow 4
+on:
+  workflow_dispatch:
+
+jobs:
+  call-reusable:
+    uses: ./.github/workflows/reusable4.yaml
+    id: reusable_job
+
+  print-message:
+    needs: call-reusable
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Message:- ${{ needs.reusable_job.outputs.message }}"

@@ -1,0 +1,18 @@
+name: reusable 4
+
+on:
+  workflow_call:
+    outputs:
+      message:
+        description: "A simple message output"
+        value: ${{ jobs.job1.outputs.message }}
+
+jobs:
+  job1:
+    runs-on: ubuntu-latest
+    outputs:
+      message: ${{ steps.step1.outputs.message }}
+
+    steps:
+      - id: step1
+        run: echo "message=Hello from reusable workflow!" >> $GITHUB_OUTPUT

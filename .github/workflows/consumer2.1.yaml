@@ -2,7 +2,7 @@ name: Consumer Workflow 2
 
 on: push
 
-# <--- Here we will use same reusable workflow in different jobs in same file
+# Here we will use same reusable workflow in different jobs in same file
 
 jobs:
   j1:

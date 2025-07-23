@@ -2,6 +2,8 @@ name: Consumer Workflow 2
 
 on: push
 
+# Here we will use with in job (for passing data)
+
 jobs:
   call-template:
     uses: ./.github/workflows/reusable2.yml

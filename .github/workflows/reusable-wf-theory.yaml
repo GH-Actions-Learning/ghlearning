@@ -1,0 +1,128 @@
+✅ What is a Reusable Workflow?
+
+A reusable workflow is a complete workflow file that can be called from another workflow—just like calling a function in programming. It allows you to:
+
+Centralize repeated logic like build, test, deploy steps.
+
+Enforce standards across projects and teams.
+
+Reduce duplication across repos or within monorepos.
+
+Think of it as a plug-and-play workflow module.
+
+
+✅ Where Does It Fit in GitHub Actions?
+
+| GitHub Actions Feature | What It Is                               | Example                                     |
+| ---------------------- | ---------------------------------------- | ------------------------------------------- |
+| **Workflow**           | A full automation pipeline (e.g., CI/CD) | `main.yml`                                  |
+| **Job**                | A set of steps running on a VM           | `build-job:`                                |
+| **Step**               | A single command or action               | `- run: echo Hello`                         |
+| **Action**             | A custom script (single task)            | `actions/checkout@v4`                       |
+| **Reusable Workflow**  | A whole workflow you can call            | `uses: repo/.github/workflows/build.yml@v1` |
+
+✅ When to Use Reusable Workflows
+
+| Situation                                      | Reusable Workflow? | Why                    |
+| ---------------------------------------------- | ------------------ | ---------------------- |
+| You repeat same build/test steps in many repos | ✅ Yes              | Centralize logic       |
+| Need compliance/security scan across projects  | ✅ Yes              | Enforce standards      |
+| Different apps deploy using same Azure steps   | ✅ Yes              | DRY principle          |
+| One-off or tightly coupled workflows           | ❌ No               | Inline is better       |
+| Workflow logic varies a lot                    | ❌ No               | Avoid over-engineering |
+
+✅ How to Create a Reusable Workflow
+
+📄 1. Create a file in:
+
+.github/workflows/my-reusable.yml
+
+🔧 2. Add workflow_call to make it callable:
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+
+🔁 3. Define the actual jobs:
+
+jobs:
+  echo-job:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Running on ${{ inputs.environment }} environment"
+
+✅ How to Call a Reusable Workflow
+
+From Another Workflow (caller):
+
+jobs:
+  use-reusable:
+    uses: your-org/your-repo/.github/workflows/my-reusable.yml@main
+    with:
+      environment: 'dev'
+
+✅ Minimal Working Example
+
+🔹 my-reusable.yml (in repo-A)
+
+on:
+  workflow_call:
+    inputs:
+      name:
+        required: true
+        type: string
+
+jobs:
+  greet:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Hello ${{ inputs.name }}!"
+
+--------------
+ caller.yml (in repo-B)
+--------------
+
+on: [push]
+
+jobs:
+  call-workflow:
+    uses: org/repo-A/.github/workflows/my-reusable.yml@main
+    with:
+      name: "GitHub Pro"
+
+✅ Folder Structure Example
+
+repo-A/
+└── .github/
+    └── workflows/
+        └── my-reusable.yml
+
+repo-B/
+└── .github/
+    └── workflows/
+        └── caller.yml
+✅ Key Requirements
+
+| Requirement                            | Description                          |
+| -------------------------------------- | ------------------------------------ |
+| `on: workflow_call`                    | Declares this as a reusable workflow |
+| Must live in `.github/workflows/`      | GitHub requires this location        |
+| Must be in a public repo if cross-repo | Or both repos must have access       |
+| Use `@branch` or `@tag` to reference   | Example: `@v1` or `@main`            |
+| Inputs must be explicitly declared     | Nothing is "automatically" passed    |
+
+
+----------------
+
+❓1. Why do we need to specify outputs both at job level and at workflow_call level in the reusable workflow?
+
+✅ Answer: Yes, it's mandatory (if you want to expose an output from inside a job to the caller workflow).
+
+| Level                                 | Purpose                                       | Example                                                |
+| ------------------------------------- | --------------------------------------------- | ------------------------------------------------------ |
+| **Step output**                       | Set the actual value                          | `echo "version=1.0" >> $GITHUB_OUTPUT`                 |
+| **Job output**                        | Collect the step's output into a job output   | `outputs: version: ${{ steps.step1.outputs.version }}` |
+| **Workflow output (`workflow_call`)** | Make that job output accessible to the caller | `outputs: version: ${{ jobs.job1.outputs.version }}`   |
