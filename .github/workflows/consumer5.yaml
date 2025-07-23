@@ -9,7 +9,7 @@ jobs:
     uses: ./.github/workflows/reusable5.yaml
 
   print:
-    needs: reusable_job
+    needs: call-reusable
     runs-on: ubuntu-latest
     steps:
       - name: Print Outputs from Reusable Workflow
