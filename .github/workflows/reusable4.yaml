@@ -15,4 +15,7 @@ jobs:
 
     steps:
       - id: step1
-        run: echo "message=Hello from reusable workflow!" >> $GITHUB_OUTPUT
+        run: |
+          echo "message = Hello from reusable workflow!" >> $GITHUB_OUTPUT
+          cat $GITHUB_OUTPUT
+
