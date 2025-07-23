@@ -5,7 +5,7 @@ on:
 jobs:
   call-reusable:
     uses: ./.github/workflows/reusable4.yaml
-    id: reusable_job
+
 
   print-message:
     needs: call-reusable
