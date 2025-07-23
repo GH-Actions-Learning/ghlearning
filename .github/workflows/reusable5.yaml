@@ -1,0 +1,28 @@
+name: reusable 5
+
+on:
+  workflow_call:
+    outputs:
+      message1:
+        description: "Message from job1"
+        value: ${{ jobs.job1.outputs.message }}
+      message2:
+        description: "Message from job2"
+        value: ${{ jobs.job2.outputs.message }}
+
+jobs:
+  job1:
+    runs-on: ubuntu-latest
+    outputs:
+      message: ${{ steps.set1.outputs.msg }}
+    steps:
+      - id: set1
+        run: echo "msg=Hello from Job 1" >> $GITHUB_OUTPUT
+
+  job2:
+    runs-on: ubuntu-latest
+    outputs:
+      message: ${{ steps.set2.outputs.msg }}
+    steps:
+      - id: set2
+        run: echo "msg=Hello from Job 2" >> $GITHUB_OUTPUT

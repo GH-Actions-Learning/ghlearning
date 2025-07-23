@@ -1,0 +1,18 @@
+# Caller workflow
+name: Calling Workflow
+
+on:
+  workflow_dispatch:
+
+jobs:
+  call-reusable:
+    uses: ./.github/workflows/reusable5.yaml
+
+  print:
+    needs: reusable_job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print Outputs from Reusable Workflow
+        run: |
+          echo "Output from job1: ${{ needs.call-reusable.message1 }}"
+          echo "Output from job2: ${{ needs.call-reusable.message2 }}"
