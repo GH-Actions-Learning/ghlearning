@@ -126,3 +126,23 @@ repo-B/
 | **Step output**                       | Set the actual value                          | `echo "version=1.0" >> $GITHUB_OUTPUT`                 |
 | **Job output**                        | Collect the step's output into a job output   | `outputs: version: ${{ steps.step1.outputs.version }}` |
 | **Workflow output (`workflow_call`)** | Make that job output accessible to the caller | `outputs: version: ${{ jobs.job1.outputs.version }}`   |
+
+
+----------------
+
+on:
+  workflow_call:
+    inputs:
+      input_name:
+        description: 'What the input is for'
+        required: true
+        default: some-value
+        type: string
+    secrets:
+      SECRET_NAME:
+        description: 'Secret required by the job'
+        required: true
+    outputs:
+      output_name:
+        description: 'Returned value'
+        value: ${{ jobs.job_id.outputs.output_id }}

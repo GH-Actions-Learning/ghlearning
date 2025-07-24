@@ -1,4 +1,4 @@
-name: Consumer Workflow 4
+name: Consumer Workflow 6
 on:
   workflow_dispatch:
 

@@ -1,5 +1,4 @@
-# Caller workflow
-name: Calling Workflow
+name: Consumer Workflow 5
 
 on:
   workflow_dispatch:

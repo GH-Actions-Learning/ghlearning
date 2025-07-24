@@ -1,0 +1,33 @@
+name: reusable 6 conditions
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        type: string
+        required: true
+        description: 'Environment name (dev/staging/prod)'
+      runTests:
+        type: boolean
+        required: false
+        default: true
+        description: 'Whether to run tests'
+
+jobs:
+  test:
+    if: ${{ inputs.runTests == true }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run unit tests
+        run: echo "✅ Running tests..."
+
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy only if production
+        if: ${{ inputs.environment == 'prod' }}
+        run: echo "🚀 Deploying to production..."
+
+      - name: Skip deploy for non-prod
+        if: ${{ inputs.environment != 'prod' }}
+        run: echo "🛑 Skipping deploy. Current env:- ${{ inputs.environment }}"

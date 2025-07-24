@@ -1,0 +1,12 @@
+name: Call Reusable Workflow
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  use-reusable:
+    uses: ./.github/workflows/reusable6.yaml
+    with:
+      environment: prod
+      runTests: true
