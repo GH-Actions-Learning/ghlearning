@@ -14,6 +14,6 @@ jobs:
     steps:
       - name: Print Outputs from Reusable Workflow
         run: |
-          echo "Output from job1 step1: ${{ needs.call-reusable.outputs.message1.0 }}"
-          echo "Output from job1 step2: ${{ needs.call-reusable.outputs.message1.1 }}"
+          echo "Output from job1 step1: ${{ needs.call-reusable.outputs.message1-0 }}"
+          echo "Output from job1 step2: ${{ needs.call-reusable.outputs.message1-1 }}"
           echo "Output from job2: ${{ needs.call-reusable.outputs.message2 }}"

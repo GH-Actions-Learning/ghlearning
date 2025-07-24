@@ -3,10 +3,10 @@ name: reusable 5
 on:
   workflow_call:
     outputs:
-      message1.0:
+      message1-0:
         description: "Message from job1 step1"
         value: ${{ jobs.job1.outputs.message1 }}
-      message1.1:
+      message1-1:
         description: "Message from job1 step2"
         value: ${{ jobs.job1.outputs.message2 }}
       message2:
