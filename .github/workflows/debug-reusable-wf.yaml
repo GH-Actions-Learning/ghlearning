@@ -1,0 +1,95 @@
+🧰 Debugging Reusable Workflows: A Comprehensive Approach
+
+1. 🪵 Enable Detailed Logging
+
+To get deeper insights into your workflow execution:
+
+env:
+  ACTIONS_RUNNER_DEBUG: true
+  ACTIONS_STEP_DEBUG: true
+
+ACTIONS_RUNNER_DEBUG=true exposes runner-level logs.
+
+ACTIONS_STEP_DEBUG=true adds step-level debugging.
+
+These must be defined as repository secrets for security reasons
+
+--------------
+
+2. 📜 Print Contexts and Environment Variables
+
+Use debug steps to log runtime contexts for diagnosis:
+
+- name: Debug Contexts
+  run: |
+    echo "github: ${{ toJSON(github) }}"
+    echo "job: ${{ toJSON(job) }}"
+    echo "steps: ${{ toJSON(steps) }}"
+    echo "runner: ${{ toJSON(runner) }}"
+
+---------------
+
+3. 🔄 Validate Step vs. Job vs. Workflow Outputs
+
+
+Ensure each step has an id, uses $GITHUB_OUTPUT to set a variable.
+
+The job should map the step output: outputs: build_status: ${{ steps.step_id.outputs.status }}.
+
+Finally, the reusable workflow must declare on.workflow_call.outputs to expose it to the caller, otherwise the caller cannot access the data 
+
+------------
+
+4. 🔗 Check Secrets Passing Across Nested Workflows
+
+If the child workflow doesn’t list the secret in its workflow_call, the parent must pass it explicitly with secrets: <NAME>.
+
+Alternatively, set secrets: inherit in the parent job to pass all secrets automatically to the child (GitHub official behavior since 2023)
+
+Always verify via logs that secrets are present at each stage.
+
+------------
+
+5. 📎 Use needs and if: Correctly
+
+Ensure that dependent jobs use needs: so they wait for predecessor jobs.
+
+Conditions like if: needs.build-test.outputs.build_status == 'success' must match output names exactly.
+
+Invalid expressions or missing outputs can cause jobs to silently skip or fail unexpectedly
+
+-------------
+
+6. 🧩 Perform Isolation Debug Runs
+
+Add continue-on-error: true temporarily to non-critical steps.
+
+Use conditional logic to isolate failing parts.
+
+For complex workflows, consider triggering only subsets via matrix strategies or manual inputs
+
+Locally test workflows using tools like act, especially for nested reusable workflows (note: may have limitations)
+
+------------
+
+7. 🛠 Real-Time Debugging with tmate
+
+For elusive runtime issues in runners:
+
+- uses: mxschmitt/action-tmate@v3
+
+This launches an interactive SSH session to the running workflow container — great for live inspection during a debug run
+
+-------------
+
+✅ Reference Summary Table
+
+| Debug Tool                                    | Usage                                                                                             |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| `ACTIONS_RUNNER_DEBUG` / `ACTIONS_STEP_DEBUG` | Enable verbose logs ([blogs.amobitsx7.tech][1])                                                   |
+| Context dumps via `toJSON(...)`               | Visualize runtime variables ([blogs.amobitsx7.tech][1], [blogs.amobitsx7.tech][1])                |
+| Workflow output mapping                       | Ensure `on.workflow_call.outputs` is defined ([earthly.dev][2], [incredibuild][3])                |
+| Secrets handling                              | Use `secrets: inherit` or explicit passing ([yourazurecoach.com][4], [earthly.dev][2])            |
+| Conditional `needs` logic                     | Validate job dependencies and conditions ([blog.shamaliroshan.com][5], [blogs.amobitsx7.tech][1]) |
+| Local emulation (`act`, `wrkflw`)             | Test workflows locally before pushing ([Reddit][6], [Reddit][7])                                  |
+| Real-time SSH via tmate                       | Inspect live runner environment ([cicube.io][8])                                                  |
