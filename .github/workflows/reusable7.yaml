@@ -1,4 +1,4 @@
-name: reusable 6 env var
+name: reusable 7 env var
 
 on:
   workflow_call:

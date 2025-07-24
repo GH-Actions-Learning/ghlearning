@@ -1,0 +1,19 @@
+name: Consumer Workflow 8
+
+on:
+  workflow_dispatch:
+    inputs:
+      env:
+        type: choice
+        options: [dev, qa, prod]
+        default: dev
+      skip_tests:
+        type: boolean
+        default: false
+
+jobs:
+  ci-deploy:
+    uses: ./.github/workflows/reusable8.1.yml
+    with:
+      deployEnv: ${{ github.event.inputs.env }}
+      skipTests: ${{ fromJSON(github.event.inputs.skip_tests) }}

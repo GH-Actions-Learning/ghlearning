@@ -1,4 +1,4 @@
-name: Call Reusable Workflow
+name: Consumer Workflow 7
 
 on:
   workflow_dispatch:

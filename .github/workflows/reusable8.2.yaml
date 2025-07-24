@@ -1,0 +1,26 @@
+name: reusable 8 Child
+
+on:
+  workflow_call:
+    inputs:
+      buildEnv:
+        type: string
+        required: true
+    
+
+    outputs:  # 👈 Must define here to expose to parent!
+      build_status:
+        description: "Status of the build step"
+        value: ${{ jobs.build.outputs.build_status }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      build_status: ${{ steps.build_step.outputs.status }}
+
+    steps:
+      - name: Simulate build
+        id: build_step
+        run: |
+          echo "status=success" >> "$GITHUB_OUTPUT"
