@@ -15,6 +15,6 @@ on:
 
 jobs:
   call-deploy:
-    uses: ./.github/workflows/reusable-deploy.yml
+    uses: ./.github/workflows/reusable7.yaml
     with:
       deployEnv: ${{ inputs.env }}
