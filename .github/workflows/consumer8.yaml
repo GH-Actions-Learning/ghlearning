@@ -13,7 +13,7 @@ on:
 
 jobs:
   ci-deploy:
-    uses: ./.github/workflows/reusable8.1.yml
+    uses: ./.github/workflows/reusable8.1.yaml
     with:
       deployEnv: ${{ github.event.inputs.env }}
       skipTests: ${{ fromJSON(github.event.inputs.skip_tests) }}
