@@ -17,4 +17,4 @@ jobs:
   call-deploy:
     uses: ./.github/workflows/reusable7.yaml
     with:
-      deployEnv: ${{ inputs.env }}
+      deployEnv: ${{ github.event.inputs.env }}
