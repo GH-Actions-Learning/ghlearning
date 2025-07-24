@@ -14,8 +14,8 @@ jobs:
 
     # Set environment variables using inputs
     env:
-      DEPLOY_ENV: ${{ inputs.deployEnv }}
-      RESOURCE_GROUP: rg-${{ inputs.deployEnv }}
+      DEPLOY_ENV: ${{ github.event.inputs.deployEnv }}
+      RESOURCE_GROUP: rg-${{ github.event.inputs.deployEnv }}
 
     steps:
       - name: Checkout code
