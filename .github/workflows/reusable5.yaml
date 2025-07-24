@@ -3,9 +3,12 @@ name: reusable 5
 on:
   workflow_call:
     outputs:
-      message1:
-        description: "Message from job1"
-        value: ${{ jobs.job1.outputs.message }}
+      message1.0:
+        description: "Message from job1 step1"
+        value: ${{ jobs.job1.outputs.message1 }}
+      message1.1:
+        description: "Message from job1 step2"
+        value: ${{ jobs.job1.outputs.message2 }}
       message2:
         description: "Message from job2"
         value: ${{ jobs.job2.outputs.message }}
@@ -14,10 +17,13 @@ jobs:
   job1:
     runs-on: ubuntu-latest
     outputs:
-      message: ${{ steps.set1.outputs.msg }}
+      message1: ${{ steps.set1.outputs.msg1 }}
+      message2: ${{ steps.set2.outputs.msg2 }}
     steps:
       - id: set1
-        run: echo "msg=Hello from Job 1" >> $GITHUB_OUTPUT
+        run: echo "msg1=You will become rich" >> $GITHUB_OUTPUT
+      - id: set2
+        run: echo "msg2=You will get 35LPA" >> $GITHUB_OUTPUT
 
   job2:
     runs-on: ubuntu-latest
