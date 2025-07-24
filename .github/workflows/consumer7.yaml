@@ -1,0 +1,20 @@
+name: Call Reusable Workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      env:
+        description: "Deployment environment"
+        required: true
+        default: dev
+        type: choice
+        options:
+          - dev
+          - qa
+          - prod
+
+jobs:
+  call-deploy:
+    uses: ./.github/workflows/reusable-deploy.yml
+    with:
+      deployEnv: ${{ inputs.env }}

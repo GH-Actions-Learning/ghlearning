@@ -1,0 +1,31 @@
+name: reusable 6 env var
+
+on:
+  workflow_call:
+    inputs:
+      deployEnv:
+        type: string
+        required: true
+        description: "The deployment environment (dev/qa/prod)"
+    
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    # Set environment variables using inputs
+    env:
+      DEPLOY_ENV: ${{ inputs.deployEnv }}
+      RESOURCE_GROUP: rg-${{ inputs.deployEnv }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Print environment variables
+        run: |
+          echo "Deploying to environment: $DEPLOY_ENV"
+          echo "Resource Group: $RESOURCE_GROUP"
+
+      - name: Deploy (simulated)
+        run: |
+          echo "✅ Successfully deployed to $DEPLOY_ENV using $RESOURCE_GROUP"
