@@ -1,0 +1,6 @@
+name: action1 basic
+
+runs:
+  using: "composite"
+  steps: |
+    run "you will become Rich"

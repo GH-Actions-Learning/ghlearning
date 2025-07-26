@@ -1,0 +1,10 @@
+name: Test Composite action 1
+
+on: push
+
+jobs:
+  j1:
+    runs-on: ubuntu-latest
+    steps:
+      - name: test1
+        uses: ./.github/actions/
