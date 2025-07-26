@@ -4,5 +4,6 @@ runs:
   using: "composite"
   steps: 
     - name: test-composite
+      shell: bash
       run: | 
         echo "you will become Rich"
