@@ -2,5 +2,7 @@ name: action1 basic
 
 runs:
   using: "composite"
-  steps: |
-    run "you will become Rich"
+  steps: 
+    - name: test-composite
+      run: | 
+        echo "you will become Rich"
