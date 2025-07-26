@@ -7,4 +7,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: test1
-        uses: ./.github/actions/
+        uses: ./.github/actions/test-action1
