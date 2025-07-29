@@ -20,6 +20,6 @@ runs:
   steps:
     - name: step1
       id: s1
-      runs:
+      run:
         echo "var1=${{ inputs.goal }}&${{inputs.package}}" >> $GITHUB_OUTPUT
       shell: bash
