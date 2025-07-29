@@ -1,0 +1,22 @@
+name: test composite action 4
+
+on: push
+
+jobs:
+  composite-action1:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: use comp action 1
+        uses: ./.github/action/test-action1 
+
+  composite-action2:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4 
+
+      - name: use com action2 
+        uses: ./.github/action/test-action2
