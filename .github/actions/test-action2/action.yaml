@@ -1,0 +1,14 @@
+name: action2 basic
+
+runs:
+  using: "composite"
+  steps:
+    - name: step1
+      shell: bash
+      run: |
+        echo "this is my first step"
+
+    - name: step2
+      shell: bash
+      run: |
+        echo "This is my Second step"

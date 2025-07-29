@@ -4,6 +4,6 @@ runs:
   using: "composite"
   steps: 
     - name: test-composite
-      shell: bash
+      shell: bash           # ✅ REQUIRED to execute below commands
       run: | 
         echo "you will become Rich"

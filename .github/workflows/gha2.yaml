@@ -1,0 +1,13 @@
+name: Test Composite action 2
+
+on: push 
+
+jobs:
+  j1:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: composite actions
+        uses: ./.github/actions/test-action2
