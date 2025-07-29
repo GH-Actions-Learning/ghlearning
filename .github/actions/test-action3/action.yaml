@@ -21,6 +21,7 @@ runs:
         echo "your goal is:-  {{ inputs.goal }}"
 
 
+
     - name: package name
       run: |
         echo "your package is:-  {{ inputs.package }}"
