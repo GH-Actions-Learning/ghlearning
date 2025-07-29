@@ -19,9 +19,8 @@ runs:
     - name: goal name 
       run: |
         echo "your goal is:-  {{ inputs.goal }}"
-      shell: bash
+
 
     - name: package name
       run: |
         echo "your package is:-  {{ inputs.package }}"
-      shell: bash
