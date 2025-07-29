@@ -24,11 +24,6 @@ outputs:
 
 runs:
   using: "composite"
-
-  env:
-    COMPANY: "OpenAI"
-    IS_PROD: ${{ inputs.env == 'prod' }}
-
   steps:
     - name: Format greeting
       id: build
