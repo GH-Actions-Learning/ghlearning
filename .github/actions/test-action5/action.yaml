@@ -1,13 +1,13 @@
-name:
+name: action5 basics
 
 runs:
   using: "composite"
   steps:
     - name: use environment variable
       env:
-        $GOAL: "rich"
+        GOAL: "rich"
       shell: bash
       run: |
         echo "you will become ${{ env.GOAL }}"
         echo "----------"
-        echo "tou will become $GOAL"
+        echo "you will become $GOAL"
