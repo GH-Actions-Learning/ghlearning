@@ -1,0 +1,13 @@
+name:
+
+runs:
+  using: "composite"
+  steps:
+    - name: use environment variable
+      env:
+        $GOAL: "rich"
+      shell: bash
+      run: |
+        echo "you will become ${{ env.GOAL }}"
+        echo "----------"
+        echo "tou will become $GOAL"

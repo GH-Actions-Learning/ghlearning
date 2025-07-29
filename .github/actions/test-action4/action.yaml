@@ -13,7 +13,7 @@ inputs:
 
 outputs:
   ambition:
-    value: ${{ steps.s1.outputs.var1}}
+    value: ${{ steps.s1.outputs.var1}}   # ✅ only "value" key type need to be used here 
   
 runs:
   using: "composite"
