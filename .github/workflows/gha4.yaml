@@ -10,7 +10,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: use comp action 1
-        uses: ./.github/action/test-action1 
+        uses: ./.github/actions/test-action1 
 
   composite-action2:
     runs-on: ubuntu-latest
@@ -19,4 +19,4 @@ jobs:
         uses: actions/checkout@v4 
 
       - name: use com action2 
-        uses: ./.github/action/test-action2
+        uses: ./.github/actions/test-action2
