@@ -1,0 +1,21 @@
+name: test composite action 6
+
+on: push
+
+jobs:
+  j1:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: composite actions1
+        id: ca1
+        uses: ./.github/actions/test-action4
+        with: 
+          goal: "ultra rich"
+          package: "50lpa"
+
+      - name: consume composite action output value
+        runs:
+          echo "${{ steps.ca1.outputs.ambition }}"

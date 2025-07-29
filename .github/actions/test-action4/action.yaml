@@ -1,1 +1,25 @@
 name: 
+
+inputs:
+  goal:
+    description: "Tell your goal"
+    requried: true
+    type: string
+
+  package:
+    description: "Tell your PKg"
+    requried: true
+    type: string 
+
+outputs:
+  ambition:
+    value: ${{ steps.s1.outputs.var1}}
+  
+runs:
+  using: "composite"
+  steps:
+    - name: step1
+      id: s1
+      runs:
+        echo "var1=${{ inputs.goal }}&${{inputs.package}}" >> $GITHUB_OUTPUT
+      shell: bash
