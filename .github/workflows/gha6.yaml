@@ -17,5 +17,5 @@ jobs:
           package: "50lpa"
 
       - name: consume composite action output value
-        runs:
+        run:
           echo "${{ steps.ca1.outputs.ambition }}"
