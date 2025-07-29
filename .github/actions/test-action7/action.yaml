@@ -1,0 +1,56 @@
+name: action7 basics
+
+description: |
+  Greets a user with optional title and role.
+  Shows different message based on environment.
+
+inputs:
+  name:
+    required: true
+    description: "The name of the user"
+  title:
+    required: false
+    default: "Engineer"
+    description: "Optional title"
+  env:
+    required: false
+    default: "dev"
+    description: "Environment name"
+
+outputs:
+  message:
+    description: "Formatted greeting message"
+    value: ${{ steps.build.outputs.msg }}
+
+runs:
+  using: "composite"
+
+  env:
+    COMPANY: "OpenAI"
+    IS_PROD: ${{ inputs.env == 'prod' }}
+
+  steps:
+    - name: Format greeting
+      id: build
+      run: |
+        MESSAGE="${{ format('{0} {1}, welcome to {2}!', inputs.title, inputs.name, env.COMPANY) }}"
+        echo "msg=$MESSAGE" >> $GITHUB_OUTPUT
+      shell: bash
+
+    - name: Show greeting
+      if: ${{ steps.build.outputs.msg != '' }}
+      run: |
+        echo "Output: ${{ steps.build.outputs.msg }}"
+      shell: bash
+
+    - name: Special log for prod
+      if: ${{ env.IS_PROD == 'true' }}
+      run: echo "⚠️ You are on PRODUCTION environment!"
+      shell: bash
+
+
+
+# | Scope                  | Declared       | Applies To                     | Overrides?                  |
+# | ---------------------- | -------------- | ------------------------------ | --------------------------- |
+# | Composite-level `env:` | Above `steps:` | All steps inside the composite | ✅ Can be overridden         |
+# | Step-level `env:`      | Inside `step`  | Only that specific step        | ✅ Overrides composite-level |

@@ -1,0 +1,21 @@
+name: Test Smart Greet
+
+on: push
+
+jobs:
+  greet:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run smart greet
+        uses: ./.github/actions/test-action7
+        id: greeter
+        with:
+          name: "Rich"
+          title: "Sr. Architect"
+          env: "prod"
+
+      - name: Use output in next step
+        run: echo "Greeting was:- ${{ steps.greeter.outputs.message }}"
