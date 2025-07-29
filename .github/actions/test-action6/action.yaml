@@ -1,0 +1,21 @@
+name: action6 basics
+
+inputs:
+  goal:
+    description: "tell me your goal"
+    requried: true
+
+outputs:
+  g1:
+    value: ${{ steps.s1.outputs.var1 }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: use env as input
+      id: s1
+      shell: bash
+      env:
+        GOAL: ${{ inputs.goal }}
+      run:
+        echo "var1=$GOAL" >> $GITHUB_OUTPUTS

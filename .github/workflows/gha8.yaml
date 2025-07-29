@@ -1,0 +1,20 @@
+name:
+
+on: push
+
+jobs:
+  j1:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: s1
+        id: s1
+        uses: ./.github/actions/test-action6 
+        with:
+          goal: "ultra rich"
+
+      - name: s2
+        run:
+          echo "${{ steps.s1.outputs.g1 }}"
