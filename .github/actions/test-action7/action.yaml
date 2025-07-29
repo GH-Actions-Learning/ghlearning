@@ -24,11 +24,18 @@ outputs:
 
 runs:
   using: "composite"
+
+  env:
+    COMPANY: "OpenAI" # ✅ Static env allowed here
+    
   steps:
     - name: Format greeting
       id: build
+      env:
+        USER_NAME: ${{ inputs.name }}
+        USER_TITLE: ${{ inputs.title }}
       run: |
-        MESSAGE="${{ format('{0} {1}, welcome to {2}!', inputs.title, inputs.name, env.COMPANY) }}"
+        MESSAGE="${USER_TITLE} ${USER_NAME}, welcome to $COMPANY!"
         echo "msg=$MESSAGE" >> $GITHUB_OUTPUT
       shell: bash
 
@@ -39,9 +46,10 @@ runs:
       shell: bash
 
     - name: Special log for prod
-      if: ${{ env.IS_PROD == 'true' }}
+      if: ${{ inputs.env == 'prod' }}
       run: echo "⚠️ You are on PRODUCTION environment!"
       shell: bash
+
 
 
 
