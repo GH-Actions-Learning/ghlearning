@@ -9,8 +9,9 @@ jobs:
 
       - name: check shell is requried ?
         run: |
-          echo "if it prints in caller workflow then here default shell is bash"
-          
+          echo "here it prints without define default shell as bash"
+          echo "but if we not define shell in composite action then it fails"
+
       - name: checkout
         uses: actions/checkout@v4
 
