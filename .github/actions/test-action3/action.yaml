@@ -1,0 +1,25 @@
+name: action3 basics
+
+inputs:
+  goal:
+    description: "Tell your goal"
+    type: string
+    requried: true
+
+  package:
+    description: "tell your package"
+    type: string
+    requried: false
+    default: "35lpa"
+
+
+runs:
+  using: "composite"
+  steps:
+    - name: goal name 
+      run: |
+        echo "your goal is:-  {{ inputs.goal }}"
+
+    - name: package name
+      run: |
+        echo "your package is:-  {{ inputs.package }}"
