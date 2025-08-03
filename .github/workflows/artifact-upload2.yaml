@@ -1,0 +1,19 @@
+name: artifact upload demo 2
+
+on: push
+
+jobs:
+  j1:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: create file
+        run: |
+          echo "this is test file" >> test.txt 
+
+      - name: get directory of files
+        runs: |
+          pwd
+          ls
