@@ -1,0 +1,106 @@
+🔹 1. FUNDAMENTALS OF GITHUB ACTIONS ARTIFACTS
+
+✅ What is an Artifact?
+
+In GitHub Actions, an artifact is a file or group of files that are:
+
+Generated during a workflow run
+
+Stored temporarily by GitHub
+
+Downloadable after the run finishes
+
+Shareable between jobs in the same workflow
+
+You can think of artifacts as "outputs" of a job that you want to preserve or reuse.
+
+✅ Why Do We Use Artifacts?
+
+| Purpose                     | Description                             | Example                            |
+| --------------------------- | --------------------------------------- | ---------------------------------- |
+| **Build results**           | Share compiled code, zipped releases    | Upload `.dll`, `.jar`, or `.zip`   |
+| **Test logs**               | Store test logs, screenshots, results   | Upload `test-results.xml`, `logs/` |
+| **Inter-job communication** | Pass files between jobs                 | Job A builds, Job B tests          |
+| **Debugging**               | Retain logs, state files for inspection | Upload `logs/error.log`            |
+| **Deployment**              | Package files and deploy in later jobs  | Push `.zip` to Azure App Service   |
+
+
+✅ Where Are Artifacts Stored?
+
+Artifacts are:
+
+Stored on GitHub’s servers
+
+Available under the “Actions” tab for each workflow run
+
+Downloadable manually
+
+Retained for up to 90 days (configurable)
+
+You can also download artifacts using the GitHub CLI, curl, or APIs.
+
+
+✅ Lifecycle of an Artifact
+
+1. Created
+
+You generate files during a job (e.g., build/ folder)
+
+2. Uploaded
+
+Use actions/upload-artifact to upload files
+
+3. Stored
+
+GitHub stores the files compressed as .zip
+
+4. Downloaded
+
+Use actions/download-artifact to access them in another job or after the run
+
+5. Expires
+
+Artifacts expire after X days unless retained externally
+
+✅ How Are Artifacts Different From Other GitHub Actions Concepts?
+
+| Concept               | Scope            | Purpose                 | Persistence             |
+| --------------------- | ---------------- | ----------------------- | ----------------------- |
+| **Artifacts**         | Workflow         | Share files             | Temporary (max 90 days) |
+| **Outputs**           | Job/Step         | Share strings/variables | Transient               |
+| **Cache**             | Across workflows | Speed up dependencies   | Stored via keys         |
+| **Environment files** | Same job         | Pass vars between steps | Short-lived             |
+
+
+✅ Key Limits and Constraints
+
+| Limit                        | Value                                     |
+| ---------------------------- | ----------------------------------------- |
+| Max file size (per artifact) | 5 GB                                      |
+| Max total per workflow run   | 100 GB                                    |
+| Retention period             | Default: 90 days, Min: 1 day              |
+| Max artifacts per repo       | No hard limit, but storage caps apply     |
+| Upload/download speed        | Affected by file size and ZIP compression |
+
+
+✅ Common Tools Involved
+
+| Tool                        | Purpose                           |
+| --------------------------- | --------------------------------- |
+| `actions/upload-artifact`   | Uploads artifacts                 |
+| `actions/download-artifact` | Downloads artifacts               |
+| `gh run download`           | CLI command to get artifacts      |
+| GitHub Web UI               | View/download artifacts           |
+| GitHub REST API             | Access artifacts programmatically |
+
+
+✅ Where Artifacts Fit in DevOps Pipelines (AZ-400 Relevance)
+
+| Azure DevOps Concept   | GitHub Equivalent          |
+| ---------------------- | -------------------------- |
+| Build Artifacts        | GitHub Action Artifacts    |
+| Publish Artifact task  | `upload-artifact` action   |
+| Download Artifact task | `download-artifact` action |
+| Retention policies     | `retention-days` in GitHub |
+
+
