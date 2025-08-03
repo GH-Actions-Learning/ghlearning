@@ -1,0 +1,40 @@
+name: artifact upload demo 6
+
+on:
+  workflow_dispatch:
+
+jobs:
+  multi-artifact-demo:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v4
+
+    - name: Create files
+      run: |
+        mkdir -p logs dist reports
+        echo "Build output" > dist/build.txt
+        echo "Log file" > logs/log.txt
+        echo "Report content" > reports/report.md
+
+    - name: Upload build artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: build
+        path: dist/
+        retention-days: 7
+
+    - name: Upload logs
+      uses: actions/upload-artifact@v4
+      with:
+        name: logs
+        path: logs/
+        retention-days: 3
+
+    - name: Upload reports
+      uses: actions/upload-artifact@v4
+      with:
+        name: reports
+        path: reports/
+        if-no-files-found: ignore
