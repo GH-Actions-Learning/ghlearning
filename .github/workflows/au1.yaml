@@ -10,6 +10,7 @@ jobs:
         run: |
           pwd
           touch test1.txt
+          $GITHUB_WORKSPACE
 
       # - name: upload file
       #   uses: actions/upload-artifact@v4
