@@ -14,6 +14,6 @@ jobs:
           echo "this is test file" >> test.txt 
 
       - name: get directory of files
-        runs: |
+        run: |
           pwd
           ls
