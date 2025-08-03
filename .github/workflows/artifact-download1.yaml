@@ -1,0 +1,28 @@
+name: Download artifact Demo 1
+
+on: push 
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Build files
+      run: echo "Hello world" > file.txt
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: my-artifact
+        path: file.txt
+
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Download artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: my-artifact
+
+    - name: Show artifact content
+      run: cat file.txt
