@@ -1,0 +1,39 @@
+name: artifact upload demo 8
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Create artifact
+      run: |
+        mkdir output
+        echo "Hello from commit $GITHUB_SHA" > output/message.txt
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: app-artifact
+        path: output/
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: prod  # 👈 This enables manual approval
+
+    steps:
+    - name: Download artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: app-artifact
+
+    - name: Deploy (simulated)
+      run: |
+        echo "Deploying the following artifact:"
+        cat output/message.txt

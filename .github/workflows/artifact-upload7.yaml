@@ -1,0 +1,29 @@
+name: artifact upload demo 7
+
+on:
+  workflow_dispatch:
+
+jobs:
+  versioning:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Get timestamp + short SHA
+      run: |
+        echo "DATE=$(date +%Y%m%d)" >> $GITHUB_ENV
+        echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+
+    - name: Create build output
+      run: |
+        mkdir -p dist
+        echo "Build from commit $SHORT_SHA on $DATE" > dist/info.txt
+
+    - name: Upload versioned artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-${{ env.DATE }}-${{ env.SHORT_SHA }}
+        path: dist/
+        retention-days: 10
