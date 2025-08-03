@@ -17,7 +17,7 @@ jobs:
         path: node_modules
         key: deps-${{ hashFiles('test1.txt') }}
     
-    # STEP 2: Check what the cache action returned
+    # STEP 2: Check what the cache action returned.
     - name: Show cache result
       run: |
         echo "Cache hit result: ${{ steps.my-cache-step.outputs.cache-hit }}"
