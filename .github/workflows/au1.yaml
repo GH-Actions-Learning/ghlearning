@@ -14,8 +14,10 @@ jobs:
           echo "-------------"
           ls
 
-      # - name: upload file
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: output
-      #     path:
+      - name: upload file
+        uses: actions/upload-artifact@v4
+        with:
+          name: output
+          path: $GITHUB_WORKSPACE
+
+      
