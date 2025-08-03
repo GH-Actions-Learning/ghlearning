@@ -1,0 +1,52 @@
+name: artifact upload demo 5
+
+on:
+  workflow_dispatch:  # manual trigger for testing
+
+jobs:
+  demo:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # Simulated step: Always succeeds
+    - name: Simulate a successful step (build)
+      run: |
+        mkdir build
+        echo "Build output from run #${{ github.run_number }}" > build/output.txt
+
+    # Simulated step: Always fails (tests)
+    - name: Simulate a failing step (tests)
+      run: |
+        mkdir logs
+        echo "Test log from run #${{ github.run_number }}" > logs/test.log
+        exit 1  # Simulates test failure
+
+    # Upload artifact only if everything succeeded (will be skipped here)
+    - name: Upload Build Artifact (only on success)
+      if: ${{ success() }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-${{ github.run_number }}
+        path: build/
+        if-no-files-found: error
+
+    # Upload logs only if any previous step failed
+    - name: Upload Test Logs (only on failure)
+      if: ${{ failure() }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-logs-${{ github.run_number }}
+        path: logs/
+        if-no-files-found: ignore
+
+    # Upload README.md only if this is the main branch
+    - name: Upload README on main only
+      if: github.ref == 'refs/heads/main'
+      uses: actions/upload-artifact@v4
+      with:
+        name: readme-main
+        path: README.md
+        if-no-files-found: warn
