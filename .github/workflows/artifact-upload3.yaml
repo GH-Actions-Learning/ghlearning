@@ -1,0 +1,23 @@
+name: artifact upload demo 3
+
+on:
+  workflow_dispatch:
+
+jobs:
+  upload-artifact-demo:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Create Demo File
+      run: |
+        echo "This is run ${{ github.run_number }}" > test1.txt
+        cat test1.txt
+
+    - name: Upload Artifact with Same Name
+      uses: actions/upload-artifact@v4
+      with:
+        name: example-artifact
+        path: test1.txt

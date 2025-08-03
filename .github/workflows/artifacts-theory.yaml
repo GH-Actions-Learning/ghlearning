@@ -104,3 +104,116 @@ Artifacts expire after X days unless retained externally
 | Retention policies     | `retention-days` in GitHub |
 
 
+---------------------------------------
+
+🔍 Deep Dive on Each Parameter in Upload Artifacts
+
+----------------------------------------
+
+1. name
+
+Logical identifier.
+
+Used later in download-artifact
+
+with:
+  name: frontend-build
+
+--------------
+
+2. path
+
+Can be a file, folder, or glob pattern.
+
+You can include multiple paths like:
+
+with:
+  path: |
+    output/app.dll
+    logs/*
+
+----------
+
+3. if-no-files-found
+
+Controls behavior when no files match path
+
+| Value    | Behavior            |
+| -------- | ------------------- |
+| `warn`   | Warns but continues |
+| `error`  | Fails the job       |
+| `ignore` | Silently continues  |
+
+----------
+
+4. retention-days
+
+Number of days the artifact is retained.
+
+Max: 90, Default: 90 (or repo default)
+
+with:
+  retention-days: 14
+
+🔸 What is retention-days?
+
+retention-days specifies how long GitHub should store your uploaded artifact before it is automatically deleted.
+
+This helps:
+
+Control storage usage
+
+Comply with compliance/data lifecycle rules
+
+Prevent bloating your repository's artifacts section
+
+🔸 Valid Range
+
+| Setting | Value                                        |
+| ------- | -------------------------------------------- |
+| Minimum | `1` day                                      |
+| Maximum | `90` days (for public and private repos)     |
+| Default | `90` days unless the repo admin overrides it |
+
+
+-------------
+
+5. compression-level
+
+ZIP compression level (0 = none, 9 = max)
+
+Default is 6 (good balance)
+
+with:
+  compression-level: 9
+
+✅ What is compression-level?
+
+The compression-level parameter defines how much compression is applied when GitHub zips your artifact before uploading it.
+
+This affects:
+
+Upload size (smaller files = faster uploads)
+
+CPU usage (higher compression = more CPU)
+
+Speed (higher compression = slower process)
+
+✅ Valid Values
+
+| Value | Description      | Notes                               |
+| ----- | ---------------- | ----------------------------------- |
+| `0`   | No compression   | Fastest upload, largest size        |
+| `1-5` | Low compression  | Balanced for speed and size         |
+| `6`   | Default          | Good balance                        |
+| `7-9` | High compression | Smallest files, slowest to compress |
+
+✅ When to Use Higher or Lower Compression
+
+| Scenario                                              | Suggested Level |
+| ----------------------------------------------------- | --------------- |
+| Speed is more important than size                     | `1–3`           |
+| You’re uploading huge files (e.g. logs, binaries)     | `7–9`           |
+| Files are already compressed (`.zip`, `.jpg`, `.mp4`) | `0` or `1`      |
+| Default use case (general purpose)                    | `6`             |
+
