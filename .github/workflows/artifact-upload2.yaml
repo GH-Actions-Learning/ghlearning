@@ -17,3 +17,9 @@ jobs:
         run: |
           pwd
           ls
+
+      - name: Upload artifact 
+        uses: actions/upload-artifact@v4
+        with:
+          name: txt file
+          path: test.txt
