@@ -217,3 +217,46 @@ Speed (higher compression = slower process)
 | Files are already compressed (`.zip`, `.jpg`, `.mp4`) | `0` or `1`      |
 | Default use case (general purpose)                    | `6`             |
 
+
+-----------------
+
+🔁 What Happens When You Run This Multiple Times?
+
+Each run will:
+
+Write test1.txt with the message:
+
+This is run 1
+This is run 2
+...
+
+Upload it as an artifact named example-artifact
+
+🔍 Result in GitHub UI
+
+| Run # | Artifact Name      | Contents inside test1.txt |
+| ----- | ------------------ | ------------------------- |
+| 1     | `example-artifact` | `This is run 1`           |
+| 2     | `example-artifact` | `This is run 2`           |
+| 3     | `example-artifact` | `This is run 3`           |
+
+
+Even though the artifact name is the same, each run's artifact is separate and isolated.
+
+✅ Key Takeaways
+
+| Behavior                   | Explanation                                     |
+| -------------------------- | ----------------------------------------------- |
+| Same name across runs      | ✅ Allowed — GitHub tracks them per run          |
+| Same name in one run       | ❌ Error — duplicate name not allowed in one run |
+| Files change across runs   | ✅ Stored independently                          |
+| View/download old versions | ✅ Yes — per run from the Actions tab            |
+
+
+✅ Alternative Unique Naming Options for Upload Artifacts
+
+| Method     | Syntax                     | Output Example        |
+| ---------- | -------------------------- | --------------------- |
+| Run number | `${{ github.run_number }}` | `artifact-run-12`     |
+| Short SHA  | `${{ github.sha }}`        | `artifact-a3c2f9e`    |
+| Timestamp  | `$(date +%s)` (in script)  | `artifact-1725362671` |

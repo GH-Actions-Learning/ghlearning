@@ -1,0 +1,23 @@
+name: artifact upload demo 3
+
+on:
+  workflow_dispatch:  # manually triggered
+
+jobs:
+  upload-unique-artifact:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Create a unique file
+      run: |
+        echo "Unique content for run number ${{ github.run_number }}" > test1.txt
+        cat test1.txt
+
+    - name: Upload with run number
+      uses: actions/upload-artifact@v4
+      with:
+        name: artifact-run-${{ github.run_number }}
+        path: test1.txt
