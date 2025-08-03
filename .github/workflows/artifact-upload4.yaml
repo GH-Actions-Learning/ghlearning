@@ -1,4 +1,4 @@
-name: artifact upload demo 3
+name: artifact upload demo 4
 
 on:
   workflow_dispatch:  # manually triggered
