@@ -2,7 +2,7 @@ name: Deploy external Artifact
 
 on:
   workflow_run:
-    workflows: ["Build artifact for external 1"]
+    workflows: ["build-artifact"]
     types:
       - completed
 
