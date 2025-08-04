@@ -185,3 +185,32 @@ With dynamic keys, the cache invalidates and refreshes automatically whenever yo
 | Version your prefix                    | E.g., `v1-npm-${{ hashFiles(...) }}` → lets you force invalidate manually later |
 
 
+-------------
+
+What Happens With Cache
+When ~/.cache/pip is restored:
+
+pip installs from the local wheel cache instead of downloading from PyPI
+
+⚡ Speeds up installations massively
+
+Saves CPU, bandwidth, and PyPI throttling
+
+Result:
+
+✅ ~2–10x faster installs
+
+✅ Less flakiness (no PyPI downtime risks)
+
+✅ Better CI efficiency
+
+
+- uses: actions/cache@v4
+  with:
+    path: ~/.cache/pip
+    key: pip-${{ hashFiles('requirements.txt') }}
+    restore-keys: |
+      pip-
+
+- name: Install dependencies
+  run: pip install -r requirements.txt
