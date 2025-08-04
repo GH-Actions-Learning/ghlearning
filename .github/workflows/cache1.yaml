@@ -9,7 +9,7 @@ jobs:
     steps:
       - name: create file
         run: |
-          echo "you will be rich." >> test1.txt
+          echo "you will be ultra rich." >> test1.txt
 
       - name: Cache text file
         id: c1
