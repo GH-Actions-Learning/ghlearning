@@ -1,0 +1,72 @@
+🔶 What is cache in GitHub Actions?
+
+📌 Definition:
+
+GitHub Actions cache is used to store dependencies or files that are reused in subsequent workflow runs — reducing build time and external downloads.
+
+It prevents repeated work like downloading large packages (e.g., npm, pip, Maven, Gradle, etc.), compiling assets, or setting up tools that haven’t changed.
+
+-----------------
+
+🧠 Concept in Simple Terms
+
+Imagine you're baking a cake and every time you make it, you need to go to the store to get flour, eggs, sugar... it's repetitive.
+Instead, you keep the ingredients in your kitchen (a cache), so next time it's faster to start baking.
+
+Same idea applies here: 
+
+download/store things once → reuse them → save time ⏱️
+
+----------------
+
+🧩 Use Cases of Cache
+
+| Use Case                    | Description                                    |
+| --------------------------- | ---------------------------------------------- |
+| `npm`, `pip`, `maven`, etc. | Speed up dependency installations              |
+| Compiled build artifacts    | Reuse build steps in long compilation cycles   |
+| Downloaded tools or SDKs    | e.g., Android SDK, Terraform plugins           |
+| Docker layers (less common) | Advanced case for caching Docker layer folders |
+
+
+⚠️ Where not to use Cache
+
+| Don't Use For                         | Why                                                  |
+| ------------------------------------- | ---------------------------------------------------- |
+| Frequently changing files             | Cache won't hit; adds overhead                       |
+| Secrets or sensitive data             | Never store secrets in cache                         |
+| Large artifacts better in `artifacts` | Use `upload-artifact` for passing files between jobs |
+
+
+✅ Required and Optional Parameters for actions/cache@v4
+
+| Parameter              | Required? | Description                                                              |
+| ---------------------- | --------- | ------------------------------------------------------------------------ |
+| `path`                 | ✅ Yes     | Path(s) to cache (can be a single string or a list of paths)             |
+| `key`                  | ✅ Yes     | Unique key to identify the cache                                         |
+| `restore-keys`         | ❌ No      | Fallback keys used when `key` doesn’t match                              |
+| `enableCrossOsArchive` | ❌ No      | Allows caches to be restored across different OS types (Linux ↔ Windows) |
+| `lookup-only`          | ❌ No      | If `true`, only checks if cache exists (doesn’t restore or save)         |
+| `upload-chunk-size`    | ❌ No      | Breaks cache uploads into smaller chunks (in bytes) to avoid timeout     |
+
+🔁 Cross-Job Caching vs Artifacts
+
+| Feature | Cache                       | Artifacts                     |
+| ------- | --------------------------- | ----------------------------- |
+| Purpose | Reuse between workflow runs | Pass files between jobs/steps |
+| Speed   | Faster (pre-job step)       | Slower (upload/download)      |
+| Expiry  | Automatically evicted       | Stored for limited days (90d) |
+| Example | Reuse node\_modules         | Share test results, coverage  |
+
+
+✅ Best Practices
+
+Use hashFiles() on lock files (package-lock.json, poetry.lock, etc.)
+
+Cache folders that are safe to reuse (e.g., ~/.npm, ~/.m2, .gradle, etc.)
+
+Keep cache size small — GitHub has a 5GB limit per cache
+
+Do not cache temporary build output unless reused across jobs
+
+Use restore-keys wisely — don’t make them too generic, or wrong cache could be used

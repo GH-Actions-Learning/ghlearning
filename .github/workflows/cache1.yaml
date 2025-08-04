@@ -1,34 +1,24 @@
-name: Cache Hit Example 1
+name: cache demo 1
+
 on: [push]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    steps:
-    - name: ctreate file 
-      run: |
-        echo "you will become rich" >> test1.txt
-    
-    # STEP 1: Cache step with ID
-    - name: Cache dependencies
-      id: my-cache-step  # You can name this anything
-      uses: actions/cache@v3
-      with:
-        path: test1.txt
-        key: deps-${{ hashFiles('test1.txt') }}
-    
-    # STEP 2: Check what the cache action returned
-    - name: Show cache result
-      run: |
-        echo "Cache hit result: ${{ steps.my-cache-step.outputs.cache-hit }}"
-        
-    # STEP 3: Use the result to make decisions
-    - name: Install if cache miss
-      if: steps.my-cache-step.outputs.cache-hit != 'true'
-      run: |
-        echo "cache miss"
 
-    - name: Install if cache Hit
-      if: steps.my-cache-step.outputs.cache-hit == 'true'
-      run: |
-        echo "cache Hit"
+    steps:
+      - name: create file
+        run: |
+          echo "you will be rich" >> test1.txt
+
+      - name: Cache text file
+        id: c1
+        uses: actions/cache@v4
+        with:
+          path: test1.txt
+          key: txt-cache-static
+
+      - name: print output
+        run: |
+          echo "${{ steps.c1.outputs }}"
+         
