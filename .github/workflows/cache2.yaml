@@ -10,6 +10,7 @@ jobs:
       - name: create file
         run: |
           echo "you will be ultra rich.." >> test1.txt
+          cat test1.txt
 
       - name: Cache text file
         id: c1
