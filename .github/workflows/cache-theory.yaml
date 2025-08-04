@@ -70,3 +70,118 @@ Keep cache size small — GitHub has a 5GB limit per cache
 Do not cache temporary build output unless reused across jobs
 
 Use restore-keys wisely — don’t make them too generic, or wrong cache could be used
+
+
+----------------------------------------------
+----------------------------------------------
+
+🟢 What Is a Static Cache Key?
+
+📌 Definition:
+
+A static cache key is a fixed string used as the key parameter in actions/cache.
+This means that the cache never changes unless you manually update the key.
+
+📌 Behavior:
+
+If a cache with that key exists, it will be restored.
+
+If the key does not exist, a new cache is created and saved under that static name.
+
+📌 Characteristics of Static Keys
+
+| Feature               | Description                                                              |
+| --------------------- | ------------------------------------------------------------------------ |
+| 🔁 Reusability        | Always reuses the same cache if it exists                                |
+| ❌ No Invalidation     | Cache **does not change** even if dependencies (e.g., `package.json`) do |
+| ✅ Simple Setup        | Great for learning, demos, or rarely changing dependencies               |
+| ⚠️ Dangerous for Prod | Can result in **stale dependencies** if packages change                  |
+
+
+🧠 When Should You Use Static Cache Keys?
+
+| ✅ Use When                 | ❌ Avoid When                                               |
+| -------------------------- | ---------------------------------------------------------- |
+| Learning / experimenting   | In production pipelines                                    |
+| Dependencies rarely change | Your build depends on lockfiles (like `package-lock.json`) |
+| Fast prototyping           | Your workflow must adapt to file changes                   |
+
+
+🔐 Static Key Best Practices
+
+| Tip                                     | Why It Matters                                          |
+| --------------------------------------- | ------------------------------------------------------- |
+| Name key clearly (e.g., `npm-cache-v1`) | Helps version or track usage manually                   |
+| Add `v1`, `v2`, etc. manually           | Lets you forcefully invalidate cache by editing the key |
+| Use for quick feedback / dev jobs       | Saves time without complex setup                        |
+| **Don’t use in critical prod CI/CD**    | Can introduce bugs due to stale data                    |
+
+
+⚠️ Pitfall: What if dependencies change?
+
+If someone changes package-lock.json or a new package is added, and you're using a static key:
+
+The cache is still restored
+
+The build might fail or install wrong versions
+
+You won't know cache is outdated
+
+📌 Summary: GitHub Cache Internals (Static Key)
+
+| Internals                           | Description                                          |
+| ----------------------------------- | ---------------------------------------------------- |
+| Cache stored in Azure blob          | Managed, compressed, scoped per repo/branch/workflow |
+| Restored pre-job, saved post-job    | Happens automatically by GitHub infrastructure       |
+| Static keys never change            | Must be manually updated to refresh cache            |
+| Eviction after 7 days of inactivity | Or if repo exceeds quota or branch is deleted        |
+| Cannot be overwritten               | GitHub does not allow overwriting the same key       |
+
+⏳ Expiry and Eviction Policy
+
+GitHub automatically removes caches if:
+
+| Condition                          | Details                                                             |
+| ---------------------------------- | ------------------------------------------------------------------- |
+| 🕒 *Not accessed in 7 days*        | GitHub **automatically evicts** cache entries older than 7 days     |
+| 📦 *Repo total cache size > 10 GB* | Cache storage capped at **10 GB per repository**                    |
+| 📉 *Repo cache limit exceeded*     | Oldest caches are evicted first to maintain size ≤ 10 GB            |
+| 🧪 *Branch deleted*                | **Not guaranteed by GitHub**—branch-scoped caches may still persist |
+
+-------------------------------------------------
+-------------------------------------------------
+
+🔁 Dynamic Cache Keys in GitHub Actions
+
+-------------------------------------------------
+
+🔶 What Is a Dynamic Cache Key?
+
+A dynamic cache key is a cache key that changes automatically when certain files or inputs change — usually by using hashFiles() or workflow variables.
+
+🧠 Why Use Dynamic Keys?
+
+With static keys, the cache never changes unless you manually change the key (→ risk of stale data).
+
+With dynamic keys, the cache invalidates and refreshes automatically whenever your dependencies change.
+
+✅ Use Cases for Dynamic Keys
+
+| Use Case             | Why Dynamic?                                                              |
+| -------------------- | ------------------------------------------------------------------------- |
+| Caching dependencies | Auto-refresh when `package-lock.json`, `poetry.lock`, etc. change         |
+| Caching build output | React/Vue/Angular: recompile only if `src/` or `webpack.config.js` change |
+| Caching test tools   | Invalidate if `.eslintrc.js`, `.prettierrc` change                        |
+
+
+💡 Best Practices for Dynamic Cache Keys
+
+| Tip                                    | Why It Helps                                                                    |
+| -------------------------------------- | ------------------------------------------------------------------------------- |
+| Use `hashFiles()` on lock/config files | Guarantees meaningful invalidation                                              |
+| Add `runner.os` or `matrix.os`         | Prevents cross-platform cache corruption                                        |
+| Always add `restore-keys`              | Enables fallback to similar caches when hash doesn’t match                      |
+| Keep paths small and relevant          | Avoid unnecessary invalidation and slow uploads                                 |
+| Version your prefix                    | E.g., `v1-npm-${{ hashFiles(...) }}` → lets you force invalidate manually later |
+
+

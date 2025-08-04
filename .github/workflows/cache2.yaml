@@ -1,0 +1,26 @@
+name: cache demo 2
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: create file
+        run: |
+          echo "you will be ultra rich." >> test1.txt
+
+      - name: Cache text file
+        id: c1
+        uses: actions/cache@v4
+        with:
+          path: test1.txt
+          key: txt-cache-${{ hashFiles('test1.txt')}}
+          restore-keys: |
+            txt-cache-
+
+      - name: print output
+        run: |
+          echo "${{ steps.c1.outputs.cache-hit }}"
+         
