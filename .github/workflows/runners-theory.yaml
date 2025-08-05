@@ -1,0 +1,698 @@
+🧠 What Are GitHub-Hosted Runners?
+
+GitHub-hosted runners are virtual machines (VMs) provisioned, managed, and maintained by GitHub, used to run your GitHub Actions jobs.
+They are temporary and automatically created and destroyed per job.
+
+⚙️ OS & Environment Options
+
+| OS Type     | Label                                                   | Notes                                               |
+| ----------- | ------------------------------------------------------- | --------------------------------------------------- |
+| Ubuntu      | `ubuntu-latest` <br> `ubuntu-22.04` <br> `ubuntu-20.04` | Most commonly used, fast boot times                 |
+| Windows     | `windows-latest` <br> `windows-2022`                    | Slower than Linux, for .NET/Windows apps            |
+| macOS       | `macos-latest` <br> `macos-14` <br> `macos-13`          | Required for iOS builds, expensive and time-limited |
+| GPU-enabled | `ubuntu-latest` + large runner (paid)                   | For ML/AI workloads                                 |
+
+📦 Pre-installed Software (Tool Cache)
+
+Each GitHub-hosted runner comes with pre-installed tools like:
+
+Node.js, Python, Java, .NET
+
+Docker & Kubernetes tools
+
+Azure CLI, AWS CLI, Terraform
+
+Browsers: Chrome, Firefox
+
+Xcode (on macOS)
+
+Package managers: apt, pip, npm, Homebrew
+
+
+
+🗂️ File System Layout
+
+Each runner VM:
+
+Has a clean working directory per job
+
+Clones your repo into ~/actions-runner/_work/<repo>/<repo>
+
+Deletes itself after the job ends
+
+Cannot persist data between jobs or workflows (unless you use artifacts, cache, or actions/upload-artifact)
+
+
+🔄 Lifecycle
+
+Job is queued
+
+GitHub allocates a VM
+
+VM runs your job
+
+VM is destroyed immediately after
+
+
+⏱️ Runtime Limits
+
+| Feature                         | GitHub-hosted Limit                              |
+| ------------------------------- | ------------------------------------------------ |
+| Max job duration                | **6 hours**                                      |
+| Max concurrent jobs (Free tier) | **20 total (max 5 macOS)**                       |
+| Workflow max duration           | **35 days** (includes pauses, approvals)         |
+| Timeout                         | **Configurable per job** using `timeout-minutes` |
+
+
+📊 Cost
+
+| Plan            | Included Minutes (Linux) | Extra Minute Cost        |
+| --------------- | ------------------------ | ------------------------ |
+| Free            | 2,000 min/month          | Linux: **\$0.008/min**   |
+| Pro             | 3,000 min/month          | Windows: **\$0.016/min** |
+| Team/Enterprise | 50,000+ min/month        | macOS: **\$0.08/min** 💸 |
+
+
+💡 Note: These rates apply to private repositories. Public repos (open-source) get free usage on all plans.
+
+
+✅ Use Cases
+
+| Use Case                   | Runner Type          | Why                            |
+| -------------------------- | -------------------- | ------------------------------ |
+| Simple CI/CD pipelines     | GitHub-hosted        | Quick, minimal setup           |
+| Open-source repos          | GitHub-hosted (free) | Free unlimited minutes         |
+| Deploy to cloud            | GitHub-hosted        | Includes popular cloud CLIs    |
+| Matrix builds (OS/browser) | GitHub-hosted        | Supports Linux, Windows, macOS |
+
+
+❌ Where Not to Use
+
+| Scenario                            | Why Not                                   |
+| ----------------------------------- | ----------------------------------------- |
+| Long or heavy builds (ML, game dev) | 6-hour limit, high cost for longer jobs   |
+| Secrets-heavy workflows             | Self-hosted offers more isolation/control |
+| Air-gapped networks                 | No private network access                 |
+| Custom hardware (ARM, GPU)          | Not available in standard hosted runners  |
+
+
+
+-----------------------------------------------
+-----------------------------------------------
+How Self-Hosted Runners Work (Architecture)
+------------------------------------------------
+------------------------------------------------
+
+🧠 Overview
+
+At a high level, self-hosted runners are machines that you provision, configure, and connect to GitHub, enabling them to execute GitHub Actions jobs locally.
+
+Instead of using GitHub’s default (hosted) infrastructure, you bring your own compute — VM, physical machine, container, etc
+
+-------
+
+🔄 Lifecycle of a Self-hosted Runner
+
+✅ Install Runner Agent
+
+You download and configure the actions/runner binary on your machine.
+
+🔒 Register with GitHub
+
+Use a one-time registration token to connect it to a repo/org/enterprise.
+
+🔁 Polls GitHub for Jobs
+
+The runner polls GitHub’s servers every few seconds for new jobs (no incoming requests needed).
+
+🏃 Job Execution
+
+When a job is received, it:
+
+Sets up a workspace
+
+Runs each step of the job locally using the OS shell
+
+Streams logs back to GitHub in real-time
+
+🧹 Job Cleanup
+
+After execution, it cleans up workspace and resets state (optional).
+
+-----------
+
+📦 Where Do You Install the Runner?
+
+Self-hosted runners can be:
+
+🖥️ Physical servers (common for CI in data centers)
+
+🧱 Virtual machines (VMWare, Hyper-V, Azure, AWS, etc.)
+
+📦 Containers (for isolated builds)
+
+☁️ Cloud VMs (e.g. Azure VM Scale Sets with autoscaling)
+
+----------
+
+📬 Communication Model
+
+Self-hosted runners do not open ports or require inbound traffic
+
+They poll GitHub over HTTPS to check for new jobs
+
+Traffic is always initiated by the runner, making it firewall-friendly
+
+🔒 Security Architecture
+
+All communication is TLS-encrypted
+
+Jobs are executed as the user account that starts the runner
+
+You can run the runner as a service with limited permissions
+
+Environment isolation is your responsibility (unlike GitHub-hosted)
+
+------------
+
+🔄 Differences From GitHub-Hosted Runners
+
+| Feature             | GitHub-Hosted       | Self-Hosted                           |
+| ------------------- | ------------------- | ------------------------------------- |
+| Infrastructure      | Managed by GitHub   | Managed by you                        |
+| Environment Control | Limited             | Full                                  |
+| Cost                | Pay per usage       | Free (but you pay for hardware/infra) |
+| Scalability         | Auto-scaling        | You configure scaling                 |
+| Persistence         | Ephemeral           | Persistent                            |
+| Security            | Isolated by default | You must isolate workloads            |
+
+----
+
+🧩 Repo-Level vs Org-Level Runners
+
+----
+
+🔹 If you register a runner at the repository level:
+
+✅ It only appears in that specific repository’s Settings → Actions → Runners.
+
+🚫 It does not show up in the organization-wide runner list.
+
+🚫 It cannot be used by other repositories in the same org.
+
+----
+
+🔹 If you register a runner at the organization level:
+
+✅ It appears under Organization Settings → Actions → Runners.
+
+✅ It can be shared across multiple repositories in the org.
+
+You can scope it to:
+
+All repos (default),
+
+Or selected repos only.
+
+📍 Visual Differences in GitHub UI
+
+| Location                | Scope                      | Visible Where?                   |
+| ----------------------- | -------------------------- | -------------------------------- |
+| Repo Settings > Actions | This repo only             | This repo only                   |
+| Org Settings > Actions  | Org-wide (all or selected) | All or selected repos in the org |
+
+
+-----------------------------
+Download self Hosted Runners 
+-----------------------------
+
+Download
+
+# Create a folder
+$ mkdir actions-runner && cd actions-runner
+# Download the latest runner package
+$ curl -o actions-runner-linux-x64-2.327.1.tar.gz -L https://github.com/actions/runner/releases/download/v2.327.1/actions-runner-linux-x64-2.327.1.tar.gz
+# Optional: Validate the hash
+$ echo "d68ac1f500b747d1271d9e52661c408d56cffd226974f68b7dc813e30b9e0575  actions-runner-linux-x64-2.327.1.tar.gz" | shasum -a 256 -c
+# Extract the installer
+$ tar xzf ./actions-runner-linux-x64-2.327.1.tar.gz
+
+-----------------------------
+configure self Hosted Runners 
+-----------------------------
+
+# Create the runner and start the configuration experience
+$ ./config.sh --url https://github.com/GH-Actions-Learning/ghlearning --token yourtocken!
+
+-----------------------------
+Authenticate self Hosted Runners 
+-----------------------------
+
+# Authentication
+
+√ Connected to GitHub
+
+# Runner Registration
+
+Enter the name of the runner group to add this runner to: [press Enter for Default]
+
+Enter the name of runner: [press Enter for DESKTOP-9M54995] test1
+
+This runner will have the following labels: 'self-hosted', 'Linux', 'X64'
+
+Enter any additional labels (ex. label-1,label-2): [press Enter to skip]
+
+√ Runner successfully added
+√ Runner connection is good
+
+# Runner settings
+
+Enter name of work folder: [press Enter for _work]
+
+√ Settings Saved.
+
+# Last step, run it!
+
+$ ./run.sh
+
+# Last step, In order to run it service use below command!
+
+sudo ./svc.sh install
+sudo ./svc.sh start
+
+🔄 Unregistering / Removing a Runner
+
+To safely remove a runner:
+
+./config.sh remove --token <REMOVE_TOKEN>
+
+
+-------------------------------------------------
+Self Hosted Runner File System & Job Execution Flow
+-------------------------------------------------
+
+🔍 Key Concepts
+
+| Concept                | What it is                                          |
+| ---------------------- | --------------------------------------------------- |
+| **Workspace**          | The base folder where your repo and job files go    |
+| **Working Directory**  | The default directory when a step runs              |
+| **Tool Cache**         | Optional cache of tool versions (e.g. Node, Python) |
+| **Job Execution Flow** | The lifecycle of a job inside the runner            |
+
+
+/actions-runner/
+├── _work/                  # Workspace root
+│   ├── <repo-name>         # Repo-specific folder
+│   │   ├── <job-id>        # One folder per job
+│   │   └── ...             # Logs, steps, metadata
+├── _diag/                  # Diagnostic logs
+├── _tool/                  # Tool cache (Node, Python, etc.)
+└── runner.exe / run.sh     # Runner agent binaries
+
+
+🔁 Execution Flow of a Job
+
+Let’s walk through what happens when a workflow job is assigned to a self-hosted runner:
+
+✅ Runner polls GitHub
+
+Every few seconds via HTTPS
+
+Finds a pending job matching its labels
+
+📥 Receives job payload
+
+Runner downloads the workflow, repo, secrets, etc.
+
+🧱 Creates workspace directory
+
+_work/<repo-name>/<job-id>/
+
+📦 Runs each step
+
+Steps are executed in a shell (bash, pwsh, etc.)
+
+Default working directory is:
+
+/actions-runner/_work/<repo-name>/<repo-name>
+
+📤 Uploads artifacts (if any)
+
+🧹 Job finishes
+
+Workspace is NOT automatically deleted on self-hosted runners
+
+---
+⚠️ Self-Hosted Runner Workspace: Manual Cleanup Needed
+
+| Runner Type   | Workspace Reset?                 |
+| ------------- | -------------------------------- |
+| GitHub-hosted | ✅ Reset after each job           |
+| Self-hosted   | ❌ Not reset unless you handle it |
+
+---
+📦 Tool Cache (_tool/)
+
+If you use actions like setup-node, setup-python, etc., the runner stores the tools under:
+
+/actions-runner/_tool/
+
+This avoids redownloading tools across jobs.
+
+You can prefill this cache to speed up builds.
+
+---
+📈 Logs & Diagnostics
+
+Runner writes logs in:
+
+/actions-runner/_diag/
+
+These are runner-level logs, useful for:
+
+1. Debugging runner connectivity
+
+2. Job startup errors
+
+3. Runner service failures
+
+You can increase log verbosity for troubleshooting by setting environment variables like:
+
+export RUNNER_TRACE=1
+
+---
+🧩 Job Isolation Summary
+
+| Isolation Concern  | GitHub-Hosted | Self-Hosted    |
+| ------------------ | ------------- | -------------- |
+| Workspace clean    | ✅ Always      | ❌ Manual       |
+| Tool reuse         | ❌ No          | ✅ Yes          |
+| Temp dir cleanup   | ✅ Yes         | ❌ No           |
+| Artifact leftovers | ❌ Cleaned     | ✅ May remain   |
+| Parallel jobs      | Isolated VMs  | Must configure |
+
+----------------------------------
+----------------------------------
+Runner Lifecycle Management
+
+---------------------------------
+
+| Action    | How to perform                                          |
+| --------- | ------------------------------------------------------- |
+| Start     | `./svc.sh start` (Linux/macOS), `.\svc start` (Windows) |
+| Stop      | `./svc.sh stop` / `.\svc stop`                          |
+| Restart   | Stop + Start                                            |
+| Uninstall | `./svc.sh uninstall` / `.\svc uninstall`                |
+
+
+----------------------------------
+Best Practices for Runner Security
+
+| Practice                         | Why it matters                                |
+| -------------------------------- | --------------------------------------------- |
+| **Run as least-privileged user** | Prevents OS-level compromise                  |
+| **Use dedicated user account**   | Isolates runner activity                      |
+| **Don’t run as root/admin**      | Prevents full machine control                 |
+| **Isolate by runner groups**     | Restricts access to trusted repositories only |
+| **Clean up workspaces manually** | Avoid data leakage across jobs                |
+| **Use ephemeral runners**        | Deletes runner instance after each job        |
+
+
+
+---------------------------------------
+---------------------------------------
+
+Ephemeral & JIT (Just-In-Time) Runners
+
+----------------------------------------
+
+Ephemeral and JIT runners are advanced self-hosted runner configurations that improve security, scalability, and resource efficiency by creating runners that only exist for a single job — and then destroy themselves.
+
+These are highly recommended for:
+
+1. Running untrusted or sensitive code
+
+2. Large-scale dynamic environments
+
+3. Cloud-native or Kubernetes-based systems
+
+4. Reducing risk of workspace leakage or tampering
+
+
+---
+
+🔹 1. What Are Ephemeral Runners?
+
+Ephemeral runners are:
+
+Short-lived: Spawned for a single workflow job
+
+Clean: No persistent file system, secrets, or tools left behind
+
+Disposable: Automatically removed after job completion
+
+Ideal for secure and scalable CI/CD pipelines
+
+They solve key problems:
+
+1. Reduce risk of data leakage between jobs
+
+2. Automatically scale based on demand
+
+3. Avoid manual runner cleanup
+
+
+---
+
+🔹 2. What Are JIT (Just-In-Time) Runners?
+
+JIT runners are a subset of ephemeral runners introduced in GitHub Actions with:
+
+On-the-fly runner registration
+
+GitHub provides a temporary registration token valid for one job
+
+Runner auto-registers and executes the job, then de-registers and self-destructs
+
+Useful for:
+
+1. Dynamically spawning runners in the cloud
+
+2. Autoscaling VMs or containers for each job
+
+3. Integration with orchestration tools like Kubernetes or VM scale sets
+
+------------------
+Ephemeral Runners vs Persistent Runners
+------------------
+
+| Feature          | Ephemeral                    | Persistent                          |
+| ---------------- | ---------------------------- | ----------------------------------- |
+| Duration         | One job                      | Long-running                        |
+| Cleanup          | Automatic                    | Manual or script-based              |
+| Security         | Strong isolation             | Risk of leakage between jobs        |
+| Scaling          | Can autoscale                | Requires static provisioning        |
+| Use case         | Cloud-native, untrusted jobs | Trusted environments, limited scale |
+| Setup complexity | Medium to High               | Low to Medium                       |
+
+---
+🔹 1. Ephemeral Basic Workflow:
+---
+
+1. GitHub requests a job execution
+
+2. You dynamically spin up a runner VM/container
+
+3. Runner registers using the ephemeral flag
+
+4. Job runs
+
+5. Runner self-destructs (deletes VM/container + deregisters)
+
+./config.sh --url https://github.com/my-org/my-repo \
+  --token <runner-token> \
+  --ephemeral \
+  --name my-ephemeral-runner
+
+You can mark a self-hosted runner as ephemeral using:
+
+./config.sh --ephemeral
+
+
+---
+🔹 1. JIT runners Basic Workflow:
+---
+
+JIT runners are ephemeral runners spun up programmatically when a job is queued, and removed upon completion.
+
+✅ Option A: GitHub REST API (Custom Automation)
+
+Use GitHub’s REST API to:
+
+Register a runner with ephemeral: true
+
+Poll workflow_job events and respond to queued, completed actions
+
+After job completion, de-register the runner via API. 
+
+
+✅ Option B: Using Actions Runner Controller (ARC) on Kubernetes
+
+ARC is GitHub’s officially supported Kubernetes operator for managing self-hosted runners. 
+
+It automates:
+
+Scaling up by launching runner pods in Kubernetes when a workflow job is queued.
+
+Each runner is ephemeral (“single-use”), registers with JIT token.
+
+Upon job completion, ARC automatically deregisters & deletes the pod.
+
+
+-----------------------------------------------------
+-----------------------------------------------------
+Autoscaling with ARC (Actions Runner Controller) & Kubernetes
+
+-----------------------------------------------------
+-----------------------------------------------------
+
+🔷 1. What is ARC (Actions Runner Controller)?
+
+ARC (Actions Runner Controller) is the official GitHub-supported Kubernetes operator that:
+
+1. Automates the management of self-hosted GitHub Actions runners in Kubernetes
+
+2. Allows dynamic autoscaling — spins up and down runners per job
+
+3. Supports both ephemeral and Just-In-Time (JIT) runners
+
+4. Works with organization-level, enterprise-level, or repository-level runners
+
+5. Offers full CI/CD scalability in the cloud
+
+---
+🔧 2. Key ARC Features
+
+| Feature                 | Description                                             |
+| ----------------------- | ------------------------------------------------------- |
+| Autoscaling             | Automatically adds/removes runner pods per job          |
+| Ephemeral runners       | Runners that self-delete after job completion           |
+| JIT runners             | Runners created **just-in-time** via GitHub webhook     |
+| Multi-repo support      | Can isolate runners per repo, org, or enterprise        |
+| Pod-based runners       | Each runner runs in its own Kubernetes pod              |
+| Labels & selectors      | Route jobs to specific runners (e.g., `android`, `gpu`) |
+| Resource limits         | Define CPU/memory for runner pods                       |
+| Integration with GitHub | Securely authenticates with GitHub using GitHub App     |
+
+---
+
+📈 3. How Autoscaling Works
+
+A workflow job is triggered on GitHub
+
+GitHub sends a webhook to ARC
+
+ARC uses GitHub App credentials to get a JIT registration token
+
+ARC spins up a new ephemeral runner pod
+
+The job runs inside the pod
+
+Pod is deleted automatically after job completes
+
+✔️ Scale-out happens per job
+✔️ Scale-in is automatic (no idle runners)
+
+---
+
+⚙️ 6. Autoscaling Strategies
+
+| Strategy                | Description                                        |
+| ----------------------- | -------------------------------------------------- |
+| **Scale-to-zero**       | No runners until a job is scheduled                |
+| **Pod-per-job**         | One runner = one pod = one job                     |
+| **Label-based scaling** | Use job labels to select specialized runner groups |
+| **Job queue-based**     | Reacts to GitHub job queue in real-time            |
+
+---------------------------------
+---------------------------------
+
+🔷 1. What Are Runner Groups?
+
+---------------------------------
+
+A runner group is a named collection of self-hosted runners used to logically group and manage runner access at the organization or enterprise level.
+
+This allows you to:
+
+1. Control which repositories can use which runners
+
+2. Apply labels, isolate environments
+
+3. Manage runners by project, department, platform, or security tier
+
+---
+🔑 2. Where Can You Use Runner Groups?
+
+| Level            | Description                               |
+| ---------------- | ----------------------------------------- |
+| **Organization** | Group runners for a specific GitHub org   |
+| **Enterprise**   | Group runners shared across multiple orgs |
+
+---
+⚙️ 3. Creating a Runner Group
+
+🖥️ From the GitHub UI:
+
+Settings → Actions → Runners → Runner Groups
+
+1. Add a group
+
+2. Define access: All repositories or Selected repositories only
+
+3. Assign runners to this group
+
+---
+🧭 4. Access Control & Visibility
+
+You can configure each runner group to:
+
+1. Be used by all repositories in the organization (default)
+
+2. Be restricted to specific repositories
+
+3. Be restricted by teams (in future roadmap, currently not GA)
+
+---
+✅ How to Check Runner Labels
+
+Go to:
+
+GitHub → Your Org → Settings → Actions → Runners → Click your runner
+
+See labels like:
+
+self-hosted
+
+linux
+
+build
+
+gpu
+
+etc.
+
+---
+How to use Runners group and runners
+---
+
+| Part                                             | Used in Workflow? | Notes                                           |
+| ------------------------------------------------ | ----------------- | ----------------------------------------------- |
+| 🏷️ Runner Label (e.g., `linux`, `gpu`, `build`) | ✅ Yes             | You use this in `runs-on` to match jobs         |
+| 🧱 Runner Group Name (e.g., `secure-runners`)    | ❌ No              | Used for access control only — not in workflows |
+
+| Item                  | Purpose                         | Used In Workflow? |
+| --------------------- | ------------------------------- | ----------------- |
+| **Runner Labels**     | Match jobs to runners           | ✅ Yes             |
+| **Runner Group Name** | Define access control for repos | ❌ No              |
