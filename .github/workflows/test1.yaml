@@ -7,4 +7,4 @@ jobs:
     runs-on: [self-hosted, test1]
     steps:
       - name: testing
-        run: echo "this is for testing"
+        run: echo "this is for testing."
