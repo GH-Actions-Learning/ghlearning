@@ -9,7 +9,7 @@ jobs:
       - name: testing-r03
         run: |
           echo "this is for .. ${{runner.name}}."
-          sleep 50
+    
 
   j2:
     runs-on: [self-hosted, r04]
@@ -17,7 +17,7 @@ jobs:
       - name: testing-r04
         run: |
           echo "this is ..... ${{runner.name}}"
-          sleep 15
+      
   
   j3:
     runs-on: [self-hosted, rs03]
