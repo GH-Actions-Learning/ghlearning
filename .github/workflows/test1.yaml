@@ -6,5 +6,29 @@ jobs:
   j1:
     runs-on: [self-hosted, rich1]
     steps:
-      - name: testing
-        run: echo "this is for testing........"
+      - name: testing-r1
+        run: |
+          echo "this is for ${{runner.name}}"
+          sleep 50
+
+
+  j2:
+    runs-on: [self-hosted, rich2]
+    steps:
+      - name: testing-r2 
+        run: |
+          echo "this is .... ${{runner.name}}"
+          sleep 15
+
+  j3:
+    runs-on: [self-hosted, 35lpa]
+    steps:
+      - name: testing-r2
+        run: echo "this is ..... ${{runner.name}}"
+
+  j4:
+    runs-on: [self-hosted, rich1]
+    steps:
+      - name: testing-r1
+        run: |
+          echo "this is for ${{runner.name}}"
