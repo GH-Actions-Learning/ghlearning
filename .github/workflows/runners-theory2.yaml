@@ -481,3 +481,48 @@ GitHub allows self-hosted runners to be registered at two levels:
 | Ideal use case          | Security, isolation     | Sharing, scalability         |
 
 
+-------------------
+
+🧩 What Are Runner Groups in GitHub Actions?
+
+Runner groups let you:
+
+🔐 Control which repositories can use which runners
+
+🏷️ Organize runners by purpose (e.g., build, test, prod, GPU, etc.)
+
+👥 Assign visibility of groups to specific repos or all repos
+
+
+---
+🏗️ Structure & Scope
+
+| Entity           | Can Create Groups? | Group Usable By   |
+| ---------------- | ------------------ | ----------------- |
+| **Repository**   | ❌ No               | N/A               |
+| **Organization** | ✅ Yes              | Org repos         |
+| **Enterprise**   | ✅ Yes              | All orgs under it |
+
+
+---
+🧱 Key Concepts
+
+| Concept            | Description                                                   |
+| ------------------ | ------------------------------------------------------------- |
+| **Runner Group**   | A named group containing one or more self-hosted runners      |
+| **Access Control** | You can specify which repos can use which runner group        |
+| **Priority**       | GitHub searches groups from top to bottom when assigning jobs |
+| **Default Group**  | GitHub provides one built-in group named `Default`            |
+
+
+| Runner Group Setting                | Repositories Added | Outcome when used in workflow       |
+| ----------------------------------- | ------------------ | ----------------------------------- |
+| All repositories (default)          | —                  | Runner picks up job                 |
+| Selected repositories **with none** | None added         | Workflow stuck in pending state     |
+| Selected repositories **with some** | Specific repos     | Only those repos can use the runner |
+
+
+| Group Type       | Default Access Behavior                               |
+| ---------------- | ----------------------------------------------------- |
+| `Default` Group  | All repos have access unless changed                  |
+| **Custom Group** | Same behavior—All repos have access unless restricted |
