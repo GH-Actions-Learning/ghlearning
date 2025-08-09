@@ -286,6 +286,24 @@ To safely remove a runner:
 
 ./config.sh remove --token <REMOVE_TOKEN>
 
+---
+
+| Action          | Needs Token? | Which Token?             |
+| --------------- | ------------ | ------------------------ |
+| Register runner | ✅ Yes        | One-time `RUNNER_TOKEN`  |
+| Remove runner   | ✅ Yes        | Local, stored auth token |
+
+| Removal Method       | Token Used                      | Scope of Removal       |
+| -------------------- | ------------------------------- | ---------------------- |
+| `./config.sh remove` | Runner’s **local stored token** | Only **that runner**   |
+| GitHub API (DELETE)  | PAT with admin permission       | Any runner in repo/org |
+
+| Method                 | Token Used                    | Can remove other runners? |
+| ---------------------- | ----------------------------- | ------------------------- |
+| `./config.sh remove`   | Runner's **own stored token** | **No**                    |
+| GitHub REST API DELETE | Admin PAT                     | **Yes**                   |
+
+
 
 -------------------------------------------------
 Self Hosted Runner File System & Job Execution Flow

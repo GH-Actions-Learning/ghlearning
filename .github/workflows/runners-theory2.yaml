@@ -1,0 +1,117 @@
+1️⃣ Runner Labels and Tagging
+--------
+
+What are Runner Labels?
+
+1. Labels are tags or keywords assigned to self-hosted runners.
+
+2. They help categorize and filter runners when choosing which runner should execute a job.
+
+You can use labels to indicate things like:
+
+1. OS (linux, windows, macos)
+
+2. Hardware (gpu, high-memory)
+
+3. Software installed (docker, nodejs)
+
+4. Location (us-east, eu-west)
+
+5. Any custom category relevant to your organization
+
+---
+
+Why Use Labels?
+
+* GitHub Actions workflows can specify labels in the runs-on field.
+
+* This ensures jobs run only on runners matching those labels.
+
+* Helps optimize resource usage and control workload distribution.
+
+---
+Default vs Custom Labels
+
+| Type        | Description                                 | Example Labels                               |
+| ----------- | ------------------------------------------- | -------------------------------------------- |
+| **Default** | Automatically assigned by GitHub to runners | `self-hosted`, `linux`, `windows`, `macos`   |
+| **Custom**  | Manually added by user during runner setup  | `gpu`, `high-mem`, `build-server`, `us-east` |
+
+
+* Every self-hosted runner has the default label: self-hosted.
+
+* OS-specific default labels (e.g., linux, windows) are also added automatically.
+
+---
+How to Add Custom Labels?
+
+At registration time:
+When running ./config.sh, you can specify labels:
+
+./config.sh --url https://github.com/your-org/your-repo --token RUNNER_TOKEN --labels label1,label2,label3
+
+Example:
+
+./config.sh --url https://github.com/my-org/my-repo --token ABC123 --labels gpu,high-memory,us-east
+
+
+---
+
+When to Use Labels?
+
+1. When you have multiple runners with different capabilities
+
+2. You want specific jobs to run on specific machines (e.g., GPU for ML jobs)
+
+3. You want geographic control (e.g., run jobs only on US data centers)
+
+---
+
+✅ Default labels always include:
+
+| Label                         | Description                          |
+| ----------------------------- | ------------------------------------ |
+| `self-hosted`                 | Identifies the runner as self-hosted |
+| `linux` / `windows` / `macos` | Based on OS of runner                |
+| `x64`, `arm64`                | Based on architecture                |
+
+---
+📌 Example: If you're registering a Linux runner on x64 CPU, these labels will be assigned by default:
+
+[self-hosted, linux, x64]
+
+---
+🔹 Custom Labels
+
+Custom labels are user-defined tags that you add to describe the runner's custom capabilities.
+
+| Purpose                     | Example Label        |
+| --------------------------- | -------------------- |
+| Tag runner with GPU         | `gpu`                |
+| Tag runner for build jobs   | `build`              |
+| Tag runner for specific app | `android`            |
+| Tag based on region         | `us-east`, `eu-west` |
+| Tag by environment          | `staging`, `prod`    |
+
+
+---
+⚠️ Important Notes
+
+* Labels in runs-on are ANDed together:
+
+* runs-on: [self-hosted, linux, gpu] means: “must match all labels”
+
+* If no runner matches, the workflow does not run
+
+* You can’t assign labels in workflows — they are defined on the runner
+
+| Rule                       | Description                                                 |
+| -------------------------- | ----------------------------------------------------------- |
+| AND logic                  | All labels must be matched by the runner                    |
+| No OR logic                | GitHub Actions does not support `runs-on: [gpu OR windows]` |
+| Must include `self-hosted` | Unless it's a GitHub-hosted runner                          |
+| Case-insensitive           | Labels like `Linux` and `linux` are treated the same        |
+
+
+---
+
