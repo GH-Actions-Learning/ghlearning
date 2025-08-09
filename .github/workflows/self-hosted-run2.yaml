@@ -4,7 +4,7 @@ on: push
 
 jobs:
   j1:
-    runs-on: [self-hosted, ro3]
+    runs-on: [self-hosted, komp]  # use labels only, not runner name
     steps:
       - name: testing-r03
         run: |
@@ -12,7 +12,7 @@ jobs:
     
 
   j2:
-    runs-on: [self-hosted, r04]
+    runs-on: [self-hosted, 1c]  # use labels only, not runner name
     steps:
       - name: testing-r04
         run: |
@@ -20,14 +20,14 @@ jobs:
       
   
   j3:
-    runs-on: [self-hosted, rs03]
+    runs-on: [self-hosted, 50lpa]  # use labels only, not runner name
     steps:
       - name: testing-rs03
         run: echo "this is ....... ${{runner.name}}"
 
 
   j4:
-    runs-on: [self-hosted, rso4]
+    runs-on: [self-hosted, 75lpa]  # use labels only, not runner name
     steps:
       - name: testing-rs04
         run: |

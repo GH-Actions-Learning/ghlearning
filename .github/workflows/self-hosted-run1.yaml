@@ -4,7 +4,7 @@ on: push
 
 jobs:
   j1:
-    runs-on: [self-hosted, rich1]
+    runs-on: [self-hosted, rich1]   # use labels only, not runner name 
     steps:
       - name: testing-r1
         run: |
@@ -12,7 +12,7 @@ jobs:
           sleep 50
 
   j2:
-    runs-on: [self-hosted, rich2]
+    runs-on: [self-hosted, rich2]  # use labels only, not runner name
     steps:
       - name: testing-r2 
         run: |
@@ -20,28 +20,28 @@ jobs:
           sleep 15
   
   j3:
-    runs-on: [self-hosted, 35lpa]
+    runs-on: [self-hosted, 35lpa]  # use labels only, not runner name
     steps:
       - name: testing-r2
         run: echo "this is ...... ${{runner.name}}"
 
 
   j4:
-    runs-on: [self-hosted, rich1]
+    runs-on: [self-hosted, rich1]  # use labels only, not runner name
     steps:
       - name: testing-r1
         run: |
           echo "this is for .. ${{runner.name}}"
 
   j5:
-    runs-on: [self-hosted, 40lpa]
+    runs-on: [self-hosted, 40lpa]  # use labels only, not runner name
     steps:
       - name: testing-rs1
         run: echo "this is ...... ${{runner.name}}"
 
 
   j6:
-    runs-on: [self-hosted, 45lpa]
+    runs-on: [self-hosted, 45lpa]  # use labels only, not runner name
     steps:
       - name: testing-rs2
         run: |
@@ -49,7 +49,7 @@ jobs:
           sleep 20
 
   j7:
-    runs-on: [self-hosted, 40lpa, hyd]
+    runs-on: [self-hosted, 40lpa, hyd]   # use labels only, not runner name
     needs: j5
     steps:
       - name: testing-rs1
@@ -57,7 +57,7 @@ jobs:
 
 
   j8:
-    runs-on: [self-hosted, 45lpa, hyd]
+    runs-on: [self-hosted, 45lpa, hyd]   # use labels only, not runner name
     needs: j6
     steps:
       - name: testing-rs2
