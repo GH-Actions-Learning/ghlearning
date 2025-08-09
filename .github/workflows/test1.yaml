@@ -8,7 +8,7 @@ jobs:
     steps:
       - name: testing-r1
         run: |
-          echo "this is for ${{runner.name}}"
+          echo "this is for ${{runner.name}}."
           sleep 50
 
 

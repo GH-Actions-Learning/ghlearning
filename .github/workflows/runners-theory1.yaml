@@ -287,22 +287,19 @@ To safely remove a runner:
 ./config.sh remove --token <REMOVE_TOKEN>
 
 ---
+REGISTER RUNNER 
+---
+| Aspect                         | Explanation                                                                               |
+| ------------------------------ | ----------------------------------------------------------------------------------------- |
+| **Token expiration**           | Tokens expire after 1 hour, so if token expires you need to generate a new one.           |
+| **Multiple runners**           | You can register many runners using the same token before it expires.                     |
+| **Each runner unique**         | Each runner must have a unique name and directory; token doesn't limit number of runners. |
+| **Reusing token after expiry** | After 1 hour, token is invalid; generate a fresh token to register new runners.           |
 
-| Action          | Needs Token? | Which Token?             |
-| --------------- | ------------ | ------------------------ |
-| Register runner | ✅ Yes        | One-time `RUNNER_TOKEN`  |
-| Remove runner   | ✅ Yes        | Local, stored auth token |
-
-| Removal Method       | Token Used                      | Scope of Removal       |
-| -------------------- | ------------------------------- | ---------------------- |
-| `./config.sh remove` | Runner’s **local stored token** | Only **that runner**   |
-| GitHub API (DELETE)  | PAT with admin permission       | Any runner in repo/org |
-
-| Method                 | Token Used                    | Can remove other runners? |
-| ---------------------- | ----------------------------- | ------------------------- |
-| `./config.sh remove`   | Runner's **own stored token** | **No**                    |
-| GitHub REST API DELETE | Admin PAT                     | **Yes**                   |
-
+| Action                   | Token required     | Token scope     | Token reuse?                                    |
+| ------------------------ | ------------------ | --------------- | ----------------------------------------------- |
+| Register runner          | Registration token | Repo/org-level  | Can register multiple runners **before expiry** |
+| Remove/unregister runner | Removal token      | Specific runner | One-time use per runner                         |
 
 
 -------------------------------------------------

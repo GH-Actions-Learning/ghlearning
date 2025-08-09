@@ -115,3 +115,42 @@ Custom labels are user-defined tags that you add to describe the runner's custom
 
 ---
 
+5️⃣ Organizational vs Repository Level Runners
+
+GitHub allows self-hosted runners to be registered at two levels:
+
+| Type                   | Scope                                          | Visible To                       |
+| ---------------------- | ---------------------------------------------- | -------------------------------- |
+| **Repository-level**   | Only for a specific repository                 | Only that repo                   |
+| **Organization-level** | Shared across multiple repositories in the org | Any repo in the org (if allowed) |
+
+🔐 Visibility & Access Control
+
+| Feature                          | Repository-Level | Organization-Level              |
+| -------------------------------- | ---------------- | ------------------------------- |
+| Visible to other repos?          | ❌ No             | ✅ Yes (if shared)               |
+| Set sharing policies?            | ❌ No             | ✅ Yes                           |
+| Isolated for sensitive projects? | ✅ Yes            | ❌ No (unless access restricted) |
+
+
+✅ When to Use Which?
+
+| Use Case                               | Recommended Runner Type      |
+| -------------------------------------- | ---------------------------- |
+| Secure, isolated CI for private repo   | Repository-level             |
+| Shared infra across many repos         | Organization-level           |
+| Different hardware for different teams | Org-level with label routing |
+| Per-team billing/resource tracking     | Repository-level             |
+
+
+✅ Summary Table
+
+| Feature                 | Repository-Level        | Organization-Level           |
+| ----------------------- | ----------------------- | ---------------------------- |
+| Scope                   | One repository          | Multiple repositories        |
+| Runner registration URL | `github.com/org/repo`   | `github.com/org`             |
+| Token type              | Repo registration token | Org registration token       |
+| Access control          | None                    | Fine-grained access (groups) |
+| Ideal use case          | Security, isolation     | Sharing, scalability         |
+
+
