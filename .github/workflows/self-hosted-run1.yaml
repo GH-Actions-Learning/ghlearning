@@ -1,4 +1,4 @@
-name: test runner 1
+name: test self hosted runners 1
 
 on: push
 
@@ -36,14 +36,14 @@ jobs:
   j5:
     runs-on: [self-hosted, 40lpa]
     steps:
-      - name: testing-r2
+      - name: testing-rs1
         run: echo "this is ...... ${{runner.name}}"
 
 
   j6:
     runs-on: [self-hosted, 45lpa]
     steps:
-      - name: testing-r1
+      - name: testing-rs2
         run: |
           echo "this is for .. ${{runner.name}}"
           sleep 20
@@ -52,7 +52,7 @@ jobs:
     runs-on: [self-hosted, 40lpa, hyd]
     needs: j5
     steps:
-      - name: testing-r2
+      - name: testing-rs1
         run: echo "this is ...... ${{runner.name}}"
 
 
@@ -60,6 +60,6 @@ jobs:
     runs-on: [self-hosted, 45lpa, hyd]
     needs: j6
     steps:
-      - name: testing-r1
+      - name: testing-rs2
         run: |
           echo "this is for .. ${{runner.name}}"

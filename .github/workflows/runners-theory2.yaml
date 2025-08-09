@@ -115,47 +115,6 @@ Custom labels are user-defined tags that you add to describe the runner's custom
 
 ---
 
-5️⃣ Organizational vs Repository Level Runners
-
-GitHub allows self-hosted runners to be registered at two levels:
-
-| Type                   | Scope                                          | Visible To                       |
-| ---------------------- | ---------------------------------------------- | -------------------------------- |
-| **Repository-level**   | Only for a specific repository                 | Only that repo                   |
-| **Organization-level** | Shared across multiple repositories in the org | Any repo in the org (if allowed) |
-
-🔐 Visibility & Access Control
-
-| Feature                          | Repository-Level | Organization-Level              |
-| -------------------------------- | ---------------- | ------------------------------- |
-| Visible to other repos?          | ❌ No             | ✅ Yes (if shared)               |
-| Set sharing policies?            | ❌ No             | ✅ Yes                           |
-| Isolated for sensitive projects? | ✅ Yes            | ❌ No (unless access restricted) |
-
-
-✅ When to Use Which?
-
-| Use Case                               | Recommended Runner Type      |
-| -------------------------------------- | ---------------------------- |
-| Secure, isolated CI for private repo   | Repository-level             |
-| Shared infra across many repos         | Organization-level           |
-| Different hardware for different teams | Org-level with label routing |
-| Per-team billing/resource tracking     | Repository-level             |
-
-
-✅ Summary Table
-
-| Feature                 | Repository-Level        | Organization-Level           |
-| ----------------------- | ----------------------- | ---------------------------- |
-| Scope                   | One repository          | Multiple repositories        |
-| Runner registration URL | `github.com/org/repo`   | `github.com/org`             |
-| Token type              | Repo registration token | Org registration token       |
-| Access control          | None                    | Fine-grained access (groups) |
-| Ideal use case          | Security, isolation     | Sharing, scalability         |
-
-
----
-
 RUNNERS RUN AS SERVICE 
 
 ---
@@ -190,3 +149,335 @@ sudo systemctl status actions.runner.GH-Actions-Learning-ghlearning.rs1.service
 4. You can find the exact service name by running:
 
 sudo systemctl list-units | grep actions
+
+
+-----------------------
+Secure Communication Between GitHub and Self-Hosted Runner
+----------------------
+
+When you register a self-hosted runner, it's essentially a persistent agent that connects to GitHub and listens for jobs.
+
+To ensure this connection is secure, GitHub enforces a secure communication model using:
+
+1. Outbound HTTPS (port 443) to GitHub
+
+2. Short-lived registration tokens
+
+3. Runner authentication using ephemeral session tokens
+
+4. TLS encryption for all communication
+
+5. Signed job payloads
+
+---------
+Communication Flow
+---------
+
+🔁 Step-by-Step Overview:
+
+1. Runner Registration
+
+You run:
+
+./config.sh --url <repo/org> --token <registration-token>
+
+This registers your runner using a short-lived token (valid for 1 hour)
+
+The runner receives:
+
+a. Repo/org metadata
+
+b. Runner ID
+
+c. A JWT token for authentication
+
+--
+
+2. Runner Connects to GitHub
+
+The runner launches and opens a secure WebSocket over HTTPS
+
+Connects to:
+
+https://github.com/_services/internal/actions
+
+--
+
+3. Job Dispatch
+
+GitHub digitally signs the job payload using a private key
+
+The runner verifies the signature using a public key baked into the runner binary
+
+Only then does it execute the job
+
+--
+
+4. Logs and Artifacts
+
+Uploaded to GitHub over HTTPS with temporary session tokens 
+
+---
+ Key Security Mechanisms
+
+ | Mechanism               | What It Does                                               |
+| ----------------------- | ---------------------------------------------------------- |
+| **HTTPS & TLS**         | Ensures all traffic between GitHub and runner is encrypted |
+| **Short-lived tokens**  | Prevents reuse of stolen registration tokens               |
+| **JWT Authentication**  | Runners use a secure token to authenticate with GitHub     |
+| **Signed job payloads** | Prevents man-in-the-middle injection or tampering          |
+| **WebSocket channel**   | Allows GitHub to push jobs securely to the runner          |
+
+
+---
+
+🚫 No Inbound Traffic or Firewall Holes Needed
+
+✅ Self-hosted runners initiate the connection to GitHub.
+
+🔒 This means:
+
+No ports need to be opened on your server
+
+Runner only needs outbound HTTPS (port 443)
+
+---
+
+🧪 Optional Hardening for Sensitive Environments
+
+| Option                                      | Description                                                          |
+| ------------------------------------------- | -------------------------------------------------------------------- |
+| ✅ Run runner on an **isolated VM**          | Prevent lateral movement if runner is compromised                    |
+| 🔒 Use **firewall rules**                   | Limit outbound domains strictly to GitHub                            |
+| 🔄 Rotate runners frequently                | Use ephemeral or containerized runners                               |
+| 🧍 Use **dedicated GitHub App**             | For org-level runner auth (advanced setup)                           |
+| 🔑 Limit access to **`config.sh`/`svc.sh`** | These scripts contain secrets — restrict them using file permissions |
+
+
+---
+🧰 Tip: Run as a Least-Privileged User
+---
+
+When setting up the runner, avoid running it as root (unless needed).
+
+# Create a new system user
+sudo useradd -m -s /bin/bash github-runner
+
+# Give only the necessary permissions
+sudo usermod -aG docker github-runner     # If using Docker
+
+
+---
+✅ Summary
+
+| Feature                | How GitHub Secures It                   |
+| ---------------------- | --------------------------------------- |
+| Communication          | HTTPS (TLS 1.2+)                        |
+| Runner Auth            | JWT via short-lived registration token  |
+| Job Payload Validation | Signed + verified                       |
+| Firewall               | Only needs outbound 443                 |
+| Monitoring             | `_diag/`, `journalctl`, GitHub UI       |
+| Hardening              | Least-privileged user, network lockdown |
+
+--------------------------
+--------------------------
+📄 Runner Logs & Debugging Failed Jobs in GitHub Actions (Self-Hosted)
+-------------------------
+-------------------------
+
+When you use a self-hosted runner, logs are generated in two main places:
+
+| Log Location              | Purpose                              |
+| ------------------------- | ------------------------------------ |
+| ✅ GitHub Actions Job Logs | Workflow step logs (in GitHub UI)    |
+| ✅ Runner System Logs      | Diagnostic logs (in `_diag/` folder) |
+
+
+Tips for Debugging Workflow Failures
+
+ | Strategy                           | Example                                         |
+| ---------------------------------- | ----------------------------------------------- |
+| ✅ Enable debug logging             | Set `ACTIONS_STEP_DEBUG: true`                  |
+| 📦 Use `run: set -x` in bash steps | Shows each command as it's run                  |
+| 📤 Print environment info          | `run: env` or `run: printenv`                   |
+| 🧪 Use `continue-on-error: true`   | Temporarily skip failure to investigate further |
+
+--- 
+
+🔧 Enable Debug Logs for a Workflow
+
+Add a secret to your repo:
+
+Go to Settings → Secrets → Actions
+
+Add:
+
+1. ACTIONS_RUNNER_DEBUG = true (Runner internals)
+
+2. ACTIONS_STEP_DEBUG = true (Each step)
+
+Then re-run the workflow.
+
+---
+
+2. Self-Hosted Runner Logs (_diag/ folder)
+
+| File/Log Name  | What It Contains                                      |
+| -------------- | ----------------------------------------------------- |
+| `Runner_*.log` | General runner activity (startup, shutdown, errors)   |
+| `Worker_*.log` | Job-specific execution details                        |
+| `Diag.log`     | Diagnostics of runner components (connectivity, etc.) |
+
+--
+🔹 1. Runner_*.log
+
+| Characteristic    | Value                                                |
+| ----------------- | ---------------------------------------------------- |
+| Format            | `Runner_<timestamp>-utc.log`                         |
+| Purpose           | Logs global actions: runner start/stop, service init |
+| Typical Size      | Small to medium                                      |
+| When It’s Written | Continuously while runner is active                  |
+
+📄 What It Captures:
+
+Runner startup and shutdown events
+
+Config load & service status
+
+Heartbeats / connection to GitHub
+
+Token refresh and WebSocket status
+
+Any crash or internal failure
+
+Errors like: Runner failed to start, Runner could not reach GitHub, etc.
+
+--
+
+🔹 2. Worker_*.log
+
+| Characteristic    | Value                                            |
+| ----------------- | ------------------------------------------------ |
+| Format            | `Worker_<timestamp>-utc.log`                     |
+| Purpose           | Logs job execution details for each workflow run |
+| One File per Job? | Yes (if enabled)                                 |
+| Typical Size      | Can be large for long/complex jobs               |
+
+📄 What It Captures:
+
+Job metadata received from GitHub (labels, repo info)
+
+Step execution (shell commands, Docker runs, etc.)
+
+Download of actions and artifacts
+
+Runtime env info (OS, path, shell)
+
+Error stack traces
+
+Return codes for each step
+
+--
+🔹 3. Diag.log
+
+| Characteristic    | Value                                        |
+| ----------------- | -------------------------------------------- |
+| File Name         | Always `Diag.log`                            |
+| Purpose           | Contains runner setup + troubleshooting info |
+| When It’s Updated | At setup/config time, or on manual run       |
+
+
+📄 What It Captures:
+
+Diagnostic commands and test results
+
+Network check status (e.g., GitHub connectivity test)
+
+Proxy info (if configured)
+
+Environment validation
+
+Diagnostic tool results (runner version, platform, OS info)
+
+| Log File       | Key Purpose                              | Look Here For...                                        |
+| -------------- | ---------------------------------------- | ------------------------------------------------------- |
+| `Runner_*.log` | Global runner events (startup, shutdown) | Runner offline, cannot start, token/auth errors         |
+| `Worker_*.log` | Job execution details                    | Step failure, command errors, exit codes, tool issues   |
+| `Diag.log`     | System and network diagnostics           | Connectivity issues, platform info, GitHub reachability |
+
+
+
+---
+🛠️ Common Issues and How to Debug
+
+| Issue Type                     | Suggested Debug Steps                               |
+| ------------------------------ | --------------------------------------------------- |
+| Job fails with "no runner"     | Check labels in `runs-on`; runner status in GitHub  |
+| Step fails with env issues     | Print `env`; check `.bashrc` or `/etc/environment`  |
+| Checkout fails                 | Check Git version, permissions, token setup         |
+| Docker permission errors       | Ensure runner user is in the `docker` group         |
+| Runner not showing as "online" | Check internet, firewall, `_diag/` and `journalctl` |
+| Job stuck in queue             | Runner offline? Wrong label? No capacity?           |
+
+
+| Log Type                   | Location                                  | Use Case                             |
+| -------------------------- | ----------------------------------------- | ------------------------------------ |
+| Actions UI Logs            | GitHub web interface                      | Step-level output and errors         |
+| Debug Logs (`ACTIONS_*`)   | GitHub UI (with secrets set)              | More verbose runner/step debugging   |
+| Runner Logs (`_diag/`)     | Local runner directory                    | Service, connectivity, job internals |
+| System Logs (`journalctl`) | System-level logs if running as a service | Crashes, service restarts, etc.      |
+
+
+---------------------------------
+--------------------------------
+Organizational vs Repository Level Runners
+---------------------------------
+--------------------------------
+
+GitHub allows self-hosted runners to be registered at two levels:
+
+| Type                   | Scope                                          | Visible To                       |
+| ---------------------- | ---------------------------------------------- | -------------------------------- |
+| **Repository-level**   | Only for a specific repository                 | Only that repo                   |
+| **Organization-level** | Shared across multiple repositories in the org | Any repo in the org (if allowed) |
+
+🔐 Visibility & Access Control
+
+| Feature                          | Repository-Level | Organization-Level              |
+| -------------------------------- | ---------------- | ------------------------------- |
+| Visible to other repos?          | ❌ No             | ✅ Yes (if shared)               |
+| Set sharing policies?            | ❌ No             | ✅ Yes                           |
+| Isolated for sensitive projects? | ✅ Yes            | ❌ No (unless access restricted) |
+
+
+✅ When to Use Which?
+
+| Use Case                               | Recommended Runner Type      |
+| -------------------------------------- | ---------------------------- |
+| Secure, isolated CI for private repo   | Repository-level             |
+| Shared infra across many repos         | Organization-level           |
+| Different hardware for different teams | Org-level with label routing |
+| Per-team billing/resource tracking     | Repository-level             |
+
+
+| Feature                  | Repository-Level Runner                  | Organization-Level Runner             |
+| ------------------------ | ---------------------------------------- | ------------------------------------- |
+| **Scope**                | Only usable by a specific repository     | Usable by **any** repo within the org |
+| **Setup Location**       | `Settings → Actions → Runners` in a repo | `Org Settings → Actions → Runners`    |
+| **Use Case**             | Small scale or isolated pipelines        | Shared infra across teams/repos       |
+| **Cost Efficiency**      | ❌ Less efficient (runner per repo)       | ✅ Highly efficient (shared runners)   |
+| **Admin Access Needed**  | Repo admin                               | Org owner or admin                    |
+| **Security & Isolation** | Tighter (repo-scoped)                    | Needs label/permissions for control   |
+
+
+✅ Table
+
+| Feature                 | Repository-Level        | Organization-Level           |
+| ----------------------- | ----------------------- | ---------------------------- |
+| Scope                   | One repository          | Multiple repositories        |
+| Runner registration URL | `github.com/org/repo`   | `github.com/org`             |
+| Token type              | Repo registration token | Org registration token       |
+| Access control          | None                    | Fine-grained access (groups) |
+| Ideal use case          | Security, isolation     | Sharing, scalability         |
+
+
