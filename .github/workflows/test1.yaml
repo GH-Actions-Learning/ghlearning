@@ -11,6 +11,9 @@ jobs:
           echo "this is for ${{runner.name}}."
           sleep 50
 
+      - name: clone 
+        uses: actions/checkout@v4
+
 
   j2:
     runs-on: [self-hosted, rich2]
@@ -19,6 +22,8 @@ jobs:
         run: |
           echo "this is .... ${{runner.name}}"
           sleep 15
+      - name: clone 
+        uses: actions/checkout@v4
 
   j3:
     runs-on: [self-hosted, 35lpa]
@@ -26,9 +31,15 @@ jobs:
       - name: testing-r2
         run: echo "this is ..... ${{runner.name}}"
 
+      - name: clone 
+        uses: actions/checkout@v4
+
   j4:
     runs-on: [self-hosted, rich1]
     steps:
       - name: testing-r1
         run: |
           echo "this is for ${{runner.name}}"
+
+      - name: clone 
+        uses: actions/checkout@v4
