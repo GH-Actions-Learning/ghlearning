@@ -154,3 +154,39 @@ GitHub allows self-hosted runners to be registered at two levels:
 | Ideal use case          | Security, isolation     | Sharing, scalability         |
 
 
+---
+
+RUNNERS RUN AS SERVICE 
+
+---
+
+| Command                               | Purpose            |
+| ------------------------------------- | ------------------ |
+| `sudo ./svc.sh status`                | Show runner status |
+| `sudo ./svc.sh start`                 | Start the service  |
+| `sudo ./svc.sh stop`                  | Stop the service   |
+| `sudo ./svc.sh uninstall`             | Remove the service |
+| `sudo journalctl -u actions.runner.*` | View logs          |
+
+
+1. Install the runner as a system service:
+
+sudo ./svc.sh install
+
+
+2. Start the service:
+
+sudo ./svc.sh start
+
+
+3. (Optional) Enable the runner to start on boot:
+
+sudo systemctl enable actions.runner.<repo-or-org>.<runner-name>.service
+
+Example:
+
+sudo systemctl status actions.runner.GH-Actions-Learning-ghlearning.rs1.service
+
+4. You can find the exact service name by running:
+
+sudo systemctl list-units | grep actions
