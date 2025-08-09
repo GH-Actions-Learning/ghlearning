@@ -1,10 +1,10 @@
-name: test self hosted runners 1
+name: test self hosted runners 2
 
 on: push
 
 jobs:
   j1:
-    runs-on: [self-hosted, r03]
+    runs-on: [self-hosted, ro3]
     steps:
       - name: testing-r03
         run: |
@@ -27,7 +27,7 @@ jobs:
 
 
   j4:
-    runs-on: [self-hosted, rs04]
+    runs-on: [self-hosted, rso4]
     steps:
       - name: testing-rs04
         run: |
