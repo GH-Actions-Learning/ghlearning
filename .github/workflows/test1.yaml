@@ -7,4 +7,6 @@ jobs:
     runs-on: [self-hosted, docker]
     steps:
       - name: testing
-        run: echo "this is for testing........."
+        run: |
+          echo "this is for testing........."
+          echo "this is for testing........."
