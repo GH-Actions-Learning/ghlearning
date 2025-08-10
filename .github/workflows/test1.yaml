@@ -4,7 +4,7 @@ on: push
 
 jobs:
   j1:
-    runs-on: [self-hosted, 35lpa]
+    runs-on: [self-hosted, bmw]
     steps:
       - name: testing
         run: echo "this is for testing........"
