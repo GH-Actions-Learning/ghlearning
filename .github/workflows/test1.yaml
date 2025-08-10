@@ -6,7 +6,8 @@ jobs:
   j1:
     runs-on: [self-hosted, docker]
     steps:
-      - name: testing
+      - name: docker testing
         run: |
           echo "this is for testing........."
           echo "this is for testing........."
+          echo "${{ runner.os}}"
