@@ -1,0 +1,10 @@
+name: test runner 1
+
+on: push
+
+jobs:
+  j1:
+    runs-on: [self-hosted, 35lpa]
+    steps:
+      - name: testing
+        run: echo "this is for testing........"
