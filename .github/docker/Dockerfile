@@ -1,13 +1,16 @@
-# Use the official GitHub Actions runner image
 FROM ghcr.io/actions/actions-runner:2.327.1
 
-# Optional: Install extra dependencies here, if needed
-# RUN apt-get update && apt-get install -y <your-packages> && apt-get clean
+USER root
 
-# Copy your custom entrypoint script into the container
-COPY entrypoint.sh /entrypoint.sh
+# Best to place files under /home/runner
+COPY entrypoint.sh /home/runner/entrypoint.sh
 
-# Make entrypoint executabl
+RUN chmod +x /home/runner/entrypoint.sh
 
-# Set the entrypoint to your script
-ENTRYPOINT ["/entrypoint.sh"]
+# Optional: metadata
+# LABEL maintainer=""
+# LABEL org.opencontainers.image.source=""
+
+USER runner
+
+ENTRYPOINT ["/home/runner/entrypoint.sh"]
