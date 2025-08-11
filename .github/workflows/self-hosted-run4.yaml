@@ -30,7 +30,7 @@ jobs:
           sleep 40
 
   j4:
-    runs-on: [self-hosted, dk-run4]  # use labels only, not runner name
+    runs-on: [self-hosted, dk-run5]  # use labels only, not runner name
     steps:
       - name: org-level-ephemeral
         run: |
