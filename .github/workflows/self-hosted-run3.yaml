@@ -1,0 +1,32 @@
+name: test self hosted runners ephemeral 3
+
+on: push
+
+jobs:
+  j1:
+    runs-on: [self-hosted, temp1]  # use labels only, not runner name
+    steps:
+      - name: testing-r03
+        run: |
+          echo "this is for .. ${{runner.name}}."
+          sleep 40
+    
+
+  j2:
+    runs-on: [self-hosted, temp2]  # use labels only, not runner name
+    steps:
+      - name: testing-r04
+        run: |
+          echo "this is ..... ${{runner.name}}"
+          sleep 40
+      
+  
+  j3:
+    runs-on: [self-hosted, temp3]  # use labels only, not runner name
+    steps:
+      - name: testing-rs03
+        run: |
+          echo "this is ....... ${{runner.name}}"
+          sleep 40
+
+
