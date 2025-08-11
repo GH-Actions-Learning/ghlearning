@@ -1,4 +1,4 @@
-name: test self hosted runners ephemeral 3
+name: test VM SHR ephemeral 3
 
 on: push
 

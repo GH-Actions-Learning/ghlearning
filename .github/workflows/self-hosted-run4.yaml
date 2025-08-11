@@ -1,0 +1,40 @@
+name: test docker SHR at repo & org level
+
+on: push
+
+jobs:
+  j1:
+    runs-on: [self-hosted, dk-run1]  # use labels only, not runner name
+    steps:
+      - name: repo-levl-persistent
+        run: |
+          echo "this is for .. ${{runner.name}}."
+          sleep 40
+    
+
+  j2:
+    runs-on: [self-hosted, dk-run2]  # use labels only, not runner name
+    steps:
+      - name: repo-levl-ephemeral
+        run: |
+          echo "this is ..... ${{runner.name}}"
+          sleep 40
+      
+  
+  j3:
+    runs-on: [self-hosted, dk-run3]  # use labels only, not runner name
+    steps:
+      - name: org-level-persistent
+        run: |
+          echo "this is ....... ${{runner.name}}"
+          sleep 40
+
+  j4:
+    runs-on: [self-hosted, dk-run4]  # use labels only, not runner name
+    steps:
+      - name: org-level-ephemeral
+        run: |
+          echo "this is ....... ${{runner.name}}"
+          sleep 40
+
+

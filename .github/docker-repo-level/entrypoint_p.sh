@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# PERSISTENT DOCKER IMAGE
+
 set -e
 
 
