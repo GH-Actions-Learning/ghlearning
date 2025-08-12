@@ -23,4 +23,9 @@ jobs:
         run: |
           git --version
           docker --version
+          node -v
+          npm -v
+          java -version
+          python --version
+          dotnet --version
           echo "${{ runner.name }}"
