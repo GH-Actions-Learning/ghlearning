@@ -18,3 +18,8 @@ jobs:
         run: |
            cd src/apps
            pip install -r requirements.txt 
+
+      - name: check pkg
+        run: |
+          git --version
+          docker --version
