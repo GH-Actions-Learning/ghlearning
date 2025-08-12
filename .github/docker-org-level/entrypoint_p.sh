@@ -1,50 +1,47 @@
 #!/bin/bash
 set -e
 
-# Validate required environment variables
+# Required vars check
 if [[ -z "$GITHUB_URL" || -z "$RUNNER_TOKEN" || -z "$RUNNER_NAME" ]]; then
   echo "[ERROR] GITHUB_URL, RUNNER_TOKEN, and RUNNER_NAME must be set."
   exit 1
 fi
 
-echo "[INFO] Configuring persistent GitHub Actions runner at ORG level..."
+cd /home/runner
 
-CONFIG_CMD="./config.sh \
-  --url \"$GITHUB_URL\" \
-  --token \"$RUNNER_TOKEN\" \
-  --name \"$RUNNER_NAME\" \
-  --labels \"${RUNNER_LABELS:-org-runner}\" \
-  --unattended \
-  --replace"
+# Optional: wait to avoid session conflict if container restarted quickly
+echo "[INFO] Waiting 15s to avoid GitHub session conflicts..."
+sleep 15
 
-# Add runner group if provided
-if [[ -n "$RUNNER_GROUP" ]]; then
-  CONFIG_CMD="$CONFIG_CMD --runnergroup \"$RUNNER_GROUP\""
+# Configure if not already configured
+if [ ! -f ".runner" ]; then
+  echo "[INFO] Configuring GitHub Actions runner..."
+
+  CONFIG_CMD="./config.sh \
+    --url \"$GITHUB_URL\" \
+    --token \"$RUNNER_TOKEN\" \
+    --name \"$RUNNER_NAME\" \
+    --labels \"${RUNNER_LABELS:-org-docker}\" \
+    --unattended \
+    --replace"
+
+  if [[ -n "$RUNNER_GROUP" ]]; then
+    CONFIG_CMD="$CONFIG_CMD --runnergroup \"$RUNNER_GROUP\""
+  fi
+
+  eval $CONFIG_CMD
+else
+  echo "[INFO] Runner already configured. Skipping config."
 fi
 
-eval $CONFIG_CMD
-
+# Cleanup handler
 cleanup() {
-  echo "[INFO] Removing runner..."
+  echo "[INFO] Caught termination signal. Cleaning up..."
   ./config.sh remove --unattended --token "$RUNNER_TOKEN"
   exit 0
 }
+trap cleanup SIGINT SIGTERM
 
-trap 'cleanup' SIGINT SIGTERM
-
-echo "[INFO] Starting persistent runner..."
+# Start the runner
+echo "[INFO] Starting runner..."
 ./run.sh
-
-echo "[INFO] Runner stopped."
-
-
-
-# docker run -d \
-#   --name ghr4 \
-#   -e GITHUB_URL=https://github.com/GH-Actions-Learning \
-#   -e RUNNER_TOKEN=A23ZVMQX6IYCIZ6JZSCSOSLITIXSO \
-#   -e RUNNER_NAME=dk-runner-4 \
-#   -e RUNNER_LABELS=dk-run4,ep4 \
-#   -e RUNNER_GROUP=docker \
-#   --restart always \
-#   ghi3:latest
