@@ -10,14 +10,19 @@ if [[ -z "$GITHUB_URL" || -z "$RUNNER_TOKEN" || -z "$RUNNER_NAME" ]]; then
   exit 1
 fi
 
-# Configure runner
-./config.sh \
-  --url "$GITHUB_URL" \
-  --token "$RUNNER_TOKEN" \
-  --name "$RUNNER_NAME" \
-  --labels "${RUNNER_LABELS:-docker}" \
-  --unattended \
-  --replace
+# Configure the runner if not already configured
+if [ ! -f ".runner" ]; then
+  echo "[INFO] Configuring GitHub Actions runner..."
+  ./config.sh \
+    --url "$GITHUB_URL" \
+    --token "$RUNNER_TOKEN" \
+    --name "$RUNNER_NAME" \
+    --labels "${RUNNER_LABELS:-repo-runner}" \
+    --unattended \
+    --replace
+else
+  echo "[INFO] Runner already configured. Skipping configuration."
+fi
 
 # Cleanup on exit
 cleanup() {
