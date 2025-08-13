@@ -1,0 +1,21 @@
+name: Test container 1
+
+on: push
+
+jobs:
+  j1:
+    runs-on: ubuntu-latest
+    container:
+       image: centos:7
+    steps:
+      - name: show centos version
+        run: |
+          cat /etc/os-release
+  j2:
+    runs-on: [self-hosted, dk-run1]
+    container:
+       image: centos:7
+    steps:
+      - name: show centos version
+        run: |
+          cat /etc/os-release
