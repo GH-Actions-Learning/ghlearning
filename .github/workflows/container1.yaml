@@ -12,9 +12,10 @@ jobs:
         run: |
           cat /etc/os-release
   j2:
-    runs-on: [self-hosted, dk-run1]
+    runs-on: [self-hosted, dk-run1]     # This job will fail because it uses self hosted docker container with container
     container:
        image: centos:7
+    continue-on-error: true
     steps:
       - name: show centos version
         run: |

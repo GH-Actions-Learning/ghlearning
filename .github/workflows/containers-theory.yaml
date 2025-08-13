@@ -11,6 +11,8 @@ That image does not need to include the Docker engine.
 
 GitHub’s runner (host VM or a self-hosted one with Docker available) pulls the image and runs the steps inside it.
 
+if you are using self hosted runner inside container then you can use this "container" in workflow 
+
 ---
 🔸 How GitHub Executes a Job Normally
 
@@ -197,120 +199,6 @@ Keep host OS clean and minimal.
 Use container: to isolate job logic from infra.
 
 If multiple teams use same runner, containerize jobs to prevent conflicts.
-
----
-✅ 3. Self-hosted Container Runners
-
-🐳 Runner itself is inside a Docker container.
-
-🔹 What it is:
-
-You run the GitHub Actions runner as a container.
-
-Common in containerized infrastructure (K8s, ECS, Docker Swarm).
-
-Ephemeral or persistent depending on setup.
-
-🔹 Container Usage:
-
-| Purpose                                                                                                                                                            | Usage                                                                       |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------- |
-| ✅ **Job-level isolation**                                                                                                                                          | Use `container:` to run job in a separate container from the runner itself. |
-| ✅ **Flexible tech stacks**                                                                                                                                         | Runner container can be generic; each job defines its own stack.            |
-| ✅ **Clean separation of concerns**                                                                                                                                 | Runner manages CI orchestration, job containers do the actual work.         |
-| ❌ **If not using `container:`**, then job runs **inside the runner container**. That means: <ul><li>Less isolation</li><li>One-size-fits-all environment</li></ul> |                                                                             |
-| ✅ **Docker-outside-of-Docker (DoD)**                                                                                                                               | Recommended method by mounting `/var/run/docker.sock` for inner containers. |
-| ⚠️ **Docker-in-Docker (DinD)**                                                                                                                                     | More complex, avoid unless required.                                        |
-
-🔹 Best Practices:
-
-Use container: even if the runner itself is in a container.
-
-Make runner image generic (no app-specific tools).
-
-Mount Docker socket for running job containers (container:).
-
-Use runner labels to target specific infra (e.g., runs-on: [self-hosted, docker]).
-
----
-🔁 🔍 Use Case Comparison Table
-
-| Feature / Scenario                  | GitHub-hosted VM          | Self-hosted VM                 | Self-hosted Container                    |
-| ----------------------------------- | ------------------------- | ------------------------------ | ---------------------------------------- |
-| Fresh job environment               | ✅ Yes                     | ❌ No (unless managed manually) | ❌ No (unless ephemeral)                  |
-| Needs Docker preinstalled           | ✅ Yes                     | ✅ You install                  | ✅ You install                            |
-| Supports `container:`               | ✅ Yes                     | ✅ Yes                          | ✅ Yes                                    |
-| Supports `services:`                | ✅ Yes                     | ✅ Yes                          | ✅ Yes (with care)                        |
-| Job environment control             | ✅ Easy (via `container:`) | ✅ Easier with `container:`     | ✅ Required unless runner image is custom |
-| Job runs in custom Docker container | ✅ Yes (recommended)       | ✅ Yes (recommended)            | ✅ Yes (recommended)                      |
-| Runner manages environment          | ❌ No                      | ✅ If container not used        | ✅ If container not used                  |
-| Best isolation & flexibility        | ✅ With `container:`       | ✅ With `container:`            | ✅ With `container:`                      |
-
-
---------------------------
-My setup - case study
---------------------------
-
-Your Setup (Restated Precisely):
-
-You're using self-hosted runners, each running inside a Docker container.
-
-These runners are ephemeral — meaning:
-
-For every job, a new runner container is provisioned.
-
-It gets a fresh, clean environment each time.
-
-These runner containers are customized (with pre-installed tools).
-
-You are running 2 jobs, each dispatched to its own ephemeral runner container.
-
----
-❓ Now you're asking:
-
-In this setup, is using container: inside the workflow still useful? Or is it unnecessary?
-
----
-✅ Short Answer:
-
-🔸 Technically: You do not need container: — because your runner containers are already isolated, fresh, and job-specific.
-
-🔸 Practically: You may still want container: 
-
-if you care about:
-
-Making the job environment declarative
-
-Supporting different tech stacks without rebuilding runner images
-
-Achieving Dev/Prod parity using the same Docker image as prod
-
-Letting teams customize job environments without touching runner infrastructure
-
----
-🔬 Detailed Analysis
-
-| Factor                              | Value in Your Setup                     | Does `container:` help?                              |
-| ----------------------------------- | --------------------------------------- | ---------------------------------------------------- |
-| 🧼 Fresh runner per job             | ✅ Yes (ephemeral)                       | ❌ No need for isolation                              |
-| 🧱 Controlled base image            | ✅ Customized runner image               | ❌ Not needed unless multiple stacks                  |
-| 📦 Custom environments per job      | ❌ No — runner image is fixed            | ✅ Yes, `container:` enables per-job envs             |
-| 🔁 Reuse for different teams/stacks | ❌ Needs new runner image for each       | ✅ `container:` makes it flexible                     |
-| ♻️ Reproducibility / portability    | ❌ Runner image is opaque to GitHub repo | ✅ `container:` is part of workflow code              |
-| 🧪 Dev/Prod parity                  | ❌ Hardcoded in runner image             | ✅ Easily match prod image via `container:`           |
-| 🔐 Secrets / services               | ✅ Can be managed either way             | 🟡 Might be easier with `container:` sidecar pattern |
-| 📄 GitOps style config              | ❌ Infra-based                           | ✅ `container:` defined in workflow YAML              |
-
-🧠 Practical Recommendations
-
-| Situation                                                | Use `container:` in workflow? | Why                                          |
-| -------------------------------------------------------- | ----------------------------- | -------------------------------------------- |
-| Same tools used in both jobs                             | ❌ Not needed                  | Runner container already has tools           |
-| Jobs require different runtimes (e.g., Python & Node)    | ✅ Yes                         | Don’t rebuild runner image every time        |
-| Want dev teams to control environment from code          | ✅ Yes                         | Better separation of concerns                |
-| You want full control via infra (no `container:`)        | ❌ OK                          | You’ll need to manage runner images yourself |
-| Dev/Prod parity using the same Docker image              | ✅ Yes                         | You can reuse your production image in CI    |
-| You care about reproducibility, portability, flexibility | ✅ Strongly recommended        | Declarative, scalable, team-friendly         |
 
 ------------------
 SETUP VS CONTAINERS
