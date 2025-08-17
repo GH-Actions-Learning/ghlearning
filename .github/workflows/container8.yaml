@@ -1,0 +1,16 @@
+name: Test container Matrix
+
+on: push
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        image: [python:3.8, python:3.9, python:3.10]
+    container:
+      image: ${{ matrix.image }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          echo "python3 --version"
