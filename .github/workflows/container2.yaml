@@ -6,7 +6,7 @@ jobs:
   j1:
    runs-on: ubuntu-latest
    container:
-     image: centos7
+     image: centos:7
      env:
        VAR1: rich
        VAR2: 35lpa
