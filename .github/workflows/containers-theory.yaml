@@ -247,3 +247,23 @@ container:
 | Full environment control | ✅ `container:`          |
 | Just language toolchain  | ✅ `setup-*`             |
 | Dev/prod parity          | ✅ `container:` (by far) |
+
+
+
+-----------------------------
+PORTS IN CONTAINER
+-----------------------------
+The ports: parameter is intended and officially supported only for service containers defined under services:.
+
+Using ports: under the job-level container: is not documented, and effectively ignored on GitHub-hosted runners.
+
+For self-hosted runners, it might have some effect with custom Docker setups but is generally not recommended or necessary.
+
+| Scenario                    | `ports:` Supported? | Notes                                                                               |
+| --------------------------- | ------------------- | ----------------------------------------------------------------------------------- |
+| `container:` (job-level)    | ❌ Not documented    | Ignored on GitHub-hosted runners; may work but rarely needed on self-hosted runners |
+| `services:` (service-level) | ✅ Fully supported   | Used to expose service container ports; officially documented & functional          |
+
+-----------------------------
+VOLUMES IN CONTAINER
+-----------------------------

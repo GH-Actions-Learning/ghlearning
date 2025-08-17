@@ -12,8 +12,8 @@ jobs:
         run: |
           cat /etc/os-release
   j2:
-    runs-on: [self-hosted, dk-run1]     # This job will fail because it uses self hosted docker container with container
-    container:
+    runs-on: [self-hosted, dk-run1]       # Container feature is not supported when runner is already running inside container
+    container:                            
        image: centos:7
     continue-on-error: true
     steps:

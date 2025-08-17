@@ -1,0 +1,17 @@
+name: Test container ENV 1 
+
+on: push
+
+jobs:
+  j1:
+   runs-on: ubuntu-latest
+   container:
+     image: centos7
+     env:
+       VAR1: rich
+       VAR2: 35lpa
+   steps:
+     - name: print container env values
+       run: |
+         echo "first env var: $VAR1"
+         echo "second env var: $VAR2"
