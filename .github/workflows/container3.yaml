@@ -14,11 +14,13 @@ jobs:
        C_VAR1: rich
        C_VAR2: 35lpa
    steps:
+       # This step prints rich and 35lpa
      - name: print container env values
        run: |
          echo "first env var: $C_VAR1"
          echo "second env var: $C_VAR2"
-         
+
+       # This step prints ultra_rich and 55lpa
      - name: print runner env values
        run: |
          echo "first env var: $R_VAR1"

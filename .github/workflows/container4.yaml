@@ -1,0 +1,20 @@
+name: Test container ENV 2
+
+on: push
+
+jobs:
+  j1:
+   runs-on: ubuntu-latest
+   env:
+     VAR1: ultra_rich
+   container:
+     image: centos:7
+     env:
+       VAR1: rich
+   steps:
+       # This step prints rich and 35lpa
+     - name: print container env values
+       run: |
+         echo "first env var: VAR1"
+         
+  
