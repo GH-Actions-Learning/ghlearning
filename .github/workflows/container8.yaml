@@ -1,4 +1,4 @@
-name: Test container outputs1
+name: Test container Artifacts1
 
 on: push
 
@@ -14,7 +14,7 @@ jobs:
          touch text1.txt
          echo "you will become rich" >> text1.txt
      - name: Artifact upload
-       uses: acions/upload-artifact@v4
+       uses: actions/upload-artifact@v4
        with:
          name: txtfile
          path: text1.txt 
