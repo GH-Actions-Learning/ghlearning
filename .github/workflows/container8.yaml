@@ -1,16 +1,38 @@
-name: Test container Matrix
+name: Test container outputs1
 
 on: push
 
 jobs:
-  test:
+  j1:
+   runs-on: ubuntu-latest
+   container:
+     image: centos:7
+   steps:
+     - name: Create file
+       id: s1
+       run: |
+         touch text1.txt
+         echo "you will become rich" >> text1.txt
+     - name: Artifact upload
+       uses: acions/upload-artifact@v4
+       with:
+         name: txtfile
+         path: text1.txt 
+
+
+  j2:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        image: [python:3.8, python:3.9, python:3.10]
+    needs: j1
     container:
-      image: ${{ matrix.image }}
+      image: centos:7
     steps:
-      - uses: actions/checkout@v4
-      - run: |
-          python3 --version
+      - name: Dowmload artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: txtfile
+
+      - name: Print downloaded files
+        run: |
+          cat text1.txt
+         
+  

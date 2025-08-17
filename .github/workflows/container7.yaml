@@ -1,0 +1,29 @@
+name: Test container outputs1
+
+on: push
+
+jobs:
+  j1:
+   runs-on: ubuntu-latest
+   container:
+     image: centos:7
+   outputs:
+     v1: ${{ steps.s1.outputs.var1 }}
+   steps:
+     - name: Export container var values
+       id: s1
+       run: |
+         echo "var1=rich" >> $GITHUB_OUTPUT
+
+
+  j2:
+    runs-on: ubuntu-latest
+    needs: j1
+    container:
+      image: centos:7
+    steps:
+      - name: print job1 values
+        run: |
+          echo "${{ needs.j1.outputs.v1 }}"
+         
+  
