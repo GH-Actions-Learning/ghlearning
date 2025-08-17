@@ -1,4 +1,4 @@
-name: Test container ENV 2
+name: Test container ENV 3
 
 on: push
 
@@ -14,6 +14,8 @@ jobs:
    steps:
        # This step prints Runner level env value only  (Ultra_rich)
      - name: print container env values
+       env:
+         VAR1: ultra_super_rich
        run: |
          echo "first env var: $VAR1"
          
