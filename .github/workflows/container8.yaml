@@ -6,7 +6,7 @@ jobs:
   j1:
    runs-on: ubuntu-latest
    container:
-     image: centos:7
+     image: ubuntu:20.04
    steps:
      - name: Create file
        id: s1
@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: j1
     container:
-      image: centos:7
+      image: ubuntu:20.04
     steps:
       - name: Dowmload artifact
         uses: actions/download-artifact@v4
