@@ -15,6 +15,6 @@ jobs:
        # This step prints rich and 35lpa
      - name: print container env values
        run: |
-         echo "first env var: VAR1"
+         echo "first env var: $VAR1"
          
   
