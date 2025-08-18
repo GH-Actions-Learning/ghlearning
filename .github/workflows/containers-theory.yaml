@@ -323,3 +323,13 @@ Run in separate sibling containers
 Share the same Docker network
 
 Share the same volume mounts
+
+
+---
+Runner Inside Container Use Cases
+
+| Scenario                                                                                                              | Outcome / Notes                                                              |
+| --------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| Self-hosted runner on Docker *without* nested container usage                                                         | Works — supports job/container features if Docker is installed on the host   |
+| Self-hosted runner **running inside a Docker container**, using container jobs (`container:` or `uses: docker://...`) | Not supported – will fail due to nested Docker limitations ([GitHub][1])     |
+| Workarounds involving Docker network/volume manipulation                                                              | Sometimes feasible, but fragile and not officially recommended ([GitHub][2]) |
