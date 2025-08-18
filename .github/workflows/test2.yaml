@@ -1,6 +1,6 @@
-name: test runner 1
+name: test runner 2
 
-on: workflow_dispatch
+on: push
 
 jobs:
   j1:
@@ -12,6 +12,7 @@ jobs:
           echo "this is for testing........"
           echo "${{ runner.os}}"
           touch file1.txt
+          echo "you will be rich" >> file1.txt
           touch file2.txt
           touch file3.txt
           touch file4.txt
