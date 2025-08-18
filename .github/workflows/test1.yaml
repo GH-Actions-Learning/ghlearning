@@ -4,10 +4,14 @@ on: push
 
 jobs:
   j1:
-    runs-on: [self-hosted, docker]
+    runs-on: [self-hosted, dk-run1]
     steps:
       - name: docker testing
         run: |
           echo "this is for testing........."
           echo "this is for testing........."
           echo "${{ runner.os}}"
+          touch file1.txt
+          touch file2.txt
+          touch file3.txt
+          touch file4.txt
