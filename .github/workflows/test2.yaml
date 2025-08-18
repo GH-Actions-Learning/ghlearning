@@ -9,7 +9,7 @@ jobs:
       - name: docker testing
         run: |
           echo "this is for testing........."
-          echo "this is for testing........"
+          echo "this is for testing........."
           echo "${{ runner.os}}"
           touch file1.txt
           echo "you will be rich" >> file1.txt
