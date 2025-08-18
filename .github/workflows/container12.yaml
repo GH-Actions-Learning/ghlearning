@@ -1,0 +1,29 @@
+name: Share container and docker:// 3
+
+on:
+  workflow_dispatch:
+
+jobs:
+  shared-file-test:
+    runs-on: ubuntu-latest
+
+    # Run entire job in a container so step-level docker:// containers can share volumes and network space
+    container:
+      image: node:18
+
+    steps:
+      - name: Step 1 Create file
+        run: |
+          echo "Hello from Step 1!" > shared.txt
+          cat shared.txt
+
+      - name: Step 2 Read file using docker://alpine
+        uses: docker://alpine:3.18
+        with:
+          args: cat shared.txt
+
+    # Run multiple commands in docker:// containers
+      - name: step3 Read file using docker://centos:7
+        uses: docker://centos:7
+        with:
+          args: /bin/bash -c "ls -l && pwd"

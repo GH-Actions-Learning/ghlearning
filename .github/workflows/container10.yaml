@@ -1,4 +1,4 @@
-name: Share container and docker://
+name: Share container and docker:// 1
 
 on:
   workflow_dispatch:
@@ -7,7 +7,7 @@ jobs:
   shared-file-test:
     runs-on: ubuntu-latest
 
-    # Run entire job in a container so step-level docker:// containers can share workspace
+    # Run entire job in a container so step-level docker:// containers can share volumes and network space
     container:
       image: node:18
 
