@@ -265,5 +265,61 @@ For self-hosted runners, it might have some effect with custom Docker setups but
 | `services:` (service-level) | ✅ Fully supported   | Used to expose service container ports; officially documented & functional          |
 
 -----------------------------
-VOLUMES IN CONTAINER
+CONTAINERS AT STEP LEVEL
 -----------------------------
+
+✅ 1. What is uses: docker://?
+
+In GitHub Actions, the uses: docker://<image> syntax allows you to run a single step inside a Docker container directly pulled from a registry like Docker Hub.
+
+This lets you run only one command or tool in a containerized environment, without affecting the rest of the job.
+
+🆚 Difference from Job-Level container:
+
+| Feature         | `container:` (Job-level) | `uses: docker://` (Step-level)   |
+| --------------- | ------------------------ | -------------------------------- |
+| Scope           | Applies to entire job    | Applies to only one step         |
+| Syntax          | `container:` under job   | `uses: docker://<image>` in step |
+| Services        | Supported                | Not supported                    |
+| Use Case        | Full environment needed  | Single tool or command           |
+| Setup overhead  | Higher                   | Minimal                          |
+| Env consistency | Consistent across steps  | Isolated to step                 |
+
+🔰 2. Basic Syntax and Example
+
+jobs:
+  example:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Alpine command
+        uses: docker://alpine:3.18
+        with:
+          args: echo "Hello from Alpine container"
+
+🔍 What’s happening here?
+
+uses: docker://alpine:3.18: Runs this step inside the alpine:3.18 Docker container.
+
+args:: Arguments passed to the container’s CMD or ENTRYPOINT. In this case, it runs echo
+
+🧪 Use Cases
+
+| Use Case                                 | Example                                     |
+| ---------------------------------------- | ------------------------------------------- |
+| Run a tool only available in a container | `uses: docker://curlimages/curl`            |
+| Avoid installing CLI tools manually      | `docker://yq`, `docker://ghcr.io/some-tool` |
+| Lightweight one-time script/tool runs    | `docker://alpine`, `docker://python`        |
+| Quick experiments or PoCs                | Use container without bloating workflow     |
+
+
+1. Job‑level container: and Step‑level uses: docker://
+
+“If you have steps that use both script and container actions, the container actions will run as sibling containers on the same network with the same volume mounts.”
+
+In other words, if your job includes a container: definition, any steps that use container actions (including uses: docker://...) will:
+
+Run in separate sibling containers
+
+Share the same Docker network
+
+Share the same volume mounts
