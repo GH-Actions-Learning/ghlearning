@@ -1,6 +1,6 @@
 name: test runner 2
 
-on: push
+on: workflow_dispatch
 
 jobs:
   j1:
