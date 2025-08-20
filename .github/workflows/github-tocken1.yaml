@@ -1,0 +1,15 @@
+name: Basic GITHUB_TOKEN 1
+
+on: push
+
+jobs:
+  check-token:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print token length (safe)
+        run: |
+          echo "Secret Token using context var is: ${{ secrets.GITHUB_TOKEN}} 
+          echo "Secret Token using env var is: $GITHUB_TOKEN"
+          echo "Length of token: ${#GITHUB_TOKEN}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
