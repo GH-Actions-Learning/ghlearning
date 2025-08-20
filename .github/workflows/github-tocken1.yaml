@@ -8,7 +8,7 @@ jobs:
     steps:
       - name: Print token length (safe)
         run: |
-          echo "Secret Token using context var is: ${{ secrets.GITHUB_TOKEN}} 
+          echo "Secret Token using context var is: ${{ secrets.GITHUB_TOKEN}}"
           echo "Secret Token using env var is: $GITHUB_TOKEN"
           echo "Length of token: ${#GITHUB_TOKEN}"
         env:
