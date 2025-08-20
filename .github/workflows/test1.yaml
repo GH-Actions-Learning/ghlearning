@@ -18,6 +18,7 @@ jobs:
   j2:
     runs-on: [self-hosted, linux]
     needs: j1
+    if: always()
     steps:
       - name: print
         run: |
