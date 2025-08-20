@@ -1,0 +1,29 @@
+name: Per-Job Clone Permissions
+
+on: push
+
+# 🔒 Disable all permissions globally
+permissions: {}
+
+jobs:
+  # 🧼 Job 1: Minimal, no token permissions
+  job-without-token:
+    runs-on: ubuntu-latest
+    permissions: {}
+    steps:
+      - name: Clone using GITHUB_TOKEN
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+  # 🔐 Job 2: Cloning with 'contents: read' permission
+  job-with-token:
+    permissions:
+      contents: read  # ✅ This enables access to private repo via GITHUB_TOKEN
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clone using GITHUB_TOKEN
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
