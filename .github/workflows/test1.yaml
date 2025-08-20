@@ -4,7 +4,7 @@ on: workflow_dispatch
 
 jobs:
   j1:
-    runs-on: [self-hosted, dk-run1]
+    runs-on: [self-hosted, linux]
     steps:
       - name: docker testing
         run: |
@@ -15,3 +15,10 @@ jobs:
           touch file2.txt
           touch file3.txt
           touch file4.txt
+  j2:
+    runs-on: [self-hosted, linux]
+    needs: j1
+    steps:
+      - name: print
+        run: |
+          ls

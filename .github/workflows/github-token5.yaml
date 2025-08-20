@@ -1,4 +1,4 @@
-name: Per-Job Clone Permissions
+name: Basic GITHUB_TOKEN 5
 
 on: push
 
@@ -6,7 +6,7 @@ on: push
 permissions: {}
 
 jobs:
-  # 🧼 Job 1: Minimal, no token permissions
+  # 🧼 Job 1: Minimal, no token permissions (This will fail if repo is private. since this is public it will clone )
   job-without-token:
     runs-on: ubuntu-latest
     permissions: {}
@@ -27,3 +27,4 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          
