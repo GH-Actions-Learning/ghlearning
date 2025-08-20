@@ -1,0 +1,11 @@
+name: Basic GITHUB_TOKEN 3
+
+on: push
+
+permissions: {}  # ⛔️ This disables all permissions for GITHUB_TOKEN
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "GITHUB_TOKEN exists, but has no permissions."
