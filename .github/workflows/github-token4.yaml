@@ -1,0 +1,20 @@
+name: name: Basic GITHUB_TOKEN 4
+
+on: push
+
+# 🔒 Disable ALL permissions globally
+permissions: {}
+
+jobs:
+  # 🔓 This job explicitly requests limited permissions
+  limited-access-job:
+    permissions:
+      issues: write  # Only this job can create issues
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create issue
+        run: |
+          curl -X POST https://api.github.com/repos/${{ github.repository }}/issues \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github+json" \
+            -d '{"title":"Scoped Permissions Test","body":"Created using job-level permissions."}'
