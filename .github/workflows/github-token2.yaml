@@ -15,7 +15,7 @@ jobs:
           -H "Accept: application/vnd.github+json" \
           -d '{"title":"Automated Issue","body":"This issue was created by GitHub Actions using GITHUB_TOKEN."}'
   
-    create-issue2:
+  create-issue2:
     runs-on: ubuntu-latest
     permissions:
       issues: write  # ⬅️ Required 
