@@ -6,6 +6,16 @@ What is Concurrency in GitHub Actions?
 
 * Using concurrency, you can cancel in-progress runs of the same workflow or queue new runs until the previous ones complete.
 
+*********
+
+It simply checks:
+
+  “Is there any other workflow run currently in progress with the same group name?”
+
+  if yes, Then it will perform action or else it ignores.
+
+*********
+
 Why Use Concurrency?
 
 * Avoid deploying multiple versions simultaneously to the same environment.
@@ -330,3 +340,109 @@ concurrency:
   cancel-in-progress: true
 
 GitHub interprets that as: "Only one workflow run in this group should be active."
+
+------
+1. What does this config do?
+
+concurrency:
+  group: br-${{ github.ref }}
+  cancel-in-progress: true
+
+Answer:
+This groups runs by Git ref (e.g., refs/heads/main) and ensures only the most recent run per branch continues; in-progress ones are canceled.
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: br-${{ github.ref }}
+  cancel-in-progress: true
+
+Only the latest push to the same branch will run; previous runs are canceled.
+------
+
+2. What if another workflow lacks concurrency?
+
+Answer:
+Workflows without concurrency execute independently—they're not affected by other workflows' settings.
+
+-----
+
+3. Can workflows share a concurrency group?
+
+Answer:
+Yes—if two workflows use the same group name, newer runs in either workflow will cancel older runs in either workflow, provided both have cancel-in-progress: true.
+
+-----
+
+4. What do prefixes like pr-, test-, env- do?
+
+Answer:
+They’re purely cosmetic and help human readability. GitHub only compares the final resolved string of the group.
+
+------
+
+5. Using a completely arbitrary group name (e.g., banana-sundae)
+
+Answer:
+Allowed. If specified, multiple runs with the same group name cancel each other—even across branches or workflows.
+
+Example:
+
+concurrency:
+  group: banana-sundae
+  cancel-in-progress: true
+
+-------
+
+6. Does GitHub parse group names semantically?
+
+Answer:
+No. Grouping is based purely on string equality—there's no parsing of prefixes or semantic logic.
+
+-------
+
+7. Will main branch be handled by group: br-${{ github.ref }}?
+
+Answer:
+Yes—github.ref resolves to refs/heads/main, so the group string becomes br-refs/heads/main, and GitHub matches that exactly.
+
+-------
+
+8. Are workflows without concurrency unaffected?
+
+Answer:
+Yes—they run all instances regardless of other workflows' concurrency settings.
+
+-------
+
+9. How does GitHub evaluate concurrency groups?
+
+Answer:
+GitHub performs string-based matching at runtime. If a run triggers with a group that matches an in-progress run, the older run is canceled (with cancel-in-progress: true) or the new run is queued.
+
+-------
+
+10. Are group names case-insensitive and is ordering guaranteed?
+
+Answer:
+Group names are case-insensitive (e.g., prod and Prod considered identical). Ordering of run execution is not guaranteed and can occur in an arbitrary order.
+
+
+-------------------------------------------
+SCOPE OF CONCURRENCY
+-------------------------------------------
+
+| Scope Level    | Applied To          | Cancels Other Runs?  | Requires Same Group?  |
+| -------------- | ------------------- | -------------------- | --------------------- |
+| Workflow-level | Entire workflow run | Yes (global to repo) | Yes (same group name) |
+| Job-level      | Individual job      | Yes (global to repo) | Yes (same group name) |
+| Cross-workflow | Multiple workflows  | Yes (global to repo) | Yes (same group name) |
+
+Workflow-level concurrency controls whether runs of that specific workflow can overlap. However, if the group name is shared, it will also cancel runs in any other workflows using the same group.
+
+Job-level concurrency only affects the job itself, but if another workflow or job in the same repo uses the same group name, it will still cancel or block other runs globally.
+
+The term “cross-workflow concurrency” isn’t explicitly in the docs—but the behavior is clear: any workflow or job in the same repository using the same concurrency group participates in the same global lock.
