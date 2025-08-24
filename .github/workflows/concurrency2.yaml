@@ -11,10 +11,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "🏗️ Building..."
+      - run: echo "🏗️ Building... ${{ github.workflow }}-${{ github.ref }}"
 
   deploy:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - run: echo "🚀 Deploying..."
+      - run: echo "🚀 Deploying...${{ github.workflow }}-${{ github.ref }}"
