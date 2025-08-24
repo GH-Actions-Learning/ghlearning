@@ -1,0 +1,23 @@
+name: concurrency test 8
+
+on:
+  workflow_dispatch
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        node: [14, 16]
+
+    concurrency:
+      group: test-${{ matrix.os }}-${{ matrix.node }}
+      cancel-in-progress: true
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run tests
+        run: |
+          echo "Running tests on ${{ matrix.os }} with Node ${{ matrix.node }}"
+          sleep 30

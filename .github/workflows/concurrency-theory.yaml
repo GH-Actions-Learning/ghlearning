@@ -33,6 +33,10 @@ Explanation of Parameters
 | `group`              | Required. Identifies the concurrency group. Runs with the same group are mutually exclusive.                               |
 | `cancel-in-progress` | Optional (default: false). If true, cancels any currently running workflows in the same group when a new run is triggered. |
 
+| Behavior                    | Use Case                                                            | Pros                         | Cons                                       |
+| --------------------------- | ------------------------------------------------------------------- | ---------------------------- | ------------------------------------------ |
+| `cancel-in-progress: true`  | For fast feedback loops, only latest run matters (e.g., CI on push) | Saves compute time, no waste | Can cancel important long jobs prematurely |
+| `cancel-in-progress: false` | When every run matters (e.g., deployment audit)                     | Ensures all jobs run         | Jobs can pile up and queue delay increases |
 
 Use Cases of Concurrency
 
