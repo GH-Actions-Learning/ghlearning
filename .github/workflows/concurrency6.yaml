@@ -25,3 +25,23 @@ jobs:
       - run: |
           echo "🚀 Deploying...${{ github.workflow }}-${{ github.ref }}-${{github.run_number}}"
           sleep 60
+
+
+# ✅ Here's what will happen:
+#
+# 💥 Only one job (either build or deploy) will run — the other will get canceled.
+#
+# The outcome is nondeterministic — GitHub does not guarantee job start order
+# in parallel workflows without `needs:`.
+
+#--------------------------------
+# 🤔 What happens if I trigger this workflow 4 times simultaneously,
+# where each run contains two jobs (`build` and `deploy`), and both jobs
+# use the same concurrency group (`test1`)?
+#
+# ✅ Outcome:
+# - 7 jobs get canceled
+# - 1 job finishes successfully
+#
+# ❓ Which job succeeds?
+# → Totally depends on race conditions / GitHub’s job queue timing.
