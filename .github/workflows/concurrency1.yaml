@@ -1,0 +1,20 @@
+name: concurrency test 1
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: test1
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "🏗️ Building..."
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "🚀 Deploying..."
