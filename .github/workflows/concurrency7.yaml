@@ -25,3 +25,23 @@ jobs:
           sleep 60
 
 
+# ✅ Here's what will happen:
+#  If triggerd one Time
+#
+# 💥 Since it had Needs on 2nd job which is depends on first it will execute fine
+#
+
+#--------------------------------
+# 🤔 What happens if I trigger this workflow 4 times simultaneously,
+# where each run contains two jobs (`build` and `deploy`), and both jobs
+# use the same concurrency group (`test1`)?
+#
+# ✅ Outcome:
+# 🕒 Time →
+# [Run #1] build ──────────> deploy ─────┐
+#                                        ╲ (canceled)
+# [Run #2] build ──────────> deploy ─────┐
+#                                        ╲ (canceled)
+# [Run #3] build ──────────> deploy ─────┐
+#                                        ╲ (canceled)
+# [Run #4] build ──────────> deploy ─────✅ (runs completely)

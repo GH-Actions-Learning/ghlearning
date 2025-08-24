@@ -28,6 +28,7 @@ jobs:
 
 
 # ✅ Here's what will happen:
+#  If triggerd one Time
 #
 # 💥 Only one job (either build or deploy) will run — the other will get canceled.
 #
