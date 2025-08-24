@@ -1,4 +1,4 @@
-name: concurrency test 2
+name: concurrency test 3
 
 on:
   workflow_dispatch:
@@ -12,10 +12,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "🏗️ Building... ${{ github.workflow }}-${{ github.ref }}"
+      - run: echo "🏗️ Building... ${{ github.workflow }}-${{ github.ref }}-${{github.run_number}}"
 
   deploy:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - run: echo "🚀 Deploying...${{ github.workflow }}-${{ github.ref }}"
+      - run: echo "🚀 Deploying...${{ github.workflow }}-${{ github.ref }}-${{github.run_number}}"
