@@ -1,0 +1,21 @@
+name: concurrency test 3
+
+on:
+  workflow_dispatch:
+
+# cancel-in-progress will not work even though vlue is true because group will dynamically change per run
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{github.run_number}}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "🏗️ Building... ${{ github.workflow }}-${{ github.ref }}-${{github.run_number}}"
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "🚀 Deploying...${{ github.workflow }}-${{ github.ref }}-${{github.run_number}}"
