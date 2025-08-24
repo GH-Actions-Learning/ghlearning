@@ -1,0 +1,21 @@
+name: concurrency test 5
+
+on:
+  workflow_dispatch:
+
+#Job level concurrency 
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: test1
+      cancel-in-progress: true
+    steps:
+      - run: echo "🏗️ Building... ${{ github.workflow }}-${{ github.ref }}-${{github.run_number}}"
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "🚀 Deploying...${{ github.workflow }}-${{ github.ref }}-${{github.run_number}}"
