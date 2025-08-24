@@ -1,0 +1,21 @@
+name: concurrency test 2
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  # Make cancel-in-progress as TRUE so that all triggert or queued workflow will run 
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "🏗️ Building... ${{ github.workflow }}-${{ github.ref }}"
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "🚀 Deploying...${{ github.workflow }}-${{ github.ref }}"
