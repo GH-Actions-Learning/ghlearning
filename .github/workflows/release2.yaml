@@ -64,4 +64,21 @@ jobs:
 #     • ✅ Source code (.zip)     - Complete repo in ZIP format
 #     • ✅ Source code (.tar.gz) - Complete repo in TAR.GZ format
 #
-# 💡 These archives are generated even if you don’t upload any custom assets.
+# 💡 These archives are created even if you don’t upload any custom assets.
+#
+# ───────────────────────────────────────────────────────────────
+# 🧠 Key Points:
+#
+# ✅ Always Happens:
+#    GitHub creates source code files for *every* release automatically.
+#
+# 📦 Complete Repository:
+#    The auto-generated archives include your *entire* repository contents
+#    at the tagged commit — not just selected files.
+#
+# 🚫 Cannot Disable:
+#    There’s no way to prevent GitHub from generating these files.
+#
+# 🎁 Different from Your Package:
+#    Any custom package (e.g. a compiled binary or zipped distribution)
+#    is something you upload manually or via workflow — it’s separate.
