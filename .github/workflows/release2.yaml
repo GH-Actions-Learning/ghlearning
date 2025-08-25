@@ -52,3 +52,16 @@ jobs:
             app-${{ github.event.inputs.tag }}.tar.gz
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
+# 🛠️ Automatic Creation Process:
+#
+# 📌 When You Create a Release:
+#
+# - You create a release with tag `v2.0.0`
+# - GitHub takes a complete snapshot of your repository at that exact commit/tag
+# - GitHub automatically generates:
+#     • ✅ Source code (.zip)     - Complete repo in ZIP format
+#     • ✅ Source code (.tar.gz) - Complete repo in TAR.GZ format
+#
+# 💡 These archives are generated even if you don’t upload any custom assets.
