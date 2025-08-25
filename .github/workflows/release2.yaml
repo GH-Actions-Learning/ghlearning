@@ -13,6 +13,8 @@ on:
 jobs:
   build-and-release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Required for creating releases
 
     steps:
       - name: 📥 Checkout repo
@@ -24,7 +26,7 @@ jobs:
           python-version: '3.11'
 
       - name: 📦 Install dependencies
-        working-directory: /home/runner/work/ghlearning/ghlearning/src/apps
+        working-directory: src/apps
         run: |
           pip install --upgrade pip
           pip install -r requirements.txt
@@ -37,26 +39,16 @@ jobs:
       - name: 📦 Package app
         run: |
           tar -czf app-${{ github.event.inputs.tag }}.tar.gz src/apps src/dockerfile
-        
 
       - name: 🚀 Create GitHub Release
-        id: create_release
-        uses: actions/create-release@v1
+        uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ github.event.inputs.tag }}
-          release_name: Release ${{ github.event.inputs.tag }}
+          name: Release ${{ github.event.inputs.tag }}
           body: ${{ github.event.inputs.changelog || 'Python app release' }}
           draft: false
           prerelease: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: 📤 Upload release asset
-        uses: actions/upload-release-asset@v1
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./app-${{ github.event.inputs.tag }}.zip
-          asset_name: app-${{ github.event.inputs.tag }}.zip
-          asset_content_type: application/zip
+          files: |
+            app-${{ github.event.inputs.tag }}.tar.gz
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
