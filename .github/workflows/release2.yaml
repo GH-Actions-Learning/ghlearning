@@ -1,0 +1,59 @@
+name: Python App Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release Tag (e.g., v1.0.0)'
+        required: true
+      changelog:
+        description: 'Release notes'
+        required: false
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout repo
+        uses: actions/checkout@v4
+
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: 📦 Install dependencies
+        run: |
+          pip install -r src/app/requirements.txt
+
+      - name: ✅ Run tests
+        run: |
+          python3 -m unittest src/app/test_app.py
+
+      - name: 📦 Package app
+        run: |
+          cd src
+          zip -r ../app-${{ github.event.inputs.tag }}.zip app Dockerfile
+
+      - name: 🚀 Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ github.event.inputs.tag }}
+          release_name: Release ${{ github.event.inputs.tag }}
+          body: ${{ github.event.inputs.changelog || 'Python app release' }}
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 📤 Upload release asset
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./app-${{ github.event.inputs.tag }}.zip
+          asset_name: app-${{ github.event.inputs.tag }}.zip
+          asset_content_type: application/zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
