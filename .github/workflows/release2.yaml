@@ -36,7 +36,7 @@ jobs:
 
       - name: 📦 Package app
         run: |
-          tar -czf app-${{ github.event.inputs.tag }}.tar.gz src/app src/Dockerfile
+          tar -czf app-${{ github.event.inputs.tag }}.tar.gz src/apps src/dockerfile
         
 
       - name: 🚀 Create GitHub Release
