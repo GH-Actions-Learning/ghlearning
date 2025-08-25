@@ -16,3 +16,25 @@ jobs:
           echo "📝 Name: ${{ github.event.release.name }}"
           echo "📄 Body: ${{ github.event.release.body }}"
           echo "👤 Author: ${{ github.event.release.author.login }}"
+
+
+# 🤔 Your Question Summarized:
+#
+# “If we are already manually creating the release from the GitHub UI,
+# what’s the point of this workflow that runs after the release is published?
+# Isn’t that redundant?”
+#
+# ✅ Short Answer:
+#
+# The `on: release` workflow doesn't create the release — it reacts to it.
+#
+# Think of `on: release` as a trigger for post-release automation —
+# like a webhook, but internal to GitHub Actions.
+#
+# 📦 It’s useful for automating things **after** a release is created:
+# - Uploading build artifacts or binaries
+# - Publishing container images
+# - Notifying external services (Slack, Discord, etc.)
+# - Tagging or version bumping other systems
+#
+# 🔄 Summary: UI = manual release creation. `on: release` = automation *after*.

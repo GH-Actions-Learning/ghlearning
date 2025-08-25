@@ -265,3 +265,5 @@ Types of release trigger
 | `release` event      | Trigger follow-up workflows post-release |
 | `schedule`           | Nightly pre-releases                     |
 | `pull_request`       | Pre-release builds before merging        |
+
+
