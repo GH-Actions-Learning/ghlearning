@@ -1,4 +1,4 @@
-name: Python App Release
+name: release event 2
 
 on:
   workflow_dispatch:
