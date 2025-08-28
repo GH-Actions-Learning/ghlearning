@@ -159,6 +159,15 @@ GitHub checks:
 4. Token has required permissions (read/write)
 
 ---
+Levels to Define permissions for GITHUB_TOKEN
+
+| Level        | Can Define Permissions? | Applies To                   | Notes                                                             |
+| ------------ | ----------------------- | ---------------------------- | ----------------------------------------------------------------- |
+| **Workflow** | ✅ Yes                   | All jobs in the workflow     | Default permissions for entire workflow unless overridden in jobs |
+| **Job**      | ✅ Yes                   | Specific individual job      | Overrides workflow-level permissions for that job                 |
+| **Step**     | ❌ No                    | Individual step within a job | Not supported                                                     |
+
+
 Components in GitHub Actions Auth Flow
 
 | #                                                        | Component                                                                                                              | Why It's Important |
