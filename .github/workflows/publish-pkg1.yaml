@@ -20,7 +20,7 @@ jobs:
           python -m pip install --upgrade pip setuptools wheel twine
 
       - name: Build the package
-        working_directory: simple_package/
+        working-directory: simple_package/
         run: |
           python setup.py sdist bdist_wheel
 
