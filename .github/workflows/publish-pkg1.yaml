@@ -23,6 +23,7 @@ jobs:
         working-directory: simple_package/
         run: |
           python setup.py sdist bdist_wheel
+          ls
 
       - name: Publish to GitHub Packages
         env:
