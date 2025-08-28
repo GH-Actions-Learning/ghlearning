@@ -24,8 +24,11 @@ jobs:
         run: |
           python setup.py sdist bdist_wheel
           ls
+          cd dist
+          ls
 
       - name: Publish to GitHub Packages
+        working-directory: simple_package/
         env:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
